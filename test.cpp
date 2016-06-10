@@ -8,15 +8,13 @@
 #include "tezt.hpp"
 #include "Event.hpp"
 #include "EventBus.hpp"
-#include "EnvironmentComponent.hpp"
-#include "DungeonMapComponent.hpp"
-#include "Direction.hpp"
-#include "Event.hpp"
+#include "Environment.hpp"
+#include "DungeonMap.hpp"
 
 using namespace dnd;
 
 int main(int argc, char const *argv[]) {
-    EnvironmentComponent
+    Environment
         big_rock("A big rock",
         "You stand in front of a big rock. Somehow you feel like home."),
         forest_one("In the forest",
@@ -38,7 +36,7 @@ int main(int argc, char const *argv[]) {
         forest_nine("In the forest",
         "You find yourself lost amongst the trees. There's a light up there.");
 
-    DungeonMapComponent dm;
+    DungeonMap dm;
 
     dm.ns(&big_rock, &forest_one);
     dm.ns(&forest_one, &forest_two);
@@ -67,36 +65,6 @@ int main(int argc, char const *argv[]) {
         auto big_rock_exits_ptr = dm.exits(&big_rock);
         tezt::ae((size_t) 1, big_rock_exits_ptr->size());
     });
-
-    tezt::add("Add & fire an event.", [&] {
-
-        eb.add_event_listener(TEST_EVENT, [&](Event *evt){
-                std::clog << "Event " << evt->name <<" fired." << std::endl;
-        });
-
-        eb.fire(&TEST_EVENT);
-    });
-
-    tezt::add("Fire an event with args.", [&] {
-            struct test_args {
-                uint64_t _id;
-                std::string dir;
-            };
-
-        eb.add_event_listener(TESTARGS_EVENT, [&](Event * evt){
-                test_args *a = (test_args*) evt->data;
-                std::clog << "Test event fired with id: " << a->_id << ", dir: " << a->dir << std::endl;
-        });
-
-        test_args evt_data {
-            23412,
-            "north"
-        };
-
-        eb.fire(new Event("TESTARGS_EVENT", &evt_data));
-    });
-
-
 
     return tezt::run();
 }

@@ -12,10 +12,10 @@
 namespace dnd {
 
     struct Player : public Actor {
-        private:
+    private:
         std::string name;
         CharacterClass cls;
-        public:
+    public:
         Player(EventBus *ebp,
                Environment *start,
                DungeonMap *dmap,
@@ -26,7 +26,7 @@ namespace dnd {
                                            dmap,
                                            race),
                                      name(name),
-                                     cls(cls) {} 
+                                     cls(cls) { }
 
         std::string get_name() const {
             return name;

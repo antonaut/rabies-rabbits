@@ -2,19 +2,20 @@
 #define LAB3_PLAYER_HPP_
 
 #include <string>
+
 namespace dnd {
 
-class Item {
-    int weight;
-    std::string name;
-    Item = 0;
+    class Item {
+        int weight;
+        std::string name;
+        Item = 0;
 
     public:
-    Item(int weight, std::string name) :
-        weight(weight),
-        name(name) {}
-    
-};
+        Item(int weight, std::string name) :
+                weight(weight),
+                name(name) { }
+
+    };
 
 }  // namespace dnd
 

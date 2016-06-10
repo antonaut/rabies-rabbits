@@ -12,28 +12,33 @@ namespace tezt {
 
     bool ALL_RIGHT = true;
 
-    void (*before_fn)(void) = []{};
-    void (*after_fn)(void) = []{};
+    void (*before_fn)(void) = [] { };
+
+    void (*after_fn)(void) = [] { };
 
     std::map<std::string, std::function<void()> > tests;
 
-    template <typename T> void ane(T expected, T actual) {
+    template<typename T>
+    void ane(T expected, T actual) {
         if (expected == actual) {
             std::cerr << "FAIL: Expected: " << expected
-                      << ", got: " << actual << ". :(" << std::endl;
+            << ", got: " << actual << ". :(" << std::endl;
             ALL_RIGHT = false;
         }
     }
 
 
-    template <typename A, typename B> void aneq_op(A a, B b) {
+    template<typename A, typename B>
+    void aneq_op(A a, B b) {
         if (a != b) {
             return;
         }
         std::cerr << "FAIL: Not equals operator fail. :(" << std::endl;
         ALL_RIGHT = false;
     }
-    template <typename A, typename B> void aeq_op(A a, B b) {
+
+    template<typename A, typename B>
+    void aeq_op(A a, B b) {
         if (a == b) {
             return;
         }
@@ -42,27 +47,30 @@ namespace tezt {
     }
 
 
-    template <typename T> void ane(T expected, T actual, std::string tc) {
+    template<typename T>
+    void ane(T expected, T actual, std::string tc) {
         if (expected == actual) {
             std::cerr << "FAIL: [" << tc << "] - Expected: " << expected
-                      << ", got: " << actual << ". :(" << std::endl;
+            << ", got: " << actual << ". :(" << std::endl;
             ALL_RIGHT = false;
         }
     }
 
 
-    template <typename T> void ae(T expected, T actual) {
+    template<typename T>
+    void ae(T expected, T actual) {
         if (expected != actual) {
             std::cerr << "FAIL: Expected: " << expected
-                      << ", got: " << actual << ". :(" << std::endl;
+            << ", got: " << actual << ". :(" << std::endl;
             ALL_RIGHT = false;
         }
     }
 
-    template <typename T> void ae(T expected, T actual, std::string tc) {
+    template<typename T>
+    void ae(T expected, T actual, std::string tc) {
         if (expected != actual) {
             std::cerr << "FAIL: [" << tc << "] - Expected: " << expected
-                      << ", got: " << actual << ". :(" << std::endl;
+            << ", got: " << actual << ". :(" << std::endl;
             ALL_RIGHT = false;
         }
     }
@@ -96,7 +104,8 @@ namespace tezt {
             fail("Should not throw. " + msg);
         }
     }
-    template <class Ex>
+
+    template<class Ex>
     void should_throw(std::string msg, void (*lambda)(void)) {
 
         try {
@@ -134,19 +143,19 @@ namespace tezt {
             }
 
             test_end = std::chrono::system_clock::now();
-            std::chrono::duration<double> test_elapsed_seconds = test_end-test_start;
+            std::chrono::duration<double> test_elapsed_seconds = test_end - test_start;
             std::cout << "Done: It took "
-                      << std::fixed
-                      << std::setprecision(5)
-                      << test_elapsed_seconds.count()
-                      << "s."
-                      << std::endl;
+            << std::fixed
+            << std::setprecision(5)
+            << test_elapsed_seconds.count()
+            << "s."
+            << std::endl;
 
             after_fn();
         }
 
         total_end = std::chrono::system_clock::now();
-        std::chrono::duration<double> total_elapsed_seconds = total_end-total_start;
+        std::chrono::duration<double> total_elapsed_seconds = total_end - total_start;
         std::cout << std::endl << "*** Done with all tests. ***" << std::endl;
 
         std::cout << "Total time elapsed: " << total_elapsed_seconds.count() << "s" << std::endl;

@@ -10,8 +10,8 @@
 namespace dnd {
 
     class Crocodile : public Actor {
-        public:
-        Crocodile() {}
+    public:
+        Crocodile() { }
     };
 
 }  // namespace dnd

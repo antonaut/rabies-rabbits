@@ -3,15 +3,14 @@
 // #include <iostream>
 #include <string>
 // #include <chrono>
-#include <cstdlib>
 #include <vector>
 #include <stdexcept>
 
 #include "GameObject.hpp"
-#include "EventBus.hpp"
 #include "SmallForestMap.hpp"
 #include "REPL.hpp"
 #include "Intro.hpp"
+#include "Rabbit.hpp"
 
 namespace dnd {
 
@@ -25,7 +24,7 @@ namespace dnd {
         while (!quit) {
             // std::chrono::duration<double> delta
             // = std::chrono::system_clock::now() - last_time;
-            for (auto &game_obj : game_objects) {
+            for (auto &game_obj : GAME_OBJECTS) {
                 // game_obj->update(delta.count());
                 try {
                     game_obj->fixed_update();
@@ -49,24 +48,26 @@ int main(int argc, char *argv[]) {
     EventBus eb;
     SmallForestMap sm(&eb);
     GAME_OBJECTS.push_back(&sm);
-    
+
     Intro intro(&eb);
     GAME_OBJECTS.push_back(&intro);
-    
+
     Player *player;
 
     try {
-        player = intro->create_player();
+        player = intro.create_player();
         GAME_OBJECTS.push_back(player);
 
         Repl repl(&eb, player);
         GAME_OBJECTS.push_back(&repl);
 
-        Rabbit r1(sm.getRabbitSpawnOne());
+        Rabbit r1(&eb,
+                  sm.getRabbitSpawnOne(),
+                  sm);
 
         start_game_loop();
 
-    } catch (const std::out_of_range& oor) {
+    } catch (const std::out_of_range &oor) {
         std::cout << "Quit: " << oor.what() << std::endl;
         return EXIT_SUCCESS;
     }

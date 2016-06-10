@@ -1,4 +1,0 @@
-
-class Rabbit : public Actor {
-
-}

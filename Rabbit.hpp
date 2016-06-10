@@ -9,19 +9,18 @@
 
 
 namespace dnd {
-class Rabbit : public Actor {
-public:
+    class Rabbit : public Actor {
+    public:
 
-Rabbit(EventBus *ebp,
-           Environment *start_pos,
-           DungeonMap *dm) : Actor(ebp,
-                                  start_pos,
-                                  dmap,
-                                  RACE_RABBIT) {}
+        Rabbit(EventBus *ebp,
+               Environment *start_pos,
+               DungeonMap *dm) : Actor(ebp,
+                                       start_pos,
+                                       dmap,
+                                       RACE_RABBIT) { }
 
 
-
-};
+    };
 
 }  // namespace dnd
 

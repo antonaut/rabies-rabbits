@@ -16,6 +16,10 @@ namespace dnd {
     const Direction UP = "U";
     const Direction DOWN = "D";
 
+    Direction parseDirection(std::string str) {
+        return UP;
+    }
+
 }  // namespace dnd
 
 #endif  // LAB3_DIRECTION_HPP_

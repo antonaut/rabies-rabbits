@@ -10,12 +10,15 @@
 namespace dnd {
 
     struct Intro : public GameObject {
-        private:
+    private:
         EventBus *ebp;
+
         Intro() = delete;
-        public:
-        Intro(EventBus *ebp):GameObject(ebp), ebp(ebp) {}
-        CharacterRace& pickRace() {
+
+    public:
+        Intro(EventBus *ebp) : GameObject(ebp), ebp(ebp) { }
+
+        CharacterRace &pickRace() {
             int i = 1, choice;
             while (true) {
                 std::cout << "Please pick a race by entering a number:" << std::endl << std::endl;
@@ -33,8 +36,8 @@ namespace dnd {
             }
         }
 
-        CharacterClass& pickClass() {
-            int i,choice;
+        CharacterClass &pickClass() {
+            int i, choice;
             while (true) {
                 std::cout << "Please pick a class by entering a number:" << std::endl << std::endl;
                 i = 1;
@@ -50,33 +53,33 @@ namespace dnd {
             }
         }
 
-        Player* create_player() {
+        Player *create_player() {
             std::string name;
             std::cout << "What is your name?" << std::endl;
             std::cout << ">";
             name = get_string();
             std::cout << std::endl;
 
-            CharacterRace& race = this->pickRace();
-            CharacterClass& cls = this->pickClass();
+            CharacterRace &race = this->pickRace();
+            CharacterClass &cls = this->pickClass();
 
             std::cout << "Welcome to Arendal, "
-                      << name
-                      << " the "
-                      << race
-                      << "-"
-                      << cls
-                      << "." << std::endl
-                      << "Your goal is to beat the badass bundile." << std::endl
-                      << "Press C-d to quit, type 'help' for help." << std::endl
-                      << std::endl;
+            << name
+            << " the "
+            << race
+            << "-"
+            << cls
+            << "." << std::endl
+            << "Your goal is to beat the badass bundile." << std::endl
+            << "Press C-d to quit, type 'help' for help." << std::endl
+            << std::endl;
 
             return new Player(this->ebp, player_comp, health_comp);
         }
 
     };
 
-    
+
 };
 
 }  // namespace dnd

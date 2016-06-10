@@ -15,39 +15,41 @@
 namespace dnd {
 
 
+    class GameObject {
+    private:
+    protected:
+        bool is_dead;
+        EventBus *ebp;
+    public:
+        static uint64_t id_counter;
+        uint64_t id;
+        GameObject *parent;
 
-class GameObject {
- private:
- protected:
-    bool is_dead;
-    EventBus *ebp;
- public:
-    static uint64_t id_counter;
-    uint64_t id;
-    GameObject *parent;
-
-    // Default constructor constructs an empty GameObject
-    explicit GameObject(EventBus* ebp) : is_dead(false), ebp(ebp), id(++id_counter) {
-        std::clog << "GameObjectSpawned - id(" << this->id << ")." << std::endl;
-    }
+        // Default constructor constructs an empty GameObject
+        explicit GameObject(EventBus *ebp) : is_dead(false), ebp(ebp), id(++id_counter) {
+            std::clog << "GameObjectSpawned - id(" << this->id << ")." << std::endl;
+        }
 
 
-    virtual ~GameObject() {}
+        virtual ~GameObject() { }
 
-    // No copy, no move
-    GameObject(const GameObject &go) = delete;
-    GameObject(GameObject &&go) = delete;
-    GameObject& operator=(const GameObject &go) = delete;
-    GameObject& operator=(GameObject &&go) = delete;
+        // No copy, no move
+        GameObject(const GameObject &go) = delete;
 
-    virtual void fixed_update() {
-        
-    }
-};
+        GameObject(GameObject &&go) = delete;
 
-std::vector<GameObject*> GAME_OBJECTS;
+        GameObject &operator=(const GameObject &go) = delete;
 
-uint64_t GameObject::id_counter = 0;
+        GameObject &operator=(GameObject &&go) = delete;
+
+        virtual void fixed_update() {
+
+        }
+    };
+
+    std::vector<GameObject *> GAME_OBJECTS;
+
+    uint64_t GameObject::id_counter = 0;
 
 }  // namespace dnd
 

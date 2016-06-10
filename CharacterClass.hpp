@@ -10,19 +10,20 @@ namespace dnd {
 
     struct CharacterClass {
         std::string name;
-        friend std::ostream& operator<<(std::ostream& str, const CharacterClass c);
+
+        friend std::ostream &operator<<(std::ostream &str, const CharacterClass c);
 
     };
 
-    std::ostream& operator<<(std::ostream& str, const CharacterClass c) {
+    std::ostream &operator<<(std::ostream &str, const CharacterClass c) {
         str << c.name;
         return str;
     }
 
     std::vector<CharacterClass> character_classes = {
-        CharacterClass{"Vet"},
-        CharacterClass{"C++ programmer"},
-        CharacterClass{"Electrician"}
+            CharacterClass{"Vet"},
+            CharacterClass{"C++ programmer"},
+            CharacterClass{"Electrician"}
     };
 
     CharacterClass CLASS_ENEMY{"Enemy"};

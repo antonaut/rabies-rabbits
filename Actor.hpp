@@ -6,7 +6,6 @@
 #include <cstdint>
 #include <iostream>
 
-
 #include "GameObject.hpp"
 #include "Environment.hpp"
 #include "EventBus.hpp"
@@ -14,76 +13,75 @@
 
 namespace dnd {
 
-class Actor : public GameObject {
+    class Actor : public GameObject {
     public:
 
-    uint32_t current_health;
-    uint32_t max_health;
-    Environment *position;
-    DungeonMap *game_map;
-    CharacterRace race;
-    
-    Actor(EventBus *ebp,
-          Environment* position,
-          DungeonMap *game_map,
-          CharacterRace race) :
-        GameObject(ebp),
-        current_health(100),
-        max_health(current_health),
-        position(position),
-        game_map(game_map),
-        race(race)
-    {}
+        uint32_t current_health;
+        uint32_t max_health;
+        Environment *position;
+        DungeonMap *game_map;
+        CharacterRace race;
 
-    uint32_t get_health() {
-        return this->current_health;
-    }
-                                                       
-    void heal(uint32_t amount) {
-        uint64_t sum = this->current_health + amount;
-        if (sum > this->max_health) {
-            this->current_health = this->max_health;
+        Actor(EventBus *ebp,
+              Environment *position,
+              DungeonMap *game_map,
+              CharacterRace race) :
+                GameObject(ebp),
+                current_health(100),
+                max_health(current_health),
+                position(position),
+                game_map(game_map),
+                race(race) { }
+
+        uint32_t get_health() {
+            return this->current_health;
         }
-    }
 
-    void hurt(uint32_t damage) {
-        int64_t diff = this->current_health - damage;
-        
-        if (diff <= 0) {
-            this->die();
+        void heal(uint32_t amount) {
+            uint64_t sum = this->current_health + amount;
+            if (sum > this->max_health) {
+                this->current_health = this->max_health;
+            }
         }
-        this->current_health = (uint64_t) diff;
-    }
 
-    void die() {
-        GameObject::is_dead = true;
-    }
+        void hurt(uint32_t damage) {
+            int64_t diff = this->current_health - damage;
 
-    void go (Direction dir) {
-        Environment *new_loc;
-        try {
-            new_loc = this->game_map->env_from_exit(this->position, dir);
-        } catch (const std::invalid_argument& ex) {
-            std::clog << ex.what();
+            if (diff <= 0) {
+                this->die();
+            }
+            this->current_health = (uint64_t) diff;
         }
-        this->position = new_loc;
-    }
 
-    void reply() {
-        std::cout << this->race.noise();
-    }
-    
-    void howl() {
-        std::string n = this->race.noise();
-        std::locale loc;
-        for (auto i = 0; i < n.length(); ++i) {
-            std:.cout << to_upper(n[i], loc);
+        void die() {
+            GameObject::is_dead = true;
         }
-        std::cout << std::endl;
-    }
 
-    virtual void action() = 0;
-};
+        void go(Direction dir) {
+            Environment *new_loc;
+            try {
+                new_loc = this->game_map->env_from_exit(this->position, dir);
+            } catch (const std::invalid_argument &ex) {
+                std::clog << ex.what();
+            }
+            this->position = new_loc;
+        }
+
+        void reply() {
+            std::cout << this->race.noise();
+        }
+
+        void howl() {
+            std::string n = this->race.noise();
+            std::locale loc;
+            for (std::size_t i = 0; i < n.length(); ++i) {
+                std::cout << std::toupper(n[i], loc);
+            }
+            std::cout << std::endl;
+        }
+
+        virtual void action() = 0;
+    };
 
 }  // namespace dnd
 
