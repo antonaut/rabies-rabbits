@@ -1,32 +1,31 @@
 // Copyright 2016 Anton Erholt <aerholt@kth.se>
 
-#ifndef LAB3_DUNGEON_MAP_COMPONENT_HPP_
-#define LAB3_DUNGEON_MAP_COMPONENT_HPP_
+#ifndef LAB3_DUNGEON_MAP_HPP_
+#define LAB3_DUNGEON_MAP_HPP_
 
 #include <string>
 #include <map>
 #include <stdexcept>
 #include <memory>
 
-#include "EnvironmentComponent.hpp"
-#include "Component.hpp"
+#include "Environment.hpp"
 #include "Direction.hpp"
 
 namespace dnd {
 
-typedef std::vector< std::pair<const EnvironmentComponent *, Direction> > Exits;
-typedef std::map<const EnvironmentComponent*, Exits> EnvironmentComponentMap;
+typedef std::vector< std::pair<Environment *, Direction> > Exits;
+typedef std::map<Environment*, Exits> EnvironmentMap;
 
-class DungeonMapComponent : public Component {
+class DungeonMap {
  private:
-    EnvironmentComponentMap env_map;
+    EnvironmentMap env_map;
 
- public:
+    public:
 
-    DungeonMapComponent() : Component(ComponentType::DUNGEON_MAP) {}
+    DungeonMap() {}
 
-    void add_exit(EnvironmentComponent *from,
-                  EnvironmentComponent *to,
+    void add_exit(Environment *from,
+                  Environment *to,
                   const Direction direction) {
         auto it = this->env_map.find(from);
         if (it == this->env_map.end()) {
@@ -43,25 +42,25 @@ class DungeonMapComponent : public Component {
         (*it).second.push_back( std::make_pair(to, direction) );
     }
 
-    void ew(EnvironmentComponent *east,
-            EnvironmentComponent *west) {
+    void ew(Environment *east,
+            Environment *west) {
         this->add_exit(east, west, WEST);
         this->add_exit(west, east, EAST);
     }
 
-    void ns(EnvironmentComponent *north,
-            EnvironmentComponent *south) {
+    void ns(Environment *north,
+            Environment *south) {
         this->add_exit(north, south, SOUTH);
         this->add_exit(south, north, NORTH);
     }
 
-    void ud(EnvironmentComponent *up,
-            EnvironmentComponent *down) {
+    void ud(Environment *up,
+            Environment *down) {
         this->add_exit(up, down, DOWN);
         this->add_exit(down, up, UP);
     }
 
-    std::shared_ptr<std::vector<Direction>> exits(EnvironmentComponent *env) {
+    std::shared_ptr<std::vector<Direction>> exits(Environment *env) {
         std::shared_ptr<std::vector<Direction>> res = std::make_shared<std::vector<Direction>>();
         auto it = this->env_map.find(env);
         if (it == this->env_map.end()) {
@@ -73,7 +72,7 @@ class DungeonMapComponent : public Component {
         return res;
     }
 
-    const EnvironmentComponent *env_from_exit(EnvironmentComponent *from, Direction dir) {
+    Environment *env_from_exit(Environment *from, Direction dir) const {
         auto it = this->env_map.find(from);
         if (it == this->env_map.end()) {
             throw std::invalid_argument("Can't find any exits.");
@@ -90,4 +89,4 @@ class DungeonMapComponent : public Component {
 };
 } // namespace dnd
 
-#endif  // LAB3_DUNGEON_MAP_COMPONENT_HPP_
+#endif  // LAB3_DUNGEON_MAP_HPP_

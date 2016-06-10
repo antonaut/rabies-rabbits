@@ -4,26 +4,34 @@
 #define LAB3_PLAYER_HPP_
 
 #include "GameObject.hpp"
-#include "PlayerComponent.hpp"
-#include "PositionComponent.hpp"
-#include "HealthComponent.hpp"
+#include "Actor.hpp"
 #include "EventBus.hpp"
+#include "CharacterRace.hpp"
+#include "CharacterClass.hpp"
 
 namespace dnd {
 
-struct Player : public GameObject {
-    Player(EventBus *ebp,
-           PlayerComponent *player_comp,
-           HealthComponent *health_comp
-           ):GameObject(ebp) {
-        GameObject::add_component(player_comp);
-        GameObject::add_component(health_comp);
-    }
+    struct Player : public Actor {
+        private:
+        std::string name;
+        CharacterClass cls;
+        public:
+        Player(EventBus *ebp,
+               Environment *start,
+               DungeonMap *dmap,
+               std::string name,
+               CharacterRace race,
+               CharacterClass cls) : Actor(ebp,
+                                           start,
+                                           dmap,
+                                           race),
+                                     name(name),
+                                     cls(cls) {} 
 
-    void set_position(PositionComponent *pos_comp) {
-        GameObject::add_component(pos_comp);
-    }
-};
+        std::string get_name() const {
+            return name;
+        }
+    };
 
 }  // namespace dnd
 

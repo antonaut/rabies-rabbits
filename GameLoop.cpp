@@ -5,6 +5,7 @@
 // #include <chrono>
 #include <cstdlib>
 #include <vector>
+#include <stdexcept>
 
 #include "GameObject.hpp"
 #include "EventBus.hpp"
@@ -14,19 +15,24 @@
 
 namespace dnd {
 
-    std::vector<GameObject*> game_objects;
 
     void start_game_loop() {
         /*
         std::chrono::time_point<std::chrono::system_clock> delta = std::chrono::system_clock::now();
         std::chrono::time_point<std::chrono::system_clock> last_time = std::chrono::system_clock::now();
         */
-        for (;;) {
+        bool quit(false);
+        while (!quit) {
             // std::chrono::duration<double> delta
             // = std::chrono::system_clock::now() - last_time;
             for (auto &game_obj : game_objects) {
                 // game_obj->update(delta.count());
-                game_obj->fixed_update();
+                try {
+                    game_obj->fixed_update();
+                } catch (const std::out_of_range &ex) {
+                    quit = true;
+                    break;
+                }
             }
         }
     }
@@ -42,37 +48,27 @@ int main(int argc, char *argv[]) {
 
     EventBus eb;
     SmallForestMap sm(&eb);
-
-    Intro intro(&eb);
-    IntroComponent *ip = (IntroComponent*) intro.getComponent(ComponentType::INTRO);
-    Player *player;
+    GAME_OBJECTS.push_back(&sm);
     
+    Intro intro(&eb);
+    GAME_OBJECTS.push_back(&intro);
+    
+    Player *player;
+
     try {
-        ip->play();
-        player = ip->create_player();
+        player = intro->create_player();
+        GAME_OBJECTS.push_back(player);
+
+        Repl repl(&eb, player);
+        GAME_OBJECTS.push_back(&repl);
+
+        Rabbit r1(sm.getRabbitSpawnOne());
+
+        start_game_loop();
+
     } catch (const std::out_of_range& oor) {
         std::cout << "Quit: " << oor.what() << std::endl;
         return EXIT_SUCCESS;
     }
-
-    
-    Repl repl(&eb, player);
-
-    //        LevelOne level_one();
-
-    // event bus, name, race, start_location
-
-    //        RabbitSpawner rs(&eb, 4, sm.random_forest_location());
-
-    //        RabbitBoss(&eb, sm.finish());
-
-    //        game_objects.push_back(&player);
-    //        game_objects.push_back(&rs);
-
-    game_objects.push_back(&sm);
-    game_objects.push_back(&repl);
-
-    start_game_loop();
-
     return EXIT_SUCCESS;
 }

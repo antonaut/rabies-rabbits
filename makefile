@@ -1,5 +1,5 @@
 #CC    = g++
-CC   = clang++ -I /usr/include/x86_64-linux-gnu/c++/4.8 -I /usr/include/c++/4.8
+CC   = clang++-3.6 -I /usr/include/x86_64-linux-gnu/c++/4.8 -I /usr/include/c++/4.8
 LDFLAGS = -lm -L /usr/lib/gcc/x86_64-linux-gnu/4.8
 CXXFLAGS = -std=c++11 -g -Wall -pedantic
 

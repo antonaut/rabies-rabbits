@@ -14,11 +14,9 @@
 
 namespace dnd {
 
-typedef std::function<void(Event*)> EventListener;
-
 class EventBus {
  private:
-    std::map<Event, std::vector<EventListener>> event_map;
+    std::map<std::string, std::vector<std::function<void()>>> event_map;
 
     void log_evt(const std::string &prefix, Event *evt) {
         std::cerr << prefix << evt->name;
@@ -36,11 +34,14 @@ class EventBus {
     EventBus& operator=(const EventBus& eb) = delete;
     EventBus& operator=(EventBus &&eb) = delete;
 
-    void add_event_listener(Event event_name, EventListener callback) {
+    template <class F, class... Args>
+        void add_event_listener(std::string event_name, F fn, Args&&... args) {
         auto it = event_map.find(event_name);
-
+        
+        std::function<void()> callback = std::bind(fn, args...);
+        
         if (it == event_map.end()) {                // Not found
-            (void) event_map.insert (std::make_pair(event_name, std::vector<EventListener>(0)));
+            (void) event_map.insert (std::make_pair(event_name, std::vector<std::function<void()>>(0)));
             it = event_map.find(event_name);
         }
 
@@ -48,18 +49,21 @@ class EventBus {
     }
 
     // Does nothing if no listeners are registered.
-    
+
     void fire(Event * evt) {
         auto it = event_map.find(evt->name);
+
         this->log_evt("DEBUG: ", evt);
+
         if (it == event_map.end()) {
             return;
         }
 
 
         for (auto callback : (*it).second) {
-            callback(evt);
+            callback();
         }
+        delete evt;
     }
 };
 }  // namespace dnd
