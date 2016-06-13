@@ -8,7 +8,6 @@
 
 #include "GameObject.hpp"
 #include "Environment.hpp"
-#include "EventBus.hpp"
 #include "CharacterRace.hpp"
 
 namespace dnd {
@@ -18,60 +17,65 @@ namespace dnd {
 
         uint32_t current_health;
         uint32_t max_health;
-        Environment *position;
+        uint32_t base_damage;
+        const Environment *position;
         DungeonMap *game_map;
         CharacterRace race;
 
-        Actor(EventBus *ebp,
-              Environment *position,
+        Actor(const Environment *position,
               DungeonMap *game_map,
               CharacterRace race) :
-                GameObject(ebp),
+                GameObject(),
                 current_health(100),
                 max_health(current_health),
+                base_damage(10),
                 position(position),
                 game_map(game_map),
                 race(race) { }
 
-        uint32_t get_health() {
+
+        uint32_t getCurrent_health() const {
             return this->current_health;
         }
 
-        void heal(uint32_t amount) {
+
+        virtual void heal(uint32_t amount) {
             uint64_t sum = this->current_health + amount;
             if (sum > this->max_health) {
                 this->current_health = this->max_health;
             }
         }
 
-        void hurt(uint32_t damage) {
-            int64_t diff = this->current_health - damage;
+        virtual void hurt(uint32_t damage) {
+            int32_t diff = this->current_health - damage;
 
             if (diff <= 0) {
                 this->die();
             }
-            this->current_health = (uint64_t) diff;
+            this->current_health = (uint32_t) diff;
         }
 
-        void die() {
+        virtual void die() {
             GameObject::is_dead = true;
         }
 
-        void go(Direction dir) {
-            Environment *new_loc;
+        bool go(Direction dir) {
+            const Environment *new_loc;
             try {
                 new_loc = this->game_map->env_from_exit(this->position, dir);
             } catch (const std::invalid_argument &ex) {
                 std::clog << ex.what();
+                return false;
             }
             this->position = new_loc;
+            return true;
         }
 
-        void reply() {
+        virtual void reply() const {
             std::cout << this->race.noise();
         }
 
-        void howl() {
+        virtual void howl() const {
             std::string n = this->race.noise();
             std::locale loc;
             for (std::size_t i = 0; i < n.length(); ++i) {
@@ -79,6 +83,11 @@ namespace dnd {
             }
             std::cout << std::endl;
         }
+
+        virtual void fight(Actor *target) {
+
+        }
+
 
         virtual void action() = 0;
     };

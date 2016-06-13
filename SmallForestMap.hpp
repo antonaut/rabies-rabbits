@@ -6,8 +6,6 @@
 #include "GameObject.hpp"
 #include "Environment.hpp"
 #include "DungeonMap.hpp"
-#include "EventBus.hpp"
-#include "Event.hpp"
 
 namespace dnd {
 
@@ -16,7 +14,7 @@ namespace dnd {
         Environment *start, *r1, *r2;
         DungeonMap dm;
     public:
-        SmallForestMap(EventBus *ebp) : GameObject(ebp) {
+        SmallForestMap() : GameObject() {
             Environment
                     *big_rock = new Environment("A big rock",
                                                 "You stand in front of a big rock. Somehow you feel like home."),
@@ -79,8 +77,8 @@ namespace dnd {
             return r2;
         }
 
-        DungeonMap &getDungeonMap() {
-            return this->dm;
+        DungeonMap *getDungeonMap() {
+            return &this->dm;
         }
 
     };

@@ -12,7 +12,7 @@ namespace dnd {
 
         friend std::ostream &operator<<(std::ostream &str, const CharacterRace c);
 
-        std::string noise() {
+        std::string noise() const {
             return this->sound;
         }
     };
@@ -28,7 +28,8 @@ namespace dnd {
             CharacterRace{"Wolf", "GRROWL!"},
     };
 
-    CharacterRace RACE_RABBIT{"Rabbit", "Omnomnom"};
+    CharacterRace RACE_RABBIT{"Rabbit", "Omnomnom."};
+    CharacterRace RACE_CROCODILE{"Crocodile", "Snap-snap!"};
 
 }  // namespace dnd
 

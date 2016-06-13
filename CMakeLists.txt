@@ -3,7 +3,7 @@ project(rabiesrabbies)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 set(PROJECT_SOURCE_DIR)
-set(SOURCE_FILES GameLoop.cpp
+set(HEADER_FILES
         Actor.hpp
         CharacterClass.hpp
         CharacterRace.hpp
@@ -20,6 +20,11 @@ set(SOURCE_FILES GameLoop.cpp
         Player.hpp
         Rabbit.hpp
         REPL.hpp
-        SmallForestMap.hpp)
+        SmallForestMap.hpp
+        Crocit.hpp)
 
-add_executable(rabiesrabbits ${SOURCE_FILES})
+set(SOURCE_FILES GameLoop.cpp)
+set(TEST_SOURCE_FILES test.cpp tezt.hpp)
+
+add_executable(rabiesrabbits ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(testexec ${TEST_SOURCE_FILES} ${HEADER_FILES})

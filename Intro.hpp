@@ -5,21 +5,16 @@
 
 #include "IOHelpers.hpp"
 #include "GameObject.hpp"
-#include "EventBus.hpp"
 
 namespace dnd {
 
     struct Intro : public GameObject {
-    private:
-        EventBus *ebp;
-
-        Intro() = delete;
 
     public:
-        Intro(EventBus *ebp) : GameObject(ebp), ebp(ebp) { }
+        Intro() : GameObject() { }
 
         CharacterRace &pickRace() {
-            int i = 1, choice;
+            int i, choice;
             while (true) {
                 std::cout << "Please pick a race by entering a number:" << std::endl << std::endl;
                 i = 1;
@@ -53,7 +48,7 @@ namespace dnd {
             }
         }
 
-        Player *create_player() {
+        Player *create_player(Environment *start, DungeonMap *dmap) {
             std::string name;
             std::cout << "What is your name?" << std::endl;
             std::cout << ">";
@@ -70,17 +65,14 @@ namespace dnd {
             << "-"
             << cls
             << "." << std::endl
-            << "Your goal is to beat the badass bundile." << std::endl
+            << "Your goal is to beat the badass crocit." << std::endl
             << "Press C-d to quit, type 'help' for help." << std::endl
             << std::endl;
 
-            return new Player(this->ebp, player_comp, health_comp);
+            return new Player(start, dmap, name, race, cls);
         }
 
     };
-
-
-};
 
 }  // namespace dnd
 

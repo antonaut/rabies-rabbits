@@ -7,12 +7,15 @@ namespace dnd {
 
     class Item {
         int weight;
+        int damage;
+        int defence;
         std::string name;
-        Item = 0;
 
     public:
-        Item(int weight, std::string name) :
+        explicit Item(int weight, std::string name, int damage = 0, int defence = 0) :
                 weight(weight),
+                damage(damage),
+                defence(defence),
                 name(name) { }
 
     };

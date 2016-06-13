@@ -6,10 +6,10 @@
 // #include "GameObject.hpp"
 
 #include "tezt.hpp"
-#include "Event.hpp"
-#include "EventBus.hpp"
 #include "Environment.hpp"
 #include "DungeonMap.hpp"
+#include "Rabbit.hpp"
+#include "REPL.hpp"
 
 using namespace dnd;
 
@@ -52,9 +52,6 @@ int main(int argc, char const *argv[]) {
 
     dm.add_exit(&forest_nine, &big_rock, UP);
 
-
-    EventBus eb;
-
     tezt::add("Create a map.", [&] {
         auto f7_exits_ptr = dm.exits(&forest_seven);
         tezt::ae((size_t)2, f7_exits_ptr->size());
@@ -64,6 +61,13 @@ int main(int argc, char const *argv[]) {
 
         auto big_rock_exits_ptr = dm.exits(&big_rock);
         tezt::ae((size_t) 1, big_rock_exits_ptr->size());
+    });
+
+    tezt::add("Player movement", [&] {
+        Player *player = new Player(&big_rock, &dm, "Anton", character_races[1], character_classes[1]);
+        Repl *repl = new Repl(player);
+        std::vector<std::string> tokens({"go", "south"});
+        repl->go(tokens);
     });
 
     return tezt::run();

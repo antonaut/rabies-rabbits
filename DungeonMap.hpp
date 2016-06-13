@@ -13,8 +13,8 @@
 
 namespace dnd {
 
-    typedef std::vector<std::pair<Environment *, Direction> > Exits;
-    typedef std::map<Environment *, Exits> EnvironmentMap;
+    typedef std::vector<std::pair<const Environment *, Direction> > Exits;
+    typedef std::map<const Environment *, Exits> EnvironmentMap;
 
     class DungeonMap {
     private:
@@ -24,8 +24,8 @@ namespace dnd {
 
         DungeonMap() { }
 
-        void add_exit(Environment *from,
-                      Environment *to,
+        void add_exit(const Environment *from,
+                      const Environment *to,
                       const Direction direction) {
             auto it = this->env_map.find(from);
             if (it == this->env_map.end()) {
@@ -42,25 +42,25 @@ namespace dnd {
             (*it).second.push_back(std::make_pair(to, direction));
         }
 
-        void ew(Environment *east,
-                Environment *west) {
+        void ew(const Environment *east,
+                const Environment *west) {
             this->add_exit(east, west, WEST);
             this->add_exit(west, east, EAST);
         }
 
-        void ns(Environment *north,
-                Environment *south) {
+        void ns(const Environment *north,
+                const Environment *south) {
             this->add_exit(north, south, SOUTH);
             this->add_exit(south, north, NORTH);
         }
 
-        void ud(Environment *up,
-                Environment *down) {
+        void ud(const Environment *up,
+                const Environment *down) {
             this->add_exit(up, down, DOWN);
             this->add_exit(down, up, UP);
         }
 
-        std::shared_ptr<std::vector<Direction>> exits(Environment *env) {
+        std::shared_ptr<std::vector<Direction>> exits(const Environment *env) const {
             std::shared_ptr<std::vector<Direction>> res = std::make_shared<std::vector<Direction>>();
             auto it = this->env_map.find(env);
             if (it == this->env_map.end()) {
@@ -72,7 +72,7 @@ namespace dnd {
             return res;
         }
 
-        Environment *env_from_exit(Environment *from, Direction dir) const {
+        const Environment *env_from_exit(const Environment *from, Direction dir) const {
             auto it = this->env_map.find(from);
             if (it == this->env_map.end()) {
                 throw std::invalid_argument("Can't find any exits.");

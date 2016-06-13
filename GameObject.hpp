@@ -9,24 +9,25 @@
 #include <memory>
 #include <stdexcept>
 
-#include "EventBus.hpp"
-#include "Event.hpp"
+#include "GameObject.hpp"
 
 namespace dnd {
 
+    class GameObject;
+
+    std::vector<GameObject *> GAME_OBJECTS;
 
     class GameObject {
     private:
     protected:
         bool is_dead;
-        EventBus *ebp;
     public:
         static uint64_t id_counter;
         uint64_t id;
-        GameObject *parent;
 
         // Default constructor constructs an empty GameObject
-        explicit GameObject(EventBus *ebp) : is_dead(false), ebp(ebp), id(++id_counter) {
+        explicit GameObject() : is_dead(false), id(++id_counter) {
+            GAME_OBJECTS.push_back(this);
             std::clog << "GameObjectSpawned - id(" << this->id << ")." << std::endl;
         }
 
@@ -47,9 +48,17 @@ namespace dnd {
         }
     };
 
-    std::vector<GameObject *> GAME_OBJECTS;
-
     uint64_t GameObject::id_counter = 0;
+
+
+    GameObject *findGameObjectById(uint64_t needle) {
+        for (size_t i = 0; i < GAME_OBJECTS.size(); ++i) {
+            if (GAME_OBJECTS[i]->id == needle) {
+                return GAME_OBJECTS[i];
+            }
+        }
+        throw std::invalid_argument("No GameObject with that id found.");
+    }
 
 }  // namespace dnd
 

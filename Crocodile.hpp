@@ -2,16 +2,16 @@
 #define LAB3_CROCODILE_HPP_
 
 #include "Actor.hpp"
-#include "EventBus.hpp"
 #include "Environment.hpp"
 #include "CharacterClass.hpp"
 #include "CharacterRace.hpp"
+#include "DungeonMap.hpp"
 
 namespace dnd {
 
     class Crocodile : public Actor {
     public:
-        Crocodile() { }
+        Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, RACE_CROCODILE) { }
     };
 
 }  // namespace dnd

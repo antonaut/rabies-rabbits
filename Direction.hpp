@@ -4,6 +4,8 @@
 #define LAB3_DIRECTION_HPP_
 
 #include <string>
+#include <set>
+#include <sstream>
 
 namespace dnd {
 
@@ -16,8 +18,29 @@ namespace dnd {
     const Direction UP = "U";
     const Direction DOWN = "D";
 
-    Direction parseDirection(std::string str) {
-        return UP;
+    const std::set<Direction> DIRECTIONS() {
+        std::set<Direction> dirs;
+
+        dirs.insert(EAST);
+        dirs.insert(WEST);
+        dirs.insert(NORTH);
+        dirs.insert(SOUTH);
+        dirs.insert(UP);
+        dirs.insert(DOWN);
+        return dirs;
+    }
+
+
+    Direction parseDirection(std::string dir) {
+        char c = *dir.begin();
+        std::locale loc;
+        std::stringstream ss;
+        ss << std::toupper(c, loc);
+
+        if (DIRECTIONS().find(ss.str()) != DIRECTIONS().end()) {
+            return (Direction) ss.str();
+        }
+        throw std::invalid_argument("No such direction.");
     }
 
 }  // namespace dnd

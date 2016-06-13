@@ -45,30 +45,27 @@ int main(int argc, char *argv[]) {
     (void) argv; // unused
     (void) argc; // unused
 
-    EventBus eb;
-    SmallForestMap sm(&eb);
-    GAME_OBJECTS.push_back(&sm);
+    SmallForestMap *sm = new SmallForestMap();
 
-    Intro intro(&eb);
-    GAME_OBJECTS.push_back(&intro);
+    Intro *intro = new Intro();
 
     Player *player;
 
     try {
-        player = intro.create_player();
-        GAME_OBJECTS.push_back(player);
+        player = intro->create_player(sm->getStart(), sm->getDungeonMap());
 
-        Repl repl(&eb, player);
-        GAME_OBJECTS.push_back(&repl);
+        Repl repl(player);
 
-        Rabbit r1(&eb,
-                  sm.getRabbitSpawnOne(),
-                  sm);
+        Rabbit r1(sm->getRabbitSpawnOne(),
+                  sm->getDungeonMap());
+        Rabbit r2(sm->getRabbitSpawnTwo(),
+                  sm->getDungeonMap());
 
         start_game_loop();
 
     } catch (const std::out_of_range &oor) {
         std::cout << "Quit: " << oor.what() << std::endl;
+
         return EXIT_SUCCESS;
     }
     return EXIT_SUCCESS;

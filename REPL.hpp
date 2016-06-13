@@ -10,7 +10,6 @@
 #include <stdexcept>
 
 #include "GameObject.hpp"
-#include "EventBus.hpp"
 #include "Player.hpp"
 
 namespace dnd {
@@ -31,14 +30,14 @@ namespace dnd {
 
         Player *player;
     public:
-        Repl(EventBus *eb, Player *p) : GameObject(eb), player(p) { }
+        Repl(Player *p) : GameObject(), player(p) { }
 
         virtual void fixed_update() {
 
             // Show prompt, REad -> Parse -> send evts/eval -> Loop => REPL
 
             std::cout << this->player->get_name() << " - "
-            << this->player->get_health() << ">";
+            << this->player->getCurrent_health() << ">";
             std::string command_input;
             std::cin >> command_input;
 
@@ -65,7 +64,12 @@ namespace dnd {
 
         inline void look(Tokens &tokens) {
             if (*tokens.begin() == "look") {
-                GameObject::ebp->fire(&EVT_Look);
+                std::clog << "player look" << std::endl;
+                std::cout << player->position->name << std::endl;
+                for (size_t i = 0; i < player->position->name.size(); i++) {
+                    std::cout << "=";
+                }
+                std::cout << std::endl << player->position->short_description << std::endl;
                 return;
             }
             inventory(tokens);
@@ -108,7 +112,12 @@ namespace dnd {
             if (*tokens.begin() == "go" ||
                 *tokens.begin() == "g") {
                 auto it = ++tokens.begin();
-                this->player->go(parseDirection(*it));
+                std::clog << "player go" << std::endl;
+                try {
+                    this->player->go(parseDirection(*it));
+                } catch (const std::invalid_argument &ex) {
+                    std::cout << "Unable to move in that direction." << std::endl;
+                }
                 return;
             }
             fight(tokens);
@@ -120,7 +129,20 @@ namespace dnd {
                 *tokens.begin() == "kill" ||
                 *tokens.begin() == "k") {
                 auto it = ++tokens.begin();
-                this->player->fight(*it);
+                uint64_t target_id = std::stoull(*it);
+                GameObject *target;
+                try {
+                    target = findGameObjectById(target_id);
+                } catch (const std::invalid_argument &ex) {
+                    std::cout << "No such target found." << std::endl;
+                    return;
+                }
+                Actor *targetActor = (Actor *) target;
+                if (targetActor->position == this->player->position) {
+                    this->player->fight(targetActor);
+                    return;
+                }
+                std::cout << "No such target found." << std::endl;
                 return;
             }
             talk(tokens);
@@ -130,8 +152,7 @@ namespace dnd {
         inline void talk(Tokens &tokens) {
             if (*tokens.begin() == "talk") {
                 auto it = ++tokens.begin();
-                Event *talk_evt = this->player_event("PlayerTalk", *it);
-                GameObject::ebp->fire(talk_evt);
+                std::clog << "talking to " << *it << std::endl;
                 return;
             }
             take(tokens);
@@ -140,7 +161,7 @@ namespace dnd {
         inline void take(Tokens &tokens) {
             if (*tokens.begin() == "take") {
                 auto it = ++tokens.begin();
-
+                std::clog << "take " << *it << std::endl;
                 return;
             }
             throw std::invalid_argument("Argle.");
