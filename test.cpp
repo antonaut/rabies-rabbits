@@ -53,14 +53,14 @@ int main(int argc, char const *argv[]) {
     dm.add_exit(&forest_nine, &big_rock, UP);
 
     tezt::add("Create a map.", [&] {
-        auto f7_exits_ptr = dm.exits(&forest_seven);
-        tezt::ae((size_t)2, f7_exits_ptr->size());
+        auto f7_exits = dm.exits(&forest_seven);
+        tezt::ae((size_t)2, f7_exits.size());
 
-        auto f9_exits_ptr = dm.exits(&forest_nine);
-        tezt::ae((size_t) 2, f9_exits_ptr->size());
+        auto f9_exits = dm.exits(&forest_nine);
+        tezt::ae((size_t) 2, f9_exits.size());
 
-        auto big_rock_exits_ptr = dm.exits(&big_rock);
-        tezt::ae((size_t) 1, big_rock_exits_ptr->size());
+        auto big_rock_exits = dm.exits(&big_rock);
+        tezt::ae((size_t) 1, big_rock_exits.size());
     });
 
     tezt::add("Player movement", [&] {
