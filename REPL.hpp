@@ -158,7 +158,9 @@ namespace dnd {
             if (*tokens.begin() == "fight" ||
                 *tokens.begin() == "kill" ||
                 *tokens.begin() == "k") {
+
                 auto it = ++tokens.begin();
+                std::clog << "player fight " << *it << std::endl;
                 uint64_t target_id = std::stoull(*it);
                 GameObject *target;
                 try {
@@ -182,7 +184,7 @@ namespace dnd {
         inline void talk(Tokens &tokens) {
             if (*tokens.begin() == "talk") {
                 auto it = ++tokens.begin();
-                std::clog << "talking to " << *it << std::endl;
+                std::clog << "player talk " << *it << std::endl;
                 return;
             }
             take(tokens);
@@ -191,7 +193,7 @@ namespace dnd {
         inline void take(Tokens &tokens) {
             if (*tokens.begin() == "take") {
                 auto it = ++tokens.begin();
-                std::clog << "take " << *it << std::endl;
+                std::clog << "player take " << *it << std::endl;
                 return;
             }
             throw std::invalid_argument("Argle.");

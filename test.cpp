@@ -13,6 +13,7 @@
 
 using namespace dnd;
 
+
 int main(int argc, char const *argv[]) {
     const Environment
         big_rock("A big rock",
@@ -67,11 +68,18 @@ int main(int argc, char const *argv[]) {
         Player *player = new Player(&big_rock, &dm, "Anton", character_races[1], character_classes[1]);
         Repl *repl = new Repl(player);
         std::vector<std::string> tokens({"go", "south"});
-        repl->go(tokens);
+        repl->parse(tokens);
         tezt::ae(&forest_one, player->position);
 
         delete repl;
         delete player;
+    });
+
+    tezt::add("Player look", [&] {
+        Player *player = new Player(&big_rock, &dm, "Testy", character_races[0], character_classes[2]);
+        Repl *repl = new Repl(player);
+        std::vector<std::string> tokens({"look"});
+        repl->parse(tokens);
     });
 
     return tezt::run();
