@@ -32,7 +32,14 @@ namespace dnd {
         }
 
 
-        virtual ~GameObject() { }
+        virtual ~GameObject() {
+            for (auto it = GAME_OBJECTS.begin(); it != GAME_OBJECTS.end(); ++it) {
+                if (*it == this) {
+                    GAME_OBJECTS.erase(it);
+                    return;
+                }
+            }
+        }
 
         // No copy, no move
         GameObject(const GameObject &go) = delete;

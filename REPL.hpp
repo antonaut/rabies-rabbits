@@ -62,14 +62,23 @@ namespace dnd {
         }
 
 
+        inline void player_look() {
+            std::clog << "player look" << std::endl;
+            std::cout << player->position->name << std::endl;
+            for (size_t i = 0; i < player->position->name.size(); i++) {
+                std::cout << "=";
+            }
+            std::cout << std::endl << player->position->short_description << std::endl;
+
+            for (auto &actor : findActorsByPosition(player->position)) {
+                if (actor->id != player_id)
+                    std::cout << "[" << actor->id << "] - A " << actor->race << " is here." << std::endl;
+            }
+        }
+
         inline void look(Tokens &tokens) {
             if (*tokens.begin() == "look") {
-                std::clog << "player look" << std::endl;
-                std::cout << player->position->name << std::endl;
-                for (size_t i = 0; i < player->position->name.size(); i++) {
-                    std::cout << "=";
-                }
-                std::cout << std::endl << player->position->short_description << std::endl;
+                this->player_look();
                 return;
             }
             inventory(tokens);
@@ -115,6 +124,8 @@ namespace dnd {
                 std::clog << "player go" << std::endl;
                 try {
                     this->player->go(parseDirection(*it));
+                    this->player_look();
+
                 } catch (const std::invalid_argument &ex) {
                     std::cout << "Unable to move in that direction." << std::endl;
                 }

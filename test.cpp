@@ -14,7 +14,7 @@
 using namespace dnd;
 
 int main(int argc, char const *argv[]) {
-    Environment
+    const Environment
         big_rock("A big rock",
         "You stand in front of a big rock. Somehow you feel like home."),
         forest_one("In the forest",
@@ -68,6 +68,7 @@ int main(int argc, char const *argv[]) {
         Repl *repl = new Repl(player);
         std::vector<std::string> tokens({"go", "south"});
         repl->go(tokens);
+        tezt::ae(&forest_one, player->position);
     });
 
     return tezt::run();

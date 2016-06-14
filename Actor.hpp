@@ -11,6 +11,9 @@
 #include "CharacterRace.hpp"
 
 namespace dnd {
+    class Actor;
+
+    std::vector<Actor *> ACTORS;
 
     class Actor : public GameObject {
     public:
@@ -31,7 +34,18 @@ namespace dnd {
                 base_damage(10),
                 position(position),
                 game_map(game_map),
-                race(race) { }
+                race(race) {
+            ACTORS.push_back(this);
+        }
+
+        virtual ~Actor() {
+            for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
+                if (*it == this) {
+                    ACTORS.erase(it);
+                    return;
+                }
+            }
+        }
 
 
         uint32_t getCurrent_health() const {
@@ -91,6 +105,17 @@ namespace dnd {
 
         virtual void action() = 0;
     };
+
+    std::vector<Actor *> findActorsByPosition(const Environment *position) {
+        std::vector<Actor *> atPosition;
+        for (auto &actor : ACTORS) {
+            if (actor->position == position) {
+                atPosition.push_back(actor);
+            }
+        }
+
+        return atPosition;
+    }
 
 }  // namespace dnd
 

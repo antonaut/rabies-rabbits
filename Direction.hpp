@@ -34,11 +34,12 @@ namespace dnd {
     Direction parseDirection(std::string dir) {
         char c = *dir.begin();
         std::locale loc;
-        std::stringstream ss;
-        ss << std::toupper(c, loc);
+        c = std::toupper(c, loc);
+        std::string s;
+        s += c;
 
-        if (DIRECTIONS().find(ss.str()) != DIRECTIONS().end()) {
-            return (Direction) ss.str();
+        if (DIRECTIONS().find(s) != DIRECTIONS().end()) {
+            return (Direction) s;
         }
         throw std::invalid_argument("No such direction.");
     }
