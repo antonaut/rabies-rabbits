@@ -11,8 +11,6 @@ set(HEADER_FILES
         Direction.hpp
         DungeonMap.hpp
         Environment.hpp
-        Event.hpp
-        EventBus.hpp
         GameObject.hpp
         Intro.hpp
         IOHelpers.hpp
