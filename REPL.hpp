@@ -37,7 +37,8 @@ namespace dnd {
             // Read -> Eval -> Print -> Loop => REPL
 
             std::cout << this->player->get_name() << " - "
-            << this->player->getCurrent_health() << ">";
+            << this->player->getCurrent_health()
+            << "/" << this->player->max_health << ">";
             std::string command_input;
             std::getline(std::cin, command_input);
 
@@ -75,7 +76,10 @@ namespace dnd {
                     std::cout << "[" << actor->id << "] - A " << actor->race << " is here." << std::endl;
             }
 
+            this->printExits();
+        }
 
+        void printExits() const {
             std::cout << "Exits: ";
             std::vector<Direction> exits = player->game_map->exits(player->position);
 

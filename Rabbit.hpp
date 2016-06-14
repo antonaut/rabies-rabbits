@@ -29,7 +29,10 @@ namespace dnd {
         Rabbit(const Environment *start_pos,
                DungeonMap *dm) : Actor(start_pos,
                                        dm,
-                                       RACE_RABBIT), starting_pos(start_pos), tickCount(0) { }
+                                       RACE_RABBIT), starting_pos(start_pos), tickCount(0) {
+            Actor::current_health = 20;
+            Actor::max_health = 20;
+        }
 
         void wait() const {
             std::clog << Actor::id << " waits." << std::endl;

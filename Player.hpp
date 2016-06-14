@@ -3,10 +3,12 @@
 #ifndef LAB3_PLAYER_HPP_
 #define LAB3_PLAYER_HPP_
 
+#include <sstream>
 #include "GameObject.hpp"
 #include "Actor.hpp"
 #include "CharacterRace.hpp"
 #include "CharacterClass.hpp"
+#include "DungeonMap.hpp"
 
 namespace dnd {
 
@@ -35,7 +37,21 @@ namespace dnd {
 
 
         void fight(Actor *enemy) {
+            uint32_t dmg = this->damage();
+            enemy->hurt(dmg);
 
+            std::stringstream ss;
+            ss << enemy->race;
+
+            this->cls.attack_fn(ss.str(), enemy->max_health, enemy->current_health, dmg);
+
+            std::cout << "The enemy hits you for " << enemy->base_damage << " points of damage." << std::endl;
+
+            this->hurt(enemy->base_damage);
+        }
+
+        uint32_t damage() {
+            return this->base_damage;
         }
 
         virtual void action() {

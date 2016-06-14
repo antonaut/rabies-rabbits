@@ -70,6 +70,7 @@ namespace dnd {
         }
 
         virtual void die() {
+            std::clog << this->id << " just died." << std::endl;
             GameObject::is_dead = true;
         }
 
