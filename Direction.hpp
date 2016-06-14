@@ -32,7 +32,9 @@ namespace dnd {
 
 
     Direction parseDirection(std::string dir) {
-        char c = *dir.begin();
+        if (dir.empty())
+            throw std::invalid_argument("No such direction");
+        char c = *(dir.begin());
         std::locale loc;
         c = std::toupper(c, loc);
         std::string s;

@@ -60,14 +60,14 @@ namespace dnd {
             this->add_exit(down, up, UP);
         }
 
-        std::shared_ptr<std::vector<Direction>> exits(const Environment *env) const {
-            std::shared_ptr<std::vector<Direction>> res = std::make_shared<std::vector<Direction>>();
+        std::vector<Direction> exits(const Environment *env) const {
+            std::vector<Direction> res;
             auto it = this->env_map.find(env);
             if (it == this->env_map.end()) {
                 return res;
             }
             for (auto &p : (*it).second) {
-                res->push_back(p.second);
+                res.push_back(p.second);
             }
             return res;
         }

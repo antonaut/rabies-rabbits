@@ -65,8 +65,11 @@ int main(int argc, char *argv[]) {
 
     } catch (const std::out_of_range &oor) {
         std::cout << "Quit: " << oor.what() << std::endl;
-
-        return EXIT_SUCCESS;
     }
+
+    delete sm;
+    delete intro;
+    delete player;
+
     return EXIT_SUCCESS;
 }

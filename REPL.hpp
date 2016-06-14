@@ -34,12 +34,12 @@ namespace dnd {
 
         virtual void fixed_update() {
 
-            // Show prompt, REad -> Parse -> send evts/eval -> Loop => REPL
+            // Read -> Eval -> Print -> Loop => REPL
 
             std::cout << this->player->get_name() << " - "
             << this->player->getCurrent_health() << ">";
             std::string command_input;
-            std::cin >> command_input;
+            std::getline(std::cin, command_input);
 
             if (std::cin.eof()) {
                 throw std::out_of_range("Ctrl-D"); // Quit game
@@ -74,6 +74,18 @@ namespace dnd {
                 if (actor->id != player_id)
                     std::cout << "[" << actor->id << "] - A " << actor->race << " is here." << std::endl;
             }
+
+
+            std::cout << "Exits: ";
+            std::vector<Direction> exits = player->game_map->exits(player->position);
+
+            if (exits.size() > 1) {
+                for (size_t i = 0; i < exits.size() - 1; ++i) {
+                    std::cout << exits[i] << ", ";
+                }
+            }
+            std::cout << exits[exits.size() - 1];
+            std::cout << std::endl;
         }
 
         inline void look(Tokens &tokens) {
@@ -122,13 +134,20 @@ namespace dnd {
                 *tokens.begin() == "g") {
                 auto it = ++tokens.begin();
                 std::clog << "player go" << std::endl;
+                bool moved;
                 try {
-                    this->player->go(parseDirection(*it));
-                    this->player_look();
+                    auto dir = parseDirection(*it);
+                    moved = this->player->go(dir);
+                } catch (std::exception &ex) {
+                    moved = false;
+                }
 
-                } catch (const std::invalid_argument &ex) {
+                if (moved) {
+                    this->player_look();
+                } else {
                     std::cout << "Unable to move in that direction." << std::endl;
                 }
+
                 return;
             }
             fight(tokens);

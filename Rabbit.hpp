@@ -70,10 +70,10 @@ namespace dnd {
                 }
 
                 queue.pop_front();
-                std::shared_ptr<std::vector<Direction>> exits_ptr = dmap->exits(current);
+                std::vector<Direction> exits = dmap->exits(current);
                 std::vector<const Environment *> nextRooms;
-                for (size_t i = 0; i < exits_ptr->size(); ++i) {
-                    Direction next_dir = (*exits_ptr)[i];
+                for (size_t i = 0; i < exits.size(); ++i) {
+                    Direction next_dir = exits[i];
                     const Environment *next_env = dmap->env_from_exit(current, next_dir);
                     if (visited.find(next_env) != visited.end()) {
                         nextRooms.push_back(next_env);
@@ -102,12 +102,11 @@ namespace dnd {
 
         // Flee in a random direction
         void flee() {
-            const std::shared_ptr<std::vector<Direction>> &ptr = this->game_map->exits(this->position);
+            std::vector<Direction> exits = this->game_map->exits(this->position);
             std::mt19937 mt_engine;
-            std::uniform_int_distribution<int> distribution(0, (int) ptr->size() - 1);
+            std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
             int exit_index = distribution(mt_engine);
-
-            this->go((*ptr)[exit_index]);
+            this->go(exits[exit_index]);
         }
 
         virtual void action() {

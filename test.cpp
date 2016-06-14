@@ -69,6 +69,9 @@ int main(int argc, char const *argv[]) {
         std::vector<std::string> tokens({"go", "south"});
         repl->go(tokens);
         tezt::ae(&forest_one, player->position);
+
+        delete repl;
+        delete player;
     });
 
     return tezt::run();
