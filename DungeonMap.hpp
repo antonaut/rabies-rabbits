@@ -7,6 +7,7 @@
 #include <map>
 #include <stdexcept>
 #include <memory>
+#include <deque>
 
 #include "Environment.hpp"
 #include "Direction.hpp"
@@ -71,6 +72,57 @@ namespace dnd {
             }
             return res;
         }
+
+        const Environment *the_void = (const Environment *) 0;
+        std::pair<const Environment *, Direction> BOGUS = std::make_pair(the_void, NORTH);
+
+        std::vector<Direction> backtrack(const Environment *from, const Environment *to,
+                                         std::map<const Environment *, std::pair<const Environment *, Direction>> prev) {
+
+            std::vector<dnd::Direction> path;
+            const Environment *current = to;
+            while (prev[current].first != the_void) {
+                path.push_back(prev[current].second);
+                current = prev[current].first;
+            }
+            return path;
+        }
+
+        std::vector<Direction> bfs(const Environment *from, const Environment *to, DungeonMap *dmap) {
+            std::set<const Environment *> visited;
+
+            const Environment *current = from;
+
+            std::map<const Environment *, std::pair<const Environment *, Direction>> previous;
+            previous[current] = BOGUS;
+
+            std::deque<const Environment *> queue;
+            queue.push_back(current);
+
+            while (!queue.empty()) {
+                current = *queue.begin();
+                visited.insert(current);
+
+                if (current == to) {
+                    return this->backtrack(from, to, previous);
+                }
+
+                queue.pop_front();
+                std::vector<Direction> exits = dmap->exits(current);
+                std::vector<const Environment *> nextRooms;
+                for (size_t i = 0; i < exits.size(); ++i) {
+                    Direction next_dir = exits[i];
+                    const Environment *next_env = dmap->env_from_exit(current, next_dir);
+                    if (visited.find(next_env) != visited.end()) {
+                        nextRooms.push_back(next_env);
+                        previous.insert(std::make_pair(next_env, std::make_pair(current, next_dir)));
+                    }
+                }
+                queue.insert(queue.end(), nextRooms.begin(), nextRooms.end());
+            }
+            return std::vector<Direction>();
+        }
+
 
         const Environment *env_from_exit(const Environment *from, Direction dir) const {
             auto it = this->env_map.find(from);

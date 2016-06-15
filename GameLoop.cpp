@@ -1,8 +1,6 @@
 // Copyright 2016 Anton Erholt <aerholt@kth.se>
 
-// #include <iostream>
 #include <string>
-// #include <chrono>
 #include <vector>
 #include <stdexcept>
 
@@ -11,23 +9,17 @@
 #include "REPL.hpp"
 #include "Intro.hpp"
 #include "Rabbit.hpp"
+#include "TickCount.hpp"
 
 namespace dnd {
 
-
     void start_game_loop() {
-        /*
-        std::chrono::time_point<std::chrono::system_clock> delta = std::chrono::system_clock::now();
-        std::chrono::time_point<std::chrono::system_clock> last_time = std::chrono::system_clock::now();
-        */
         bool quit(false);
         while (!quit) {
-            // std::chrono::duration<double> delta
-            // = std::chrono::system_clock::now() - last_time;
+            std::clog << "*** Tick: " << tickCount << " ***" << std::endl;
             for (auto &game_obj : GAME_OBJECTS) {
-                // game_obj->update(delta.count());
                 try {
-                    game_obj->fixed_update();
+                    game_obj->action();
                 } catch (const std::out_of_range &ex) {
                     quit = true;
                     break;
@@ -35,7 +27,6 @@ namespace dnd {
             }
         }
     }
-
 
 }  // namespace dnd
 

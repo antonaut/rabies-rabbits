@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <random>
 
 #include "GameObject.hpp"
 #include "Environment.hpp"
@@ -46,7 +47,6 @@ namespace dnd {
                 }
             }
         }
-
 
         uint32_t getCurrent_health() const {
             return this->current_health;
@@ -99,13 +99,48 @@ namespace dnd {
             std::cout << std::endl;
         }
 
-        virtual void fight(Actor *target) {
+        virtual void fight(Actor *target) {}
 
+        virtual void action() {}
+
+        friend
+        std::ostream& operator<<(std::ostream &str, const Actor &actor);
+
+        void moveTowards(const Environment *target_location) {
+            std::vector<Direction> path = this->game_map->bfs(Actor::position, target_location, Actor::game_map);
+            if (path.empty()) {
+                return this->wait();
+            }
+
+            std::clog << Actor::id << " - move towards path ";
+            for (Direction d : path) {
+                std::clog << d << ", ";
+            }
+            std::clog << std::endl;
+
+            this->go(*path.begin());
         }
 
+        // Flee in a random direction
+        void flee() {
+            std::vector<Direction> exits = this->game_map->exits(this->position);
+            std::mt19937 mt_engine;
+            std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
+            int exit_index = distribution(mt_engine);
+            this->go(exits[exit_index]);
+        }
 
-        virtual void action() = 0;
+        virtual void wait() const {
+            std::clog << Actor::id << " waits." << std::endl;
+        }
+
     };
+
+    std::ostream& operator<<(std::ostream &str, const Actor &actor) {
+        str << actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
+        << actor.max_health;
+        return str;
+    }
 
     std::vector<Actor *> findActorsByPosition(const Environment *position) {
         std::vector<Actor *> atPosition;

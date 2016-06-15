@@ -50,7 +50,7 @@ namespace dnd {
 
         GameObject &operator=(GameObject &&go) = delete;
 
-        virtual void fixed_update() {
+        virtual void action() {
 
         }
     };

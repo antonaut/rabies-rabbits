@@ -9,6 +9,7 @@
 namespace dnd {
 
     struct Intro : public GameObject {
+    private:
 
     public:
         Intro() : GameObject() { }
