@@ -113,7 +113,7 @@ namespace dnd {
                 for (size_t i = 0; i < exits.size(); ++i) {
                     Direction next_dir = exits[i];
                     const Environment *next_env = dmap->env_from_exit(current, next_dir);
-                    if (visited.find(next_env) != visited.end()) {
+                    if (visited.find(next_env) == visited.end()) { // not visited
                         nextRooms.push_back(next_env);
                         previous.insert(std::make_pair(next_env, std::make_pair(current, next_dir)));
                     }

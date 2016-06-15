@@ -12,8 +12,9 @@
 #include "CharacterRace.hpp"
 
 namespace dnd {
-    class Actor;
+    std::mt19937 mt_engine;
 
+    class Actor;
     std::vector<Actor *> ACTORS;
 
     class Actor : public GameObject {
@@ -113,18 +114,18 @@ namespace dnd {
             }
 
             std::clog << Actor::id << " - move towards path ";
-            for (Direction d : path) {
-                std::clog << d << ", ";
+            for (auto it = path.rbegin(); it != path.rend(); ++it) {
+                std::clog << *it << " ";
             }
             std::clog << std::endl;
 
-            this->go(*path.begin());
+            this->go(*(--path.end()));
         }
 
         // Flee in a random direction
         void flee() {
             std::vector<Direction> exits = this->game_map->exits(this->position);
-            std::mt19937 mt_engine;
+
             std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
             int exit_index = distribution(mt_engine);
             this->go(exits[exit_index]);
@@ -138,7 +139,7 @@ namespace dnd {
 
     std::ostream& operator<<(std::ostream &str, const Actor &actor) {
         str << actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
-        << actor.max_health;
+        << actor.max_health << ")";
         return str;
     }
 

@@ -37,7 +37,7 @@ namespace dnd {
                     *forest_nine = new Environment("In the forest",
                                                    "You find yourself lost amongst the trees. There's a light up there.");
             start = big_rock;
-            r1 = forest_four;
+            r1 = forest_three;
             r2 = forest_seven;
 
 

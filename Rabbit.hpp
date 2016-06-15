@@ -40,10 +40,9 @@ namespace dnd {
             std::clog << *this << std::endl;
 
             if (tickCount % 3 == 0) {
-                std::clog << "move / fight" << std::endl;
                 if (currentState == aggr) {
                     Player *player = getPlayer();
-                    if (player->position == Actor::position) {
+                    if (*player->position == *Actor::position) {
                         Actor::fight(player);
                         return;
                     }
