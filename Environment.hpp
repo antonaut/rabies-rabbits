@@ -6,7 +6,10 @@
 #include <string>
 #include <vector>
 
+#include "GameObject.hpp"
+
 namespace dnd {
+
     class Environment : public GameObject {
     protected:
         Environment() { }
@@ -21,9 +24,6 @@ namespace dnd {
 
     };
 
-    bool operator==(const Environment &a, const Environment &b) {
-        return a.id == b.id;
-    }
 
 }  // namespace dnd
 

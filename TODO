@@ -1,5 +1,17 @@
 TODO
 * Death of actors
+    -   Tried to make sure dead actors are removed and won't attack back.
+        Keep investigating this.
+
+    1. In GameLoop.hpp:
+       After each action(), loop through the ACTORS and see if an Actor is_dead.
+       If so, remove it.
+
+    2. Created failing test case of 1.
+
+    3. Fixed said test case and found another bug in the meantime.
+       Dead enemies should always have zero hp. Not overflow. :D
+
 * Crocodiles
 * Boss
 * Items

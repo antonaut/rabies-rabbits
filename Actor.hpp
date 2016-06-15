@@ -72,12 +72,16 @@ namespace dnd {
 
             if (diff <= 0) {
                 this->die();
+                this->current_health = 0;
+                return;
             }
+
             this->current_health = (uint32_t) diff;
         }
 
         virtual void die() {
             this->howl();
+            this->is_dead = true;
             std::clog << this->id << " just died." << std::endl;
         }
 

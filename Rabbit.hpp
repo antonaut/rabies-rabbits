@@ -33,6 +33,10 @@ namespace dnd {
             Actor::max_health = 20;
         }
 
+        virtual ~Rabbit() {
+            std::clog << "Rabbit destructor called, id: " << this->id << std::endl;
+        }
+
         friend
         std::ostream& operator<<(std::ostream &str, const Rabbit &rabbit);
 
@@ -50,12 +54,12 @@ namespace dnd {
             if (tickCount % 3 == 0) {
                 if (currentState == aggr) {
                     Player *player = getPlayer();
-                    if (*player->position == *Actor::position) {
+                    if (player->position->id == Actor::position->id) {
                         this->fight(player);
                         return;
                     }
                     Actor::moveTowards(player->position);
-                    if (*player->position == *Actor::position) {
+                    if (player->position->id == Actor::position->id) {
                         std::cout << this->race.noise() << std::endl;
                     }
                     return;

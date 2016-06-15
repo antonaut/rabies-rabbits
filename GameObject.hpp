@@ -49,6 +49,8 @@ namespace dnd {
         virtual void action() {
 
         }
+
+        friend bool operator==(const GameObject &a, const GameObject &b);
     };
 
     uint64_t GameObject::id_counter = 0;
@@ -61,6 +63,10 @@ namespace dnd {
             }
         }
         throw std::invalid_argument("No GameObject with that id found.");
+    }
+
+    bool operator==(const GameObject &a, const GameObject &b) {
+        return a.id == b.id;
     }
 
 }  // namespace dnd

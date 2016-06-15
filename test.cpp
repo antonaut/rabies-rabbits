@@ -3,8 +3,6 @@
 #include <string>
 #include <iostream>
 
-// #include "GameObject.hpp"
-
 #include "tezt.hpp"
 #include "Environment.hpp"
 #include "DungeonMap.hpp"
@@ -80,6 +78,31 @@ int main(int argc, char const *argv[]) {
         Repl *repl = new Repl(player);
         std::vector<std::string> tokens({"look"});
         repl->parse(tokens);
+    });
+
+    tezt::add("Remove dead actor after an action is performed that kills it.", [&] {
+
+        Player *player = new Player(&big_rock, &dm, "Testy", character_races[0], character_classes[2]);
+        Actor *rabbit = new Rabbit(&forest_four, &dm);
+        auto s1 = ACTORS.size();
+
+        rabbit->current_health = 1;
+
+        // Simulate GameLoop
+        player->fight(rabbit);
+
+        tezt::ae(true, rabbit->is_dead, "Rabbit should be dead.");
+
+        // Make sure rabbit is gone
+        for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
+            if ((*it)->is_dead) {
+                ACTORS.erase(it);
+                break;
+            }
+        }
+        tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
+
+        tezt::ae(0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
     });
 
     return tezt::run();
