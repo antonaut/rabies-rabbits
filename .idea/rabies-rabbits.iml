@@ -6,19 +6,18 @@
       <sourceFolder url="file://$MODULE_DIR$/Crocit.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GameLoop.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GameObject.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Event.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/REPL.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Item.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Intro.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/DungeonMap.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Direction.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Crocodile.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Actor.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SmallForestMap.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/EventBus.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CharacterRace.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Environment.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Item.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TickCount.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Player.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tezt.hpp" isTestSource="false" />

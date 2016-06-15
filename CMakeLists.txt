@@ -19,10 +19,10 @@ set(HEADER_FILES
         Rabbit.hpp
         REPL.hpp
         SmallForestMap.hpp
-        Crocit.hpp)
+        Crocit.hpp TickCount.hpp)
 
-set(SOURCE_FILES GameLoop.cpp)
-set(TEST_SOURCE_FILES test.cpp tezt.hpp)
+set(SOURCE_FILES GameLoop.cpp TickCount.hpp)
+set(TEST_SOURCE_FILES test.cpp tezt.hpp TickCount.hpp)
 
 add_executable(rabiesrabbits ${SOURCE_FILES} ${HEADER_FILES})
 add_executable(testexec ${TEST_SOURCE_FILES} ${HEADER_FILES})

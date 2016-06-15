@@ -11,6 +11,7 @@
 
 #include "GameObject.hpp"
 #include "Player.hpp"
+#include "TickCount.hpp"
 
 namespace dnd {
 
@@ -32,7 +33,7 @@ namespace dnd {
     public:
         Repl(Player *p) : GameObject(), player(p) { }
 
-        virtual void fixed_update() {
+        virtual void action() {
 
             // Read -> Eval -> Print -> Loop => REPL
 
@@ -59,7 +60,7 @@ namespace dnd {
 
         void parse(Tokens &tokens) {
             if (tokens.empty()) return;
-            look(tokens);
+            this->look(tokens);
         }
 
 
@@ -97,7 +98,7 @@ namespace dnd {
                 this->player_look();
                 return;
             }
-            inventory(tokens);
+            this->inventory(tokens);
         }
 
         inline void inventory(Tokens &tokens) {
@@ -105,7 +106,7 @@ namespace dnd {
                 *tokens.begin() == "inventory") {
                 return;
             }
-            help(tokens);
+            this->help(tokens);
         }
 
 
@@ -129,7 +130,7 @@ namespace dnd {
                 << "Press `Ctrl-c` to quit the game." << std::endl;
                 return;
             }
-            go(tokens);
+            this->go(tokens);
         }
 
 
@@ -148,13 +149,14 @@ namespace dnd {
 
                 if (moved) {
                     this->player_look();
+                    ++tickCount;
                 } else {
                     std::cout << "Unable to move in that direction." << std::endl;
                 }
 
                 return;
             }
-            fight(tokens);
+            this->fight(tokens);
         }
 
 
@@ -176,12 +178,13 @@ namespace dnd {
                 Actor *targetActor = (Actor *) target;
                 if (targetActor->position == this->player->position) {
                     this->player->fight(targetActor);
+                    ++tickCount;
                     return;
                 }
                 std::cout << "No such target found." << std::endl;
                 return;
             }
-            talk(tokens);
+            this->talk(tokens);
         }
 
 
@@ -191,13 +194,22 @@ namespace dnd {
                 std::clog << "player talk " << *it << std::endl;
                 return;
             }
-            take(tokens);
+            this->take(tokens);
         }
 
         inline void take(Tokens &tokens) {
             if (*tokens.begin() == "take") {
                 auto it = ++tokens.begin();
                 std::clog << "player take " << *it << std::endl;
+                return;
+            }
+            this->wait(tokens);
+        }
+
+        inline void wait(Tokens &tokens) {
+            if (*tokens.begin() == "wait") {
+                std::clog << "player wait" << std::endl;
+                ++tickCount;
                 return;
             }
             throw std::invalid_argument("Argle.");

@@ -11,6 +11,7 @@
 #include "CharacterRace.hpp"
 #include "Direction.hpp"
 #include "DungeonMap.hpp"
+#include "TickCount.hpp"
 
 
 namespace dnd {
@@ -22,14 +23,13 @@ namespace dnd {
 
     class Rabbit : public Actor {
         const Environment *starting_pos;
-        int tickCount;
         rabbit_state currentState = aggr;
     public:
 
         Rabbit(const Environment *start_pos,
                DungeonMap *dm) : Actor(start_pos,
                                        dm,
-                                       RACE_RABBIT), starting_pos(start_pos), tickCount(0) {
+                                       RACE_RABBIT), starting_pos(start_pos) {
             Actor::current_health = 20;
             Actor::max_health = 20;
         }
@@ -121,23 +121,22 @@ namespace dnd {
                         return;
                     }
                     this->moveTowards(player->position);
-                    ++tickCount;
                     return;
                 } else {
                     this->flee();
-                    ++tickCount;
                     return;
                 }
             } else {
                 wait();
             }
 
-            if (Actor::current_health < Actor::current_health) {
+            if (Actor::current_health < Actor::max_health >> 1) {
                 currentState = wimpy;
             }
             ++tickCount;
 
         }
+
     };
 
 
