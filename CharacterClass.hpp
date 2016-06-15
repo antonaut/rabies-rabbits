@@ -49,7 +49,7 @@ namespace dnd {
                                double diff = max_hp - current_hp;
                                std::cout << "You put an effort worth "
                                << dmg
-                               << " points in to solving "
+                               << " points into solving " << std::endl
                                << target << "'s problems. "
                                << std::setprecision(3)
                                <<  (diff / (double) max_hp) * 100.0 << "\% of corner cases covered." << std::endl;

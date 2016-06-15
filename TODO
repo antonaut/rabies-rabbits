@@ -1,6 +1,9 @@
 TODO
 * Death of actors
-    -   Tried to make sure dead actors are removed and won't attack back.
+
+#1
+
+Tried to make sure dead actors are removed and won't attack back.
         Keep investigating this.
 
     1. In GameLoop.hpp:
@@ -12,7 +15,15 @@ TODO
     3. Fixed said test case and found another bug in the meantime.
        Dead enemies should always have zero hp. Not overflow. :D
 
+
+#2
+
+Crashes when more than one rabbit gets killed.
+
+Made a really ugly way to keep track of dead enemies.
+
+
 * Crocodiles
-* Boss
+* Boss Rabbidile
 * Items
 

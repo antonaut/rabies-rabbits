@@ -157,6 +157,10 @@ namespace dnd {
                 auto it = ++tokens.begin();
                 std::clog << "player go" << std::endl;
                 bool moved;
+                if (tokens.size() == 1) {
+                    std::cout << "Go in what direction?" << std::endl;
+                    return;
+                }
                 try {
                     auto dir = parseDirection(*it);
                     moved = this->player->go(dir);

@@ -29,6 +29,7 @@ namespace dnd {
 
 
         virtual ~GameObject() {
+            std::clog << "GameObject destructor called. id: " << this->id << std::endl;
             for (auto it = GAME_OBJECTS.begin(); it != GAME_OBJECTS.end(); ++it) {
                 if (*it == this) {
                     GAME_OBJECTS.erase(it);

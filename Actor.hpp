@@ -45,6 +45,7 @@ namespace dnd {
         }
 
         virtual ~Actor() {
+            std::clog << "Actor destructor called. id: " << this->id << std::endl;
             for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
                 if (*it == this) {
                     ACTORS.erase(it);

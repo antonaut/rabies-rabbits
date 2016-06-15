@@ -31,6 +31,10 @@ namespace dnd {
             player_id = Actor::id;
         }
 
+        const CharacterClass &getCls() const {
+            return cls;
+        }
+
         std::string get_name() const {
             return name;
         }

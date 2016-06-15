@@ -24,13 +24,29 @@ namespace dnd {
                     break;
                 }
             }
+            std::vector<std::vector<Actor *>::iterator> dead_actors;
             for (std::vector<Actor *>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
                 if ((*it)->is_dead) {
                     Actor *dead_actor = *it;
-                    std::cout << dead_actor->id << " - " << dead_actor->race << " has died." << std::cout;
-                    delete dead_actor;
+                    Player *player = getPlayer();
+                    if (dead_actor->id == player->id) {
+                        quit = true;
+                        std::cout << "Oh dear, you are dead. Please play again!" << std::endl;
+                        break;
+                    }
+                    std::stringstream ss;
+                    ss << dead_actor->race;
+                    player->getCls().killed_fn(ss.str());
+
+                    dead_actors.push_back(it);
                 }
             }
+            for (auto it : dead_actors) {
+                Actor *ap = *it;
+                ACTORS.erase(it);
+                delete ap;
+            }
+
         }
     }
 
@@ -51,7 +67,7 @@ int main(int argc, char *argv[]) {
 
         Repl repl(player);
 
-        // Spawn actors, deleted upon death.
+        // Spawn actors, deleted upon death / exit
         new Rabbit(sm->getRabbitSpawnOne(),
                   sm->getDungeonMap());
         new Rabbit(sm->getRabbitSpawnTwo(),
@@ -63,9 +79,17 @@ int main(int argc, char *argv[]) {
         std::cout << "Quit: " << oor.what() << std::endl;
     }
 
+
+    for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
+        delete *it;
+    }
+
+    ACTORS.clear();
+
     delete sm;
     delete intro;
-    delete player;
+
+    GAME_OBJECTS.clear();
 
     return EXIT_SUCCESS;
 }
