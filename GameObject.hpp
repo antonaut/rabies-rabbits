@@ -17,16 +17,12 @@ namespace dnd {
 
     std::vector<GameObject *> GAME_OBJECTS;
 
-    class GameObject {
-    private:
-    protected:
-        bool is_dead;
-    public:
+    struct GameObject {
         static uint64_t id_counter;
         uint64_t id;
 
         // Default constructor constructs an empty GameObject
-        explicit GameObject() : is_dead(false), id(++id_counter) {
+        explicit GameObject() : id(++id_counter) {
             GAME_OBJECTS.push_back(this);
             std::clog << "GameObjectSpawned - id(" << this->id << ")." << std::endl;
         }

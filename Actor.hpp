@@ -23,9 +23,12 @@ namespace dnd {
         uint32_t current_health;
         uint32_t max_health;
         uint32_t base_damage;
+
         const Environment *position;
         DungeonMap *game_map;
         CharacterRace race;
+
+        bool is_dead;
 
         Actor(const Environment *position,
               DungeonMap *game_map,
@@ -36,7 +39,8 @@ namespace dnd {
                 base_damage(10),
                 position(position),
                 game_map(game_map),
-                race(race) {
+                race(race),
+                is_dead(false) {
             ACTORS.push_back(this);
         }
 
@@ -44,7 +48,7 @@ namespace dnd {
             for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
                 if (*it == this) {
                     ACTORS.erase(it);
-                    return;
+                    break;
                 }
             }
         }
@@ -62,6 +66,8 @@ namespace dnd {
         }
 
         virtual void hurt(uint32_t damage) {
+            if (this->is_dead)
+                return;
             int32_t diff = this->current_health - damage;
 
             if (diff <= 0) {
@@ -71,8 +77,8 @@ namespace dnd {
         }
 
         virtual void die() {
+            this->howl();
             std::clog << this->id << " just died." << std::endl;
-            GameObject::is_dead = true;
         }
 
         bool go(Direction dir) {

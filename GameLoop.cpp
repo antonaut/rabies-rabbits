@@ -9,7 +9,6 @@
 #include "REPL.hpp"
 #include "Intro.hpp"
 #include "Rabbit.hpp"
-#include "TickCount.hpp"
 
 namespace dnd {
 
@@ -25,6 +24,13 @@ namespace dnd {
                     break;
                 }
             }
+            for (std::vector<Actor *>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
+                if ((*it)->is_dead) {
+                    Actor *dead_actor = *it;
+                    std::cout << dead_actor->id << " - " << dead_actor->race << " has died." << std::cout;
+                    delete dead_actor;
+                }
+            }
         }
     }
 
@@ -33,8 +39,6 @@ namespace dnd {
 using namespace dnd;
 
 int main(int argc, char *argv[]) {
-    (void) argv; // unused
-    (void) argc; // unused
 
     SmallForestMap *sm = new SmallForestMap();
 
@@ -47,10 +51,11 @@ int main(int argc, char *argv[]) {
 
         Repl repl(player);
 
-        Rabbit r1(sm->getRabbitSpawnOne(),
+        // Spawn actors, deleted upon death.
+        new Rabbit(sm->getRabbitSpawnOne(),
                   sm->getDungeonMap());
-        Rabbit r2(sm->getRabbitSpawnTwo(),
-                  sm->getDungeonMap());
+        new Rabbit(sm->getRabbitSpawnTwo(),
+                   sm->getDungeonMap());
 
         start_game_loop();
 

@@ -64,7 +64,7 @@ namespace dnd {
         }
 
 
-        inline void player_look() {
+        inline void playerLook() {
             std::clog << "player look" << std::endl;
             std::cout << player->position->name << std::endl;
             for (size_t i = 0; i < player->position->name.size(); i++) {
@@ -95,7 +95,7 @@ namespace dnd {
 
         inline void look(Tokens &tokens) {
             if (*tokens.begin() == "look") {
-                this->player_look();
+                this->playerLook();
                 return;
             }
             this->inventory(tokens);
@@ -165,7 +165,7 @@ namespace dnd {
                 }
 
                 if (moved) {
-                    this->player_look();
+                    this->playerLook();
                     ++tickCount;
                 } else {
                     std::cout << "Unable to move in that direction." << std::endl;

@@ -17,6 +17,8 @@ namespace dnd {
         }
     };
 
+    std::ostream &operator<<(std::ostream &str, const CharacterRace c);
+
     std::ostream &operator<<(std::ostream &str, const CharacterRace c) {
         str << c.name;
         return str;

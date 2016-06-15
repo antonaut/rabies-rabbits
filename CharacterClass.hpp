@@ -34,7 +34,7 @@ namespace dnd {
                                << target << " with a syringe and put in "
                                << dmg
                                << " drops of vaccine. Sickness cured by "
-                               << std::setprecision(2)
+                               << std::setprecision(3)
                                << (diff / (double) max_hp) * 100.0 << "\%." << std::endl;
                            },
                            [&](std::string target) {
@@ -51,7 +51,7 @@ namespace dnd {
                                << dmg
                                << " points in to solving "
                                << target << "'s problems. "
-                               << std::setprecision(2)
+                               << std::setprecision(3)
                                <<  (diff / (double) max_hp) * 100.0 << "\% of corner cases covered." << std::endl;
                            },
                            [&](std::string target) {
@@ -68,7 +68,7 @@ namespace dnd {
                                std::cout << "You shock "
                                << target << " with a tazer for "
                                << dmg << " points of damage. "
-                               << std::setprecision(2)
+                               << std::setprecision(3)
                                << ((double) current_hp / (double) max_hp) * 100.0 << "\% health left." << std::endl;
                            },
                            [&](std::string target){

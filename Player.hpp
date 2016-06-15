@@ -45,9 +45,10 @@ namespace dnd {
 
             this->cls.attack_fn(ss.str(), enemy->max_health, enemy->current_health, dmg);
 
-            std::cout << "The enemy hits you for " << enemy->base_damage << " points of damage." << std::endl;
-
-            this->hurt(enemy->base_damage);
+            if (!enemy->is_dead) {
+                std::cout << "The enemy hits you for " << enemy->base_damage << " points of damage." << std::endl;
+                this->hurt(enemy->base_damage);
+            }
         }
 
         virtual uint32_t damage() {
