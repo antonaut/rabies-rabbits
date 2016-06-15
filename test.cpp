@@ -102,7 +102,7 @@ int main(int argc, char const *argv[]) {
         }
         tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
 
-        tezt::ae(0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
+        tezt::ae((uint32_t) 0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
     });
 
     return tezt::run();
