@@ -122,12 +122,29 @@ namespace dnd {
                 << "        \"west\", \"east\"" << std::endl
                 << "        \"up\", \"down\"" << std::endl
                 << std::endl
+                << std::endl
+                << "Objects in the game are shown with their id."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    [32] - Bird, where '32' is the id of the bird."
+                << std::endl
+                << std::endl
+                << "In order to interact with the objects, simply use their id after the interaction."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    '>fight 32'  -- fights with the bird"
+                << std::endl
+                << std::endl
+                << "Interaction commands:"
+                << std::endl
                 << "    talk *target* - talks to *target*." << std::endl
                 << "    fight *target* - fights with *target*." << std::endl
                 << "    take *item* - takes *item*." << std::endl
                 << "    inv - lists item in inventory." << std::endl
                 << std::endl
-                << "Press `Ctrl-c` to quit the game." << std::endl;
+                << "Press `Ctrl-d` to quit the game." << std::endl;
                 return;
             }
             this->go(tokens);

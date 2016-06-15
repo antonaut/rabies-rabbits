@@ -50,7 +50,7 @@ namespace dnd {
             this->hurt(enemy->base_damage);
         }
 
-        uint32_t damage() {
+        virtual uint32_t damage() {
             return this->base_damage;
         }
 

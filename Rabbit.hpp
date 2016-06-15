@@ -36,6 +36,14 @@ namespace dnd {
         friend
         std::ostream& operator<<(std::ostream &str, const Rabbit &rabbit);
 
+        virtual void fight(Actor *target) {
+            Player *player = getPlayer();
+            if (target == player) {
+                std::cout << this->race << " attacks!" << std::endl;
+                player->fight(this);
+            }
+        }
+
         virtual void action() {
             std::clog << *this << std::endl;
 
@@ -43,10 +51,13 @@ namespace dnd {
                 if (currentState == aggr) {
                     Player *player = getPlayer();
                     if (*player->position == *Actor::position) {
-                        Actor::fight(player);
+                        this->fight(player);
                         return;
                     }
                     Actor::moveTowards(player->position);
+                    if (*player->position == *Actor::position) {
+                        std::cout << this->race.noise() << std::endl;
+                    }
                     return;
                 } else {
                     Actor::flee();

@@ -100,6 +100,10 @@ namespace dnd {
             std::cout << std::endl;
         }
 
+        virtual uint32_t damage() {
+            return this->base_damage;
+        }
+
         virtual void fight(Actor *target) {}
 
         virtual void action() {}
@@ -109,7 +113,7 @@ namespace dnd {
 
         void moveTowards(const Environment *target_location) {
             std::vector<Direction> path = this->game_map->bfs(Actor::position, target_location, Actor::game_map);
-            if (path.empty()) {
+            if (path.empty()) { // already there
                 return this->wait();
             }
 

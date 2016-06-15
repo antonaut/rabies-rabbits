@@ -30,8 +30,8 @@ namespace dnd {
                                uint32_t current_hp,
                                uint32_t dmg){
                                double diff = max_hp - current_hp;
-                               std::cout << "Stabs "
-                               << target << " with a syringe and puts in "
+                               std::cout << "You stab "
+                               << target << " with a syringe and put in "
                                << dmg
                                << " drops of vaccine. Sickness cured by "
                                << std::setprecision(2)
@@ -47,7 +47,7 @@ namespace dnd {
                                uint32_t current_hp,
                                uint32_t dmg) {
                                double diff = max_hp - current_hp;
-                               std::cout << "Puts an effort worth "
+                               std::cout << "You put an effort worth "
                                << dmg
                                << " points in to solving "
                                << target << "'s problems. "
@@ -65,7 +65,7 @@ namespace dnd {
                            uint32_t max_hp,
                            uint32_t current_hp,
                            uint32_t dmg){
-                               std::cout << "Shocks "
+                               std::cout << "You shock "
                                << target << " with a tazer for "
                                << dmg << " points of damage. "
                                << std::setprecision(2)
