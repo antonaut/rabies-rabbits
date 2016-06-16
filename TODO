@@ -1,4 +1,6 @@
-TODO
+# The story of development
+
+DONE
 * Death of actors
 
 #1
@@ -18,12 +20,36 @@ Tried to make sure dead actors are removed and won't attack back.
 
 #2
 
-Crashes when more than one rabbit gets killed.
+    1. Crashes when more than one rabbit gets killed.
+        => Got a segmentation violation when trying to access a previously not dead rabbit.
+        This means that Actors don't get removed properly.
 
-Made a really ugly way to keep track of dead enemies.
+    2. Implemented a really ugly way to keep track of dead enemies.
+       I use a vector to store iterators to dead-flagged actors and then erase them after having found all of them.
+       This allows for death messages / events to happen before the actual delete.
+       @see GameLoop.hpp
 
+TODO
 
 * Crocodiles
+
+1. How do crocodiles differ from rabbits?
+    a. They hurt a lot more, like twice as much. They are a lot slower.
+        Let's introduce speeds:
+            - FAST, means moves every second tick
+            - NORMAL, means moves every third tick
+
+    b. They live in a different environment, the swamp.
+        Let's add that to the SmallForestMap.
+
+** SwampEnvironment
+
 * Boss Rabbidile
+
+1.  Protects the candy mountain.
+
+    Is a combination of
+
+
 * Items
 

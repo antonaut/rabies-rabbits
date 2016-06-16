@@ -17,6 +17,11 @@ namespace dnd {
     class Actor;
     std::vector<Actor *> ACTORS;
 
+    typedef int SPEED;
+
+    const SPEED NORMAL(3);
+    const SPEED FAST(2);
+
     class Actor : public GameObject {
     public:
 
@@ -26,13 +31,13 @@ namespace dnd {
 
         const Environment *position;
         DungeonMap *game_map;
-        CharacterRace race;
+        const CharacterRace &race;
 
         bool is_dead;
 
         Actor(const Environment *position,
               DungeonMap *game_map,
-              CharacterRace race) :
+              const CharacterRace &race) :
                 GameObject(),
                 current_health(100),
                 max_health(current_health),

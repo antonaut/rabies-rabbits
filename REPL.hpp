@@ -17,7 +17,7 @@ namespace dnd {
 
     typedef std::vector<std::string> Tokens;
 
-    struct Repl : public GameObject {
+    struct Repl {
     private:
         void split(std::string str, char delim, std::vector<std::string> &elems) {
             std::stringstream ss(str);
@@ -31,7 +31,7 @@ namespace dnd {
 
         Player *player;
     public:
-        Repl(Player *p) : GameObject(), player(p) { }
+        Repl(Player *p) : player(p) { }
 
         virtual void action() {
 

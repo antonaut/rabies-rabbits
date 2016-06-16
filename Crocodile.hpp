@@ -11,7 +11,11 @@ namespace dnd {
 
     class Crocodile : public Actor {
     public:
-        Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, RACE_CROCODILE) { }
+        Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, RACE_CROCODILE) {
+            this->base_damage = 20;
+            this->max_health = 150;
+            this->current_health = this->max_health;
+        }
     };
 
 }  // namespace dnd

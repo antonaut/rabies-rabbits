@@ -41,17 +41,24 @@ namespace dnd {
         std::ostream& operator<<(std::ostream &str, const Rabbit &rabbit);
 
         virtual void fight(Actor *target) {
-            Player *player = getPlayer();
-            if (target == player) {
-                std::cout << this->race << " attacks!" << std::endl;
-                player->fight(this);
+            try {
+                Player *player = getPlayer();
+                if (target == player) {
+                    std::cout << this->race << " attacks!" << std::endl;
+                    player->fight(this);
+                    return;
+                }
+            } catch (const std::invalid_argument &ex) {
+                // No player found
             }
+            this->hurt(target->damage());
+            target->hurt(this->damage());
         }
 
         virtual void action() {
             std::clog << *this << std::endl;
 
-            if (tickCount % 3 == 0) {
+            if (tickCount % FAST == 0) {
                 if (currentState == aggr) {
                     Player *player = getPlayer();
                     if (player->position->id == Actor::position->id) {

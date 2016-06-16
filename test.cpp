@@ -8,32 +8,33 @@
 #include "DungeonMap.hpp"
 #include "Rabbit.hpp"
 #include "REPL.hpp"
+#include "Crocodile.hpp"
 
 using namespace dnd;
 
 
 int main(int argc, char const *argv[]) {
     const Environment
-        big_rock("A big rock",
-        "You stand in front of a big rock. Somehow you feel like home."),
-        forest_one("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_two("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_three("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_four("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_five("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_six("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_seven("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_eight("In the forest",
-        "You find yourself lost amongst the trees."),
-        forest_nine("In the forest",
-        "You find yourself lost amongst the trees. There's a light up there.");
+            big_rock(FOREST_TYPE, "A big rock",
+                     "You stand in front of a big rock. Somehow you feel like home."),
+            forest_one(FOREST_TYPE, "In the forest",
+                       "You find yourself lost amongst the trees."),
+            forest_two(FOREST_TYPE, "In the forest",
+                       "You find yourself lost amongst the trees."),
+            forest_three(FOREST_TYPE, "In the forest",
+                         "You find yourself lost amongst the trees."),
+            forest_four(FOREST_TYPE, "In the forest",
+                        "You find yourself lost amongst the trees."),
+            forest_five(FOREST_TYPE, "In the forest",
+                        "You find yourself lost amongst the trees."),
+            forest_six(FOREST_TYPE, "In the forest",
+                       "You find yourself lost amongst the trees."),
+            forest_seven(FOREST_TYPE, "In the forest",
+                         "You find yourself lost amongst the trees."),
+            forest_eight(FOREST_TYPE, "In the forest",
+                         "You find yourself lost amongst the trees."),
+            forest_nine(FOREST_TYPE, "In the forest",
+                        "You find yourself lost amongst the trees. There's a light up there.");
 
     DungeonMap dm;
 
@@ -64,12 +65,11 @@ int main(int argc, char const *argv[]) {
 
     tezt::add("Player movement", [&] {
         Player *player = new Player(&big_rock, &dm, "Anton", character_races[1], character_classes[1]);
-        Repl *repl = new Repl(player);
+        Repl repl(player);
         std::vector<std::string> tokens({"go", "south"});
-        repl->parse(tokens);
+        repl.parse(tokens);
         tezt::ae(&forest_one, player->position);
 
-        delete repl;
         delete player;
     });
 
@@ -103,6 +103,38 @@ int main(int argc, char const *argv[]) {
         tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
 
         tezt::ae((uint32_t) 0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
+    });
+
+    tezt::add("A crocodile is slower than a rabbit.", [&] {
+        Rabbit r1(&big_rock, &dm);
+        Crocodile c1(&big_rock, &dm);
+        Player player(&forest_nine, &dm, "Testy", character_races[2], character_classes[0]);
+
+        const Environment *target = &forest_nine;
+
+        while (r1.position->id != target->id) {
+            r1.action();
+            c1.action();
+            tickCount++;
+        }
+
+        tezt::ae(target->id, r1.position->id, "Rabbit arrived at target.");
+        tezt::ane(target->id, c1.position->id, "Crocodile not at target.");
+    });
+
+    tezt::add("A crocodile always hurts more than a rabbit.", [&] {
+        CharacterRace dummy{"Dummy",};
+
+        Actor dummy1(&big_rock, &dm, dummy);
+        Actor dummy2(&big_rock, &dm, dummy);
+
+        Crocodile crocodile(&big_rock, &dm);
+        Rabbit rabbit(&big_rock, &dm);
+
+        rabbit.fight(&dummy1);
+        crocodile.fight(&dummy2);
+
+        tezt::ae(true, dummy1.getCurrent_health() < dummy2.getCurrent_health());
     });
 
     return tezt::run();
