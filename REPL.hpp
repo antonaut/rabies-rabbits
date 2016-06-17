@@ -32,6 +32,7 @@ namespace lab3 {
 
         Player *player;
         SmallGameMap *smallGameMap;
+        Tokens prev{""};
     public:
         Repl(Player *player, SmallGameMap *smallGameMap = nullptr)
                 : GameObject(), player(player), smallGameMap(smallGameMap) { }
@@ -63,7 +64,16 @@ namespace lab3 {
 
         void parse(Tokens &tokens) {
             if (tokens.empty()) return;
-            this->look(tokens);
+            this->previous(tokens);
+        }
+
+        inline void previous(Tokens &tokens) {
+            if (*tokens.begin() == "p") {
+                this->look(this->prev);
+            } else {
+                this->prev = tokens;
+                this->look(tokens);
+            }
         }
 
 
@@ -119,6 +129,7 @@ namespace lab3 {
                 std::cout << "There are only a few commands:" << std::endl
                 << "    help - prints this help." << std::endl
                 << "    look - look around you." << std::endl
+                << "    wait - wait a turn or two. Useful near glowing rocks." << std::endl
                 << "    go *dir* - walk in direction: " << std::endl
                 << "        *dir* can be any from " << std::endl
                 << std::endl
@@ -150,11 +161,12 @@ namespace lab3 {
                 << std::endl
                 << "    '>fight 32'  -- fights with the bird"
                 << std::endl
-                << "Some commands are only available after you have gained some experience."
+                << std::endl
+                << "New commands may become available after you have gained some experience."
                 << std::endl
                 << std::endl;
                 if (player->kills > 3) {
-                    std::cout << "   howl - gives you bonus damage for the next attack." << std::endl << std::endl;
+                    std::cout << "   howl - gives you bonus damage for the next fight." << std::endl << std::endl;
                 }
                 return;
             }
@@ -228,7 +240,9 @@ namespace lab3 {
         inline void talk(Tokens &tokens) {
             if (*tokens.begin() == "talk") {
                 auto it = ++tokens.begin();
-                std::clog << "player talk " << *it << std::endl;
+                if (tokens.size() >= 2) {
+                    std::clog << "player talk " << *it << std::endl;
+                }
                 return;
             }
             this->take(tokens);
@@ -237,7 +251,9 @@ namespace lab3 {
         inline void take(Tokens &tokens) {
             if (*tokens.begin() == "take") {
                 auto it = ++tokens.begin();
-                std::clog << "player take " << *it << std::endl;
+                if (tokens.size() >= 2) {
+                    std::clog << "player take " << *it << std::endl;
+                }
                 return;
             }
             this->wait(tokens);
@@ -290,7 +306,9 @@ namespace lab3 {
             this->teleport(tokens);
         }
 
-        inline void teleport(Tokens &tokens) { // Cheat
+
+        // Cheat, crashes the game if no argument is supplied on purpose
+        inline void teleport(Tokens &tokens) {
             if (this->player->cls.name == character_classes[1].name) { // Only C++ programmer can teleport
                 if (*tokens.begin() == "std::move") {
                     if (*(tokens.begin() + 1) == "home") {

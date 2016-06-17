@@ -50,16 +50,17 @@ namespace lab3 {
             Player *player = getPlayer();
             std::clog << *this << std::endl;
 
-            // TODO (@antonaut) Go into rage
             if (this->current_state == NEUTRAL) {
                 if (Actor::current_health < Actor::max_health) {
                     if (this->position == this->start) {
                         this->heal(10);
                         std::cout << *Actor::race << " regained strength by a mysterious force!" << std::endl;
+                        std::clog << Actor::id << " heals." << std::endl;
                         this->wait();
                         return;
                     } else {
                         moveTowards(this->start);
+                        std::clog << Actor::id << " moved towards starting location." << std::endl;
                     }
                     if (closeToPlayer(player)) {
                         if (player->current_health < player->max_health) {
@@ -68,18 +69,22 @@ namespace lab3 {
                     }
                 }
             } else if (this->current_state == AGGRESSIVE) {
-
                 if (closeToPlayer(player)) {
                     if (this->position->id == player->position->id) {
-
                         this->howl();
                         player->fight(this);
+                        std::clog << Actor::id << " howls and fights." << std::endl;
+                        return;
+                    } else {
+                        this->moveTowards(player->position);
+                        std::clog << Actor::id << " chases the player." << std::endl;
                         return;
                     }
-                } else {
-                    this->current_state = NEUTRAL;
                 }
             }
+
+            this->current_state = NEUTRAL;
+            this->wait();
         }
 
         virtual void die() {

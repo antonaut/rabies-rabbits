@@ -131,6 +131,10 @@ namespace lab3 {
         void addFinalExit() {
             this->dm.ud(mountain_three, mountain_two);
         }
+
+        const Environment *getWinLocation() const {
+            return mountain_three;
+        }
     };
 
 

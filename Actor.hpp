@@ -156,7 +156,7 @@ namespace lab3 {
                 return this->wait();
             }
 
-            std::clog << Actor::id << " - move towards path ";
+            std::clog << Actor::id << " - move according to path ";
             for (auto it = path.rbegin(); it != path.rend(); ++it) {
                 std::clog << *it << " ";
             }
