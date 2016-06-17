@@ -11,7 +11,7 @@
 
 #include "GameObject.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     class GameObject;
 
@@ -70,6 +70,6 @@ namespace dnd {
         return a.id == b.id;
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
 #endif  // LAB3_GAMEOBJECT_HPP_

@@ -1,12 +1,14 @@
 # The story of development
 
+This contains bugs, ideas, changes, issues etc. it's somewhat chronological from top to bottom.
+
+
 DONE
 * Death of actors
 
 #1
 
 Tried to make sure dead actors are removed and won't attack back.
-        Keep investigating this.
 
     1. In GameLoop.hpp:
        After each action(), loop through the ACTORS and see if an Actor is_dead.
@@ -15,7 +17,7 @@ Tried to make sure dead actors are removed and won't attack back.
     2. Created failing test case of 1.
 
     3. Fixed said test case and found another bug in the meantime.
-       Dead enemies should always have zero hp. Not overflow. :D
+       Dead enemies should always have zero hp. Not overflow.
 
 
 #2
@@ -27,9 +29,8 @@ Tried to make sure dead actors are removed and won't attack back.
     2. Implemented a really ugly way to keep track of dead enemies.
        I use a vector to store iterators to dead-flagged actors and then erase them after having found all of them.
        This allows for death messages / events to happen before the actual delete.
-       @see GameLoop.hpp
+       Look in "GameLoop.hpp".
 
-TODO
 
 * Crocodiles
 
@@ -40,16 +41,28 @@ TODO
             - NORMAL, means moves every third tick
 
     b. They live in a different environment, the swamp.
-        Let's add that to the SmallForestMap.
+        They are pretty damn fast in the swamp.
+        Let's add that to the SmallGameMap.
+
+    c. Added more speeds.
+       - PRETTY_DAMN_FAST, same as player speed.
+       - SLOW, slower than normal. Rabbits are slow in the swamp.
 
 ** SwampEnvironment
+
+1. Added EnvironmentType so we can differentiate between environments.
+
 
 * Boss Rabbidile
 
 1.  Protects the candy mountain.
 
-    Is a combination of
-
+    Is a combination of a Crocodile and a Rabbit.
 
 * Items
 
+
+* Memory leaks?
+
+1. The principle of keeping 'new' and 'delete' as close as possible is violated a bit throughout this project.
+   Especially with Actors.

@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace dnd {
+namespace lab3 {
 
     std::string get_string() {
         std::string line;
@@ -28,7 +28,7 @@ namespace dnd {
         }
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_IOHELPERS_HPP_

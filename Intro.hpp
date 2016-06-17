@@ -6,7 +6,7 @@
 #include "IOHelpers.hpp"
 #include "GameObject.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     struct Intro : public GameObject {
     private:
@@ -14,7 +14,7 @@ namespace dnd {
     public:
         Intro() : GameObject() { }
 
-        CharacterRace &pickRace() {
+        const Race *pickRace() {
             int i, choice;
             while (true) {
                 std::cout << "Please pick a race by entering a number:" << std::endl << std::endl;
@@ -26,7 +26,7 @@ namespace dnd {
                 std::cout << std::endl << ">";
                 choice = get_integer();
                 if (choice > 0 && ((size_t) choice) <= character_races.size()) {
-                    return character_races[choice - 1];
+                    return &character_races[choice - 1];
                 }
                 std::cout << "No such race available." << std::endl;
             }
@@ -56,13 +56,13 @@ namespace dnd {
             name = get_string();
             std::cout << std::endl;
 
-            CharacterRace &race = this->pickRace();
+            const Race *race = this->pickRace();
             CharacterClass &cls = this->pickClass();
 
             std::cout << "Welcome to Arendal, "
             << name
             << " the "
-            << race
+            << *race
             << "-"
             << cls
             << "." << std::endl
@@ -75,7 +75,7 @@ namespace dnd {
 
     };
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_INTRO_HPP_

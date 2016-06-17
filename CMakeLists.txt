@@ -6,7 +6,7 @@ set(PROJECT_SOURCE_DIR)
 set(HEADER_FILES
         Actor.hpp
         CharacterClass.hpp
-        CharacterRace.hpp
+        Race.hpp
         Crocodile.hpp
         Direction.hpp
         DungeonMap.hpp
@@ -18,8 +18,8 @@ set(HEADER_FILES
         Player.hpp
         Rabbit.hpp
         REPL.hpp
-        SmallForestMap.hpp
-        Crocit.hpp TickCount.hpp)
+        SmallGameMap.hpp
+        Rabbidile.hpp TickCount.hpp SimpleAI.hpp)
 
 set(SOURCE_FILES GameLoop.cpp TickCount.hpp)
 set(TEST_SOURCE_FILES test.cpp tezt.hpp TickCount.hpp)

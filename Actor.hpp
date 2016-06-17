@@ -9,18 +9,33 @@
 
 #include "GameObject.hpp"
 #include "Environment.hpp"
-#include "CharacterRace.hpp"
+#include "Race.hpp"
+#include "TickCount.hpp"
 
-namespace dnd {
+namespace lab3 {
+
     std::mt19937 mt_engine;
 
     class Actor;
+
+    class Player;
+
+    Player *getPlayer();
+
     std::vector<Actor *> ACTORS;
 
-    typedef int SPEED;
+    typedef int ActorSpeed;
 
-    const SPEED NORMAL(3);
-    const SPEED FAST(2);
+    const ActorSpeed SLOW(5);
+    const ActorSpeed NORMAL(3);
+    const ActorSpeed FAST(2);
+    const ActorSpeed PRETTY_DAMN_FAST(1);
+
+    typedef std::string ActorState;
+    ActorState aggr("Aggressive");
+    ActorState neutral("Neutral");
+    ActorState wimpy("Wimpy");
+
 
     class Actor : public GameObject {
     public:
@@ -28,20 +43,23 @@ namespace dnd {
         uint32_t current_health;
         uint32_t max_health;
         uint32_t base_damage;
+        ActorSpeed speed;
+        ActorState currentState = aggr;
 
         const Environment *position;
         DungeonMap *game_map;
-        const CharacterRace &race;
+        const Race *race;
 
         bool is_dead;
 
         Actor(const Environment *position,
               DungeonMap *game_map,
-              const CharacterRace &race) :
+              const Race *race) :
                 GameObject(),
                 current_health(100),
                 max_health(current_health),
                 base_damage(10),
+                speed(NORMAL),
                 position(position),
                 game_map(game_map),
                 race(race),
@@ -91,7 +109,7 @@ namespace dnd {
             std::clog << this->id << " just died." << std::endl;
         }
 
-        bool go(Direction dir) {
+        virtual bool go(Direction dir) {
             const Environment *new_loc;
             try {
                 new_loc = this->game_map->env_from_exit(this->position, dir);
@@ -104,11 +122,11 @@ namespace dnd {
         }
 
         virtual void reply() const {
-            std::cout << this->race.noise();
+            std::cout << this->race->noise();
         }
 
         virtual void howl() const {
-            std::string n = this->race.noise();
+            std::string n = this->race->noise();
             std::locale loc;
             for (std::size_t i = 0; i < n.length(); ++i) {
                 std::cout << std::toupper(n[i], loc);
@@ -120,12 +138,12 @@ namespace dnd {
             return this->base_damage;
         }
 
-        virtual void fight(Actor *target) {}
+        virtual void fight(Actor *target) { }
 
-        virtual void action() {}
+        virtual void action() { }
 
         friend
-        std::ostream& operator<<(std::ostream &str, const Actor &actor);
+        std::ostream &operator<<(std::ostream &str, const Actor &actor);
 
         void moveTowards(const Environment *target_location) {
             std::vector<Direction> path = this->game_map->bfs(Actor::position, target_location, Actor::game_map);
@@ -147,7 +165,9 @@ namespace dnd {
             std::vector<Direction> exits = this->game_map->exits(this->position);
 
             std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
+
             int exit_index = distribution(mt_engine);
+
             this->go(exits[exit_index]);
         }
 
@@ -157,9 +177,9 @@ namespace dnd {
 
     };
 
-    std::ostream& operator<<(std::ostream &str, const Actor &actor) {
-        str << actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
-        << actor.max_health << ")";
+    std::ostream &operator<<(std::ostream &str, const Actor &actor) {
+        str << *actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
+        << actor.max_health << ")" << " - " << actor.currentState;
         return str;
     }
 
@@ -174,7 +194,7 @@ namespace dnd {
         return atPosition;
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_ACTOR_HPP_

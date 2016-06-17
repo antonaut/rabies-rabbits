@@ -6,11 +6,12 @@
 #include <sstream>
 #include "GameObject.hpp"
 #include "Actor.hpp"
-#include "CharacterRace.hpp"
+#include "Race.hpp"
 #include "CharacterClass.hpp"
 #include "DungeonMap.hpp"
+#include "REPL.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     uint64_t player_id;
 
@@ -22,7 +23,7 @@ namespace dnd {
         Player(const Environment *start,
                DungeonMap *dmap,
                std::string name,
-               CharacterRace race,
+               const Race *race,
                CharacterClass cls) : Actor(start,
                                            dmap,
                                            race),
@@ -30,6 +31,8 @@ namespace dnd {
                                      cls(cls) {
             player_id = Actor::id;
         }
+
+        friend class Repl;
 
         const CharacterClass &getCls() const {
             return cls;
@@ -59,9 +62,8 @@ namespace dnd {
             return this->base_damage;
         }
 
-        virtual void action() {
+        virtual void action() override { }
 
-        }
     };
 
 
@@ -69,7 +71,7 @@ namespace dnd {
         return (Player *) findGameObjectById(player_id);
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_PLAYER_HPP_

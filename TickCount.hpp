@@ -3,9 +3,9 @@
 #ifndef RABIESRABBIES_TICKCOUNT_HPP_
 #define RABIESRABBIES_TICKCOUNT_HPP_
 
-namespace dnd {
+namespace lab3 {
     int tickCount(0);
-} //  namespace dnd
+} //  namespace lab3
 
 
 #endif //RABIESRABBIES_TICKCOUNT_HPP_

@@ -1,15 +1,15 @@
 // Copyright 2016 Anton Erholt <aerholt@kth.se>
 
-#ifndef LAB3_SMALL_FOREST_MAP_HPP_
-#define LAB3_SMALL_FOREST_MAP_HPP_
+#ifndef LAB3_SMALL_GAME_MAP_HPP_
+#define LAB3_SMALL_GAME_MAP_HPP_
 
 #include "GameObject.hpp"
 #include "Environment.hpp"
 #include "DungeonMap.hpp"
 
-namespace dnd {
+namespace lab3 {
 
-    class SmallForestMap {
+    class SmallGameMap {
     private:
         Environment *big_rock,
                 *forest_one,
@@ -28,9 +28,15 @@ namespace dnd {
                 *mountain_one,
                 *mountain_two,
                 *mountain_three;
+    public:
+        const DungeonMap &getDm() const {
+            return dm;
+        }
+
+    private:
         DungeonMap dm;
     public:
-        SmallForestMap() : GameObject() {
+        SmallGameMap() {
 
             big_rock = new Environment(FOREST_TYPE, "A big rock",
                                                 "You stand in front of a big rock. Somehow you feel like home."),
@@ -66,7 +72,11 @@ namespace dnd {
                                          "There is mud and water everywhere.\n"
                                                  "The air is filled with flies and mosquitoes.\n"),
             mountain_one = new Environment(MOUNTAIN_TYPE, "The bottom of the mountain",
-                                           "The mountain is steep and ");
+                                           "The mountain is pretty steep. The vegetation is not as dense anymore."),
+            mountain_two = new Environment(MOUNTAIN_TYPE, "Halfway up the mountain",
+                                           "A small river runs down the side. The top is visible from here.\n"),
+            mountain_three = new Environment(MOUNTAIN_TYPE, "The top of the mountain",
+                                             "The view up here is breathtaking.");
 
             this->dm.ns(big_rock, forest_one);
             this->dm.ns(forest_one, forest_two);
@@ -85,28 +95,34 @@ namespace dnd {
             this->dm.ew(swamp_two, swamp_three);
             this->dm.ns(swamp_three, swamp_four);
 
+            this->dm.ns(swamp_four, mountain_one);
+            this->dm.ud(mountain_one, mountain_two);
+            this->dm.ud(mountain_two, mountain_three);
         }
 
-        ~SmallForestMap() {
-            Environment *big_rock,
-                    *forest_one,
-                    *forest_two,
-                    *forest_three,
-                    *forest_four,
-                    *forest_five,
-                    *forest_six,
-                    *forest_seven,
-                    *forest_eight,
-                    *forest_nine,
-                    *swamp_one,
-                    *swamp_two,
-                    *swamp_three,
-                    *swamp_four;
+        ~SmallGameMap() {
+            delete big_rock;
+            delete forest_one;
+            delete forest_two;
+            delete forest_three;
+            delete forest_four;
+            delete forest_five;
+            delete forest_six;
+            delete forest_seven;
+            delete forest_eight;
+            delete forest_nine;
+            delete swamp_one;
+            delete swamp_two;
+            delete swamp_three;
+            delete swamp_four;
+            delete mountain_one;
+            delete mountain_two;
+            delete mountain_three;
         }
 
-        SmallForestMap(const SmallForestMap &sfm) = delete;
+        SmallGameMap(const SmallGameMap &sfm) = delete;
 
-        SmallForestMap &operator=(const SmallForestMap &sfm) = delete;
+        SmallGameMap &operator=(const SmallGameMap &sfm) = delete;
 
         Environment *getStart() const {
             return big_rock;
@@ -120,12 +136,20 @@ namespace dnd {
             return forest_seven;
         }
 
+        Environment *getCrocSpawnOne() const {
+            return swamp_two;
+        }
+
+        Environment *getCrocSpawnTwo() const {
+            return swamp_four;
+        }
+
         DungeonMap *getDungeonMap() {
             return &this->dm;
         }
 
     };
 
-} // namespace dnd
+} // namespace lab3
 
-#endif  // LAB3_SMALL_FOREST_MAP_HPP_
+#endif  // LAB3_SMALL_GAME_MAP_HPP_

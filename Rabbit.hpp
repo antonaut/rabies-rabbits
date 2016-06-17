@@ -1,3 +1,5 @@
+// Copyright 2016 Anton Erholt <aerholt@kth.se>
+
 #ifndef LAB3_RABBIT_HPP_
 #define LAB3_RABBIT_HPP_
 
@@ -6,95 +8,38 @@
 #include <deque>
 #include "Actor.hpp"
 #include "Environment.hpp"
-#include "Player.hpp"
 #include "CharacterClass.hpp"
-#include "CharacterRace.hpp"
+#include "Race.hpp"
 #include "Direction.hpp"
 #include "DungeonMap.hpp"
-#include "TickCount.hpp"
+#include "SimpleAI.hpp"
 
+namespace lab3 {
 
-namespace dnd {
-
-    typedef std::string rabbit_state;
-    rabbit_state aggr("Aggressive");
-    rabbit_state wimpy("Wimpy");
-
-    class Rabbit : public Actor {
-        const Environment *starting_pos;
-        rabbit_state currentState = aggr;
+    class Rabbit : public SimpleAI {
     public:
 
         Rabbit(const Environment *start_pos,
-               DungeonMap *dm) : Actor(start_pos,
-                                       dm,
-                                       RACE_RABBIT), starting_pos(start_pos) {
+               DungeonMap *dm) : SimpleAI(start_pos,
+                                          dm,
+                                          &RACE_RABBIT) {
             Actor::current_health = 20;
             Actor::max_health = 20;
         }
 
-        virtual ~Rabbit() {
-            std::clog << "Rabbit destructor called, id: " << this->id << std::endl;
-        }
-
-        friend
-        std::ostream& operator<<(std::ostream &str, const Rabbit &rabbit);
-
-        virtual void fight(Actor *target) {
-            try {
-                Player *player = getPlayer();
-                if (target == player) {
-                    std::cout << this->race << " attacks!" << std::endl;
-                    player->fight(this);
-                    return;
-                }
-            } catch (const std::invalid_argument &ex) {
-                // No player found
-            }
-            this->hurt(target->damage());
-            target->hurt(this->damage());
-        }
-
-        virtual void action() {
-            std::clog << *this << std::endl;
-
-            if (tickCount % FAST == 0) {
-                if (currentState == aggr) {
-                    Player *player = getPlayer();
-                    if (player->position->id == Actor::position->id) {
-                        this->fight(player);
-                        return;
-                    }
-                    Actor::moveTowards(player->position);
-                    if (player->position->id == Actor::position->id) {
-                        std::cout << this->race.noise() << std::endl;
-                    }
-                    return;
-                } else {
-                    Actor::flee();
-                    return;
-                }
+        virtual bool go(Direction dir) override {
+            if (this->position->type == FOREST_TYPE || this->position->type == MOUNTAIN_TYPE) {
+                this->speed = FAST;
             } else {
-                wait();
+                this->speed = SLOW;
             }
-
-            if (Actor::current_health < Actor::max_health >> 1) {
-                currentState = wimpy;
-            }
-
+            return SimpleAI::go(dir);
         }
 
     };
 
-    std::ostream& operator<<(std::ostream &str, const Rabbit &rabbit) {
-        const Actor * ap = &rabbit;
-        str << *ap;
-        str << " " << rabbit.currentState;
-        return str;
-    }
 
-
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_RABBIT_HPP_

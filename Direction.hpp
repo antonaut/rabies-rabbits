@@ -7,7 +7,7 @@
 #include <set>
 #include <sstream>
 
-namespace dnd {
+namespace lab3 {
 
     typedef std::string Direction;
 
@@ -46,6 +46,6 @@ namespace dnd {
         throw std::invalid_argument("No such direction.");
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
 #endif  // LAB3_DIRECTION_HPP_

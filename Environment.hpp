@@ -8,7 +8,7 @@
 
 #include "GameObject.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     typedef const int EnvironmentType;
 
@@ -32,7 +32,7 @@ namespace dnd {
     };
 
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // ENVIRONMENT_HPP

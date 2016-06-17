@@ -7,10 +7,10 @@
 #include "Environment.hpp"
 #include "DungeonMap.hpp"
 #include "Rabbit.hpp"
-#include "REPL.hpp"
 #include "Crocodile.hpp"
+#include "SmallGameMap.hpp"
 
-using namespace dnd;
+using namespace lab3;
 
 
 int main(int argc, char const *argv[]) {
@@ -54,7 +54,7 @@ int main(int argc, char const *argv[]) {
 
     tezt::add("Create a map.", [&] {
         auto f7_exits = dm.exits(&forest_seven);
-        tezt::ae((size_t)2, f7_exits.size());
+        tezt::ae((size_t) 2, f7_exits.size());
 
         auto f9_exits = dm.exits(&forest_nine);
         tezt::ae((size_t) 2, f9_exits.size());
@@ -64,7 +64,7 @@ int main(int argc, char const *argv[]) {
     });
 
     tezt::add("Player movement", [&] {
-        Player *player = new Player(&big_rock, &dm, "Anton", character_races[1], character_classes[1]);
+        Player *player = new Player(&big_rock, &dm, "Anton", &character_races[1], character_classes[1]);
         Repl repl(player);
         std::vector<std::string> tokens({"go", "south"});
         repl.parse(tokens);
@@ -74,7 +74,7 @@ int main(int argc, char const *argv[]) {
     });
 
     tezt::add("Player look", [&] {
-        Player *player = new Player(&big_rock, &dm, "Testy", character_races[0], character_classes[2]);
+        Player *player = new Player(&big_rock, &dm, "Testy", &character_races[0], character_classes[2]);
         Repl *repl = new Repl(player);
         std::vector<std::string> tokens({"look"});
         repl->parse(tokens);
@@ -82,7 +82,7 @@ int main(int argc, char const *argv[]) {
 
     tezt::add("Remove dead actor after an action is performed that kills it.", [&] {
 
-        Player *player = new Player(&big_rock, &dm, "Testy", character_races[0], character_classes[2]);
+        Player *player = new Player(&big_rock, &dm, "Testy", &character_races[0], character_classes[2]);
         Actor *rabbit = new Rabbit(&forest_four, &dm);
         auto s1 = ACTORS.size();
 
@@ -100,15 +100,15 @@ int main(int argc, char const *argv[]) {
                 break;
             }
         }
-        tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
 
+        tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
         tezt::ae((uint32_t) 0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
     });
 
-    tezt::add("A crocodile is slower than a rabbit.", [&] {
+    tezt::add("A crocodile is slower than a rabbit on land, but faster in water!", [&] {
         Rabbit r1(&big_rock, &dm);
         Crocodile c1(&big_rock, &dm);
-        Player player(&forest_nine, &dm, "Testy", character_races[2], character_classes[0]);
+        Player player(&forest_nine, &dm, "Testy", &character_races[2], character_classes[0]);
 
         const Environment *target = &forest_nine;
 
@@ -122,11 +122,33 @@ int main(int argc, char const *argv[]) {
         tezt::ane(target->id, c1.position->id, "Crocodile not at target.");
     });
 
-    tezt::add("A crocodile always hurts more than a rabbit.", [&] {
-        CharacterRace dummy{"Dummy",};
+    tezt::add("A crocodile is faster in the swamp.", [&] {
+        SmallGameMap *sm2 = new SmallGameMap();
+        Rabbit r1(sm2->getCrocSpawnOne(), sm2->getDungeonMap());
+        Crocodile c1(sm2->getCrocSpawnOne(), sm2->getDungeonMap());
+        Player player(sm2->getCrocSpawnTwo(), sm2->getDungeonMap(), "Testy", &character_races[2], character_classes[0]);
 
-        Actor dummy1(&big_rock, &dm, dummy);
-        Actor dummy2(&big_rock, &dm, dummy);
+        r1.position = sm2->getCrocSpawnOne();
+        c1.position = sm2->getCrocSpawnOne();
+        player.position = sm2->getCrocSpawnTwo();
+
+        const Environment *target = player.position;
+
+        while (c1.position->id != target->id) {
+            r1.action();
+            c1.action();
+            tickCount++;
+        }
+
+        tezt::ae(target->id, c1.position->id, "The croc is at target.");
+        tezt::ane(target->id, r1.position->id, "...But the rabbit isn't.");
+    });
+
+    tezt::add("A crocodile always hurts more than a rabbit.", [&] {
+        Race dummy{"Dummy"};
+
+        Actor dummy1(&big_rock, &dm, &dummy);
+        Actor dummy2(&big_rock, &dm, &dummy);
 
         Crocodile crocodile(&big_rock, &dm);
         Rabbit rabbit(&big_rock, &dm);

@@ -13,11 +13,11 @@
 #include "Player.hpp"
 #include "TickCount.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     typedef std::vector<std::string> Tokens;
 
-    struct Repl {
+    struct Repl : public GameObject {
     private:
         void split(std::string str, char delim, std::vector<std::string> &elems) {
             std::stringstream ss(str);
@@ -31,7 +31,7 @@ namespace dnd {
 
         Player *player;
     public:
-        Repl(Player *p) : player(p) { }
+        Repl(Player *player) : GameObject(), player(player) { }
 
         virtual void action() {
 
@@ -238,7 +238,7 @@ namespace dnd {
 
     };
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_REPL_HPP_

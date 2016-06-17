@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace dnd {
+namespace lab3 {
 
     class Item {
         int weight;
@@ -20,7 +20,7 @@ namespace dnd {
 
     };
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_PLAYER_HPP_

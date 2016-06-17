@@ -12,7 +12,7 @@
 #include "Environment.hpp"
 #include "Direction.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     typedef std::vector<std::pair<const Environment *, Direction> > Exits;
     typedef std::map<const Environment *, Exits> EnvironmentMap;
@@ -79,7 +79,7 @@ namespace dnd {
         std::vector<Direction> backtrack(const Environment *from, const Environment *to,
                                          std::map<const Environment *, std::pair<const Environment *, Direction>> prev) {
 
-            std::vector<dnd::Direction> path;
+            std::vector<lab3::Direction> path;
             const Environment *current = to;
             while (prev[current].first != the_void) {
                 path.push_back(prev[current].second);
@@ -139,6 +139,6 @@ namespace dnd {
         }
 
     };
-} // namespace dnd
+} // namespace lab3
 
 #endif  // LAB3_DUNGEON_MAP_HPP_

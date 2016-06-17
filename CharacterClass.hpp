@@ -8,7 +8,7 @@
 #include <functional>
 
 
-namespace dnd {
+namespace lab3 {
 
     struct CharacterClass {
         std::string name;
@@ -80,7 +80,7 @@ namespace dnd {
     CharacterClass CLASS_ENEMY{"Enemy"};
 
 
-}  // namespace dnd
+}  // namespace lab3
 
 
 #endif  // LAB3_CHARACTER_CLASS_HPP_

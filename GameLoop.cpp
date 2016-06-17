@@ -5,12 +5,12 @@
 #include <stdexcept>
 
 #include "GameObject.hpp"
-#include "SmallForestMap.hpp"
+#include "SmallGameMap.hpp"
 #include "REPL.hpp"
 #include "Intro.hpp"
 #include "Rabbit.hpp"
 
-namespace dnd {
+namespace lab3 {
 
     void start_game_loop() {
         bool quit(false);
@@ -50,13 +50,13 @@ namespace dnd {
         }
     }
 
-}  // namespace dnd
+}  // namespace lab3
 
-using namespace dnd;
+using namespace lab3;
 
 int main(int argc, char *argv[]) {
 
-    SmallForestMap *sm = new SmallForestMap();
+    SmallGameMap *sm = new SmallGameMap();
 
     Intro *intro = new Intro();
 
@@ -64,12 +64,11 @@ int main(int argc, char *argv[]) {
 
     try {
         player = intro->create_player(sm->getStart(), sm->getDungeonMap());
-
         Repl repl(player);
 
         // Spawn actors, deleted upon death / exit
         new Rabbit(sm->getRabbitSpawnOne(),
-                  sm->getDungeonMap());
+                   sm->getDungeonMap());
         new Rabbit(sm->getRabbitSpawnTwo(),
                    sm->getDungeonMap());
 

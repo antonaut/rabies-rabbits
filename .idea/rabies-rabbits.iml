@@ -3,24 +3,25 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Rabbit.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Crocit.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Rabbidile.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GameLoop.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GameObject.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tezt.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/REPL.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Item.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Intro.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TickCount.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/DungeonMap.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Direction.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Crocodile.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Actor.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/SmallForestMap.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/CharacterRace.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SimpleAI.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Player.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Environment.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/TickCount.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Player.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Item.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Intro.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Race.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Actor.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SmallGameMap.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/tezt.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CharacterClass.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/IOHelpers.hpp" isTestSource="false" />
     </content>
