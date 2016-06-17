@@ -126,47 +126,48 @@ namespace lab3 {
         inline void help(Tokens &tokens) {
             if (*tokens.begin() == "help" ||
                 *tokens.begin() == "man") {
+
+                std::cout << "There are a few commands:" << std::endl
+                << "    help - prints this help." << std::endl
+                << "    look - look around you." << std::endl
+                << "    wait - wait a turn or two. Useful near glowing rocks." << std::endl
+                << "    p - repeats the previous command entered." << std::endl
+                << "    go *dir* - walk in direction: " << std::endl
+                << "        *dir* can be any from " << std::endl
+                << std::endl
+                << "        \"north\", \"south\"" << std::endl
+                << "        \"west\", \"east\"" << std::endl
+                << "        \"up\", \"down\"" << std::endl
+                << std::endl
+                << "Interaction commands:"
+                << std::endl
+                << "    talk *target* - talks to *target*." <<
+                std::endl
+                << "    fight *target* - fights with *target*." <<
+                std::endl
+                << "    take *item* - takes *item*." << std::endl
+                << "    inv - lists item in inventory." << std::endl
+                << std::endl
+                << "Type 'quit' to quit the game." << std::endl
+                << std::endl
+                << "Objects in the game are shown with their id."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    [32] - Bird, where '32' is the id of the bird."
+                << std::endl
+                << std::endl
+                << "In order to interact with the objects, simply use their id after the interaction."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    '>fight 32'  -- fights with the bird"
+                << std::endl
+                << std::endl
+                << "New commands may become available after you have gained some experience."
+                << std::endl
+                << std::endl;
                 if (player->kills > 3) {
-                    std::cout << "There are a few commands:" << std::endl
-                    << "    help - prints this help." << std::endl
-                    << "    look - look around you." << std::endl
-                    << "    wait - wait a turn or two. Useful near glowing rocks." << std::endl
-                    << "    p - repeats the previous command entered." << std::endl
-                    << "    go *dir* - walk in direction: " << std::endl
-                    << "        *dir* can be any from " << std::endl
-                    << std::endl
-                    << "        \"north\", \"south\"" << std::endl
-                    << "        \"west\", \"east\"" << std::endl
-                    << "        \"up\", \"down\"" << std::endl
-                    << std::endl
-                    << "Interaction commands:"
-                    << std::endl
-                    << "    talk *target* - talks to *target*." <<
-                    std::endl
-                    << "    fight *target* - fights with *target*." <<
-                    std::endl
-                    << "    take *item* - takes *item*." << std::endl
-                    << "    inv - lists item in inventory." << std::endl
-                    << std::endl
-                    << "Type 'quit' to quit the game." << std::endl
-                    << std::endl
-                    << "Objects in the game are shown with their id."
-                    << std::endl
-                    << "Example:"
-                    << std::endl
-                    << "    [32] - Bird, where '32' is the id of the bird."
-                    << std::endl
-                    << std::endl
-                    << "In order to interact with the objects, simply use their id after the interaction."
-                    << std::endl
-                    << "Example:"
-                    << std::endl
-                    << "    '>fight 32'  -- fights with the bird"
-                    << std::endl
-                    << std::endl
-                    << "New commands may become available after you have gained some experience."
-                    << std::endl
-                    << std::endl;
                     std::cout << "   howl - gives you bonus damage for the next fight." << std::endl << std::endl;
                 }
                 return;
