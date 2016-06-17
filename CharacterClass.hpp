@@ -40,7 +40,7 @@ namespace lab3 {
                            [&](std::string target) {
                                std::cout << "Nursed "
                                << target
-                               <<" back to full health. It ran hom to mom." << std::endl;}},
+                               <<" back to full health. It ran hom-to-mom-nom-nom." << std::endl;}},
             CharacterClass{"C++ programmer",
                            [&](std::string target,
                                uint32_t max_hp,

@@ -53,9 +53,11 @@ namespace lab3 {
             if (this->current_state == NEUTRAL) {
                 if (Actor::current_health < Actor::max_health) {
                     if (this->position == this->start) {
-                        this->heal(10);
-                        std::cout << *Actor::race << " regained strength by a mysterious force!" << std::endl;
-                        std::clog << Actor::id << " heals." << std::endl;
+                        if (!this->is_dead) {
+                            this->heal(10);
+                            std::cout << *Actor::race << " regained strength by a mysterious force!" << std::endl;
+                            std::clog << Actor::id << " heals." << std::endl;
+                        }
                         this->wait();
                         return;
                     } else {
@@ -88,7 +90,8 @@ namespace lab3 {
         }
 
         virtual void die() {
-            std::cout << "A path to the mountain top opens." << std::endl;
+            std::cout << std::endl << std::endl
+            << "A path to the mountain top suddenly opens!" << std::endl << std::endl;
             smallGameMap->addFinalExit();
             Actor::die();
         }

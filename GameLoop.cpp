@@ -45,7 +45,7 @@ namespace lab3 {
         bool has_won = player->position->id == sm->getWinLocation()->id;
 
         if (has_won) {
-            std::cout << "Congratulations! You have won the game! Please play agin." << std::endl;
+            std::cout << "Congratulations! You have won the game! Please play again." << std::endl;
         }
 
         return has_won;
