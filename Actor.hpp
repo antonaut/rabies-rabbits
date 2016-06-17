@@ -18,10 +18,6 @@ namespace lab3 {
 
     class Actor;
 
-    class Player;
-
-    Player *getPlayer();
-
     std::vector<Actor *> ACTORS;
 
     typedef int ActorSpeed;

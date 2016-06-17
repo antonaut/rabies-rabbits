@@ -9,6 +9,7 @@
 #include "Rabbit.hpp"
 #include "Crocodile.hpp"
 #include "SmallGameMap.hpp"
+#include "REPL.hpp"
 
 using namespace lab3;
 
