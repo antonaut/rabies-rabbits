@@ -9,7 +9,7 @@
 
 namespace lab3 {
 
-    class SmallGameMap {
+    class SmallGameMap : public GameObject {
     private:
         Environment *big_rock,
                 *forest_one,
@@ -36,7 +36,7 @@ namespace lab3 {
     private:
         DungeonMap dm;
     public:
-        SmallGameMap() {
+        SmallGameMap() : GameObject() {
 
             big_rock = new Environment(FOREST_TYPE, "A big rock",
                                                 "You stand in front of a big rock. Somehow you feel like home."),
@@ -96,29 +96,11 @@ namespace lab3 {
             this->dm.ns(swamp_three, swamp_four);
 
             this->dm.ns(swamp_four, mountain_one);
-            this->dm.ud(mountain_one, mountain_two);
-            this->dm.ud(mountain_two, mountain_three);
+            this->dm.ud(mountain_two, mountain_one);
+            this->dm.ud(mountain_three, mountain_two);
         }
 
-        ~SmallGameMap() {
-            delete big_rock;
-            delete forest_one;
-            delete forest_two;
-            delete forest_three;
-            delete forest_four;
-            delete forest_five;
-            delete forest_six;
-            delete forest_seven;
-            delete forest_eight;
-            delete forest_nine;
-            delete swamp_one;
-            delete swamp_two;
-            delete swamp_three;
-            delete swamp_four;
-            delete mountain_one;
-            delete mountain_two;
-            delete mountain_three;
-        }
+        ~SmallGameMap() { }
 
         SmallGameMap(const SmallGameMap &sfm) = delete;
 

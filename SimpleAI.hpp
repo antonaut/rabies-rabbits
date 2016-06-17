@@ -18,7 +18,7 @@ namespace lab3 {
             try {
                 Player *player = getPlayer();
                 if (target == player) {
-                    std::cout << this->race << " attacks!" << std::endl;
+                    std::cout << *this->race << " attacks!" << std::endl;
                     player->fight(this);
                     return;
                 }

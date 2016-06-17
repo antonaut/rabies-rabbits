@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <algorithm>
 
 #include "GameObject.hpp"
 #include "SmallGameMap.hpp"
@@ -24,7 +25,10 @@ namespace lab3 {
                     break;
                 }
             }
-            std::vector<std::vector<Actor *>::iterator> dead_actors;
+
+
+            // Death
+            std::vector<Actor *> dead_actors;
             for (std::vector<Actor *>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
                 if ((*it)->is_dead) {
                     Actor *dead_actor = *it;
@@ -35,15 +39,19 @@ namespace lab3 {
                         break;
                     }
                     std::stringstream ss;
-                    ss << dead_actor->race;
+                    ss << *dead_actor->race;
                     player->getCls().killed_fn(ss.str());
 
-                    dead_actors.push_back(it);
+                    dead_actors.push_back(*it);
                 }
             }
-            for (auto it : dead_actors) {
-                Actor *ap = *it;
+
+            // Memory management
+            for (auto ap : dead_actors) {
+                auto it = std::find(ACTORS.begin(), ACTORS.end(), ap);
                 ACTORS.erase(it);
+                auto it2 = std::find(GAME_OBJECTS.begin(), GAME_OBJECTS.end(), ap);
+                GAME_OBJECTS.erase(it2);
                 delete ap;
             }
 
@@ -64,7 +72,8 @@ int main(int argc, char *argv[]) {
 
     try {
         player = intro->create_player(sm->getStart(), sm->getDungeonMap());
-        Repl repl(player);
+
+        new Repl(player);
 
         // Spawn actors, deleted upon death / exit
         new Rabbit(sm->getRabbitSpawnOne(),
@@ -78,16 +87,12 @@ int main(int argc, char *argv[]) {
         std::cout << "Quit: " << oor.what() << std::endl;
     }
 
-
-    for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
-        delete *it;
+    // Memory management - cleanup
+    for (size_t i = 0; i < GAME_OBJECTS.size(); ++i) {
+        delete GAME_OBJECTS[i];
     }
 
     ACTORS.clear();
-
-    delete sm;
-    delete intro;
-
     GAME_OBJECTS.clear();
 
     return EXIT_SUCCESS;

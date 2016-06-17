@@ -24,19 +24,10 @@ namespace lab3 {
         // Default constructor constructs an empty GameObject
         explicit GameObject() : id(++id_counter) {
             GAME_OBJECTS.push_back(this);
-            std::clog << "GameObjectSpawned - id(" << this->id << ")." << std::endl;
         }
 
 
-        virtual ~GameObject() {
-            std::clog << "GameObject destructor called. id: " << this->id << std::endl;
-            for (auto it = GAME_OBJECTS.begin(); it != GAME_OBJECTS.end(); ++it) {
-                if (*it == this) {
-                    GAME_OBJECTS.erase(it);
-                    return;
-                }
-            }
-        }
+        virtual ~GameObject() { }
 
         // No copy, no move
         GameObject(const GameObject &go) = delete;

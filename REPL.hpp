@@ -52,7 +52,7 @@ namespace lab3 {
 
             try {
                 this->parse(tokens);
-            } catch (std::exception &ex) {
+            } catch (std::invalid_argument &ex) {
                 std::cout << "Arglebargle, glop-glyf!?!" << std::endl;
             }
         }
@@ -74,7 +74,7 @@ namespace lab3 {
 
             for (auto &actor : findActorsByPosition(player->position)) {
                 if (actor->id != player_id)
-                    std::cout << "[" << actor->id << "] - A " << actor->race << " is here." << std::endl;
+                    std::cout << "[" << actor->id << "] - A " << *actor->race << " is here." << std::endl;
             }
 
             this->printExits();
@@ -134,17 +134,17 @@ namespace lab3 {
                 << std::endl
                 << "Example:"
                 << std::endl
-                << "    '>fight 32'  -- fights with the bird"
-                << std::endl
-                << std::endl
-                << "Interaction commands:"
-                << std::endl
-                << "    talk *target* - talks to *target*." << std::endl
-                << "    fight *target* - fights with *target*." << std::endl
-                << "    take *item* - takes *item*." << std::endl
-                << "    inv - lists item in inventory." << std::endl
-                << std::endl
-                << "Press `Ctrl-d` to quit the game." << std::endl;
+                   << "    '>fight 32'  -- fights with the bird"
+                   << std::endl
+                   << std::endl
+                   << "Interaction commands:"
+                   << std::endl
+                   << "    talk *target* - talks to *target*." << std::endl
+                   << "    fight *target* - fights with *target*." << std::endl
+                   << "    take *item* - takes *item*." << std::endl
+                   << "    inv - lists item in inventory." << std::endl
+                   << std::endl
+                   << "Type 'quit' to quit the game." << std::endl;
                 return;
             }
             this->go(tokens);
@@ -231,6 +231,14 @@ namespace lab3 {
             if (*tokens.begin() == "wait") {
                 std::clog << "player wait" << std::endl;
                 ++tickCount;
+                return;
+            }
+            this->quit(tokens);
+        }
+
+        inline void quit(Tokens &tokens) {
+            if (*tokens.begin() == "quit") {
+                throw std::out_of_range("Player quit.");
                 return;
             }
             throw std::invalid_argument("Argle.");

@@ -67,7 +67,7 @@ namespace lab3 {
             << cls
             << "." << std::endl
             << "Your goal is to beat the badass crocit." << std::endl
-            << "Press C-d to quit, type 'help' for help." << std::endl
+            << "Type 'quit' to quit, type 'help' for help." << std::endl
             << std::endl;
 
             return new Player(start, dmap, name, race, cls);

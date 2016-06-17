@@ -12,9 +12,9 @@ namespace lab3 {
 
     typedef const int EnvironmentType;
 
-    EnvironmentType FOREST_TYPE(1);
-    EnvironmentType SWAMP_TYPE(2);
-    EnvironmentType MOUNTAIN_TYPE(3);
+    EnvironmentType FOREST_TYPE = 1;
+    EnvironmentType SWAMP_TYPE = 2;
+    EnvironmentType MOUNTAIN_TYPE = 3;
 
     class Environment : public GameObject {
     protected:

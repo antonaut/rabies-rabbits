@@ -63,15 +63,7 @@ namespace lab3 {
             ACTORS.push_back(this);
         }
 
-        virtual ~Actor() {
-            std::clog << "Actor destructor called. id: " << this->id << std::endl;
-            for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
-                if (*it == this) {
-                    ACTORS.erase(it);
-                    break;
-                }
-            }
-        }
+        virtual ~Actor() { }
 
         uint32_t getCurrent_health() const {
             return this->current_health;

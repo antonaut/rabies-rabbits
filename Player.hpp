@@ -47,7 +47,7 @@ namespace lab3 {
             enemy->hurt(dmg);
 
             std::stringstream ss;
-            ss << enemy->race;
+            ss << *enemy->race;
 
             this->cls.attack_fn(ss.str(), enemy->max_health, enemy->current_health, dmg);
 
