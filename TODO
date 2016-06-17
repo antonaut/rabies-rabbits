@@ -53,6 +53,14 @@ Tried to make sure dead actors are removed and won't attack back.
 1. Added EnvironmentType so we can differentiate between environments.
 
 
+* Memory leaks?
+
+1. The principle of keeping 'new' and 'delete' as close as possible is violated a bit throughout this project.
+   Especially with Actors.
+
+2. Fixed this with two global vectors from which the objects gets deleted at appropriate times such as death and quit.
+
+
 * Boss Rabbidile
 
 1.  Protects the "candy mountain".
@@ -60,13 +68,7 @@ Tried to make sure dead actors are removed and won't attack back.
     Is a combination of a Crocodile and a Rabbit.
 
     - Combine speeds?
+    - Rage when attacked.
+
 
 * Items
-
-
-* Memory leaks?
-
-1. The principle of keeping 'new' and 'delete' as close as possible is violated a bit throughout this project.
-   Especially with Actors.
-
-2. Fixed this with two global vectors from which the objects gets deleted at appropriate times such as death and quit.

@@ -120,7 +120,7 @@ namespace lab3 {
             return swamp_four;
         }
 
-        DungeonMap *getDungeonMap() {
+        DungeonMap * getDungeonMap() {
             return &this->dm;
         }
 

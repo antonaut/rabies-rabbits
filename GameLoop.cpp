@@ -15,7 +15,9 @@
 
 namespace lab3 {
 
-    void start_game_loop() {
+    bool handleDeath();
+
+    void start_game_loop(SmallGameMap *sm) {
         bool quit(false);
         while (!quit) {
             std::clog << "*** Tick: " << tickCount << " ***" << std::endl;
@@ -27,11 +29,20 @@ namespace lab3 {
                     break;
                 }
             }
+            quit = handleDeath();
 
+            // Spawn more enemies
+            if (tickCount % 15 == 0) new Rabbit(sm->getRabbitSpawnTwo(), sm->getDungeonMap());
+            if (tickCount % 25 == 0) new Crocodile(sm->getCrocSpawnTwo(), sm->getDungeonMap());
+        }
+    }
 
-            // Death
-            std::vector<Actor *> dead_actors;
-            for (std::vector<Actor *>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
+    bool handleDeath() {
+        bool quit = false;
+
+        // Death
+        std::vector<Actor *> dead_actors;
+        for (std::vector<Actor*>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
                 if ((*it)->is_dead) {
                     Actor *dead_actor = *it;
                     Player *player = getPlayer();
@@ -48,16 +59,15 @@ namespace lab3 {
                 }
             }
 
-            // Memory management
-            for (auto ap : dead_actors) {
-                auto it = std::find(ACTORS.begin(), ACTORS.end(), ap);
+        // Memory management
+        for (auto ap : dead_actors) {
+                auto it = find(ACTORS.begin(), ACTORS.end(), ap);
                 ACTORS.erase(it);
-                auto it2 = std::find(GAME_OBJECTS.begin(), GAME_OBJECTS.end(), ap);
+                auto it2 = find(GAME_OBJECTS.begin(), GAME_OBJECTS.end(), ap);
                 GAME_OBJECTS.erase(it2);
                 delete ap;
             }
-
-        }
+        return quit;
     }
 
 }  // namespace lab3
@@ -90,7 +100,7 @@ int main(int argc, char *argv[]) {
 
         new Rabbidile(sm->getBossSpawn(), sm->getDungeonMap(), sm);
 
-        start_game_loop();
+        start_game_loop(sm);
 
     } catch (const std::out_of_range &oor) {
         std::cout << "Quit: " << oor.what() << std::endl;
