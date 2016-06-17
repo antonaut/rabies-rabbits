@@ -55,9 +55,11 @@ Tried to make sure dead actors are removed and won't attack back.
 
 * Boss Rabbidile
 
-1.  Protects the candy mountain.
+1.  Protects the "candy mountain".
 
     Is a combination of a Crocodile and a Rabbit.
+
+    - Combine speeds?
 
 * Items
 
@@ -66,3 +68,5 @@ Tried to make sure dead actors are removed and won't attack back.
 
 1. The principle of keeping 'new' and 'delete' as close as possible is violated a bit throughout this project.
    Especially with Actors.
+
+2. Fixed this with two global vectors from which the objects gets deleted at appropriate times such as death and quit.

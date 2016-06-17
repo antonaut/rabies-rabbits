@@ -8,6 +8,7 @@
 #include <iterator>
 #include <vector>
 #include <stdexcept>
+#include <algorithm>
 
 #include "GameObject.hpp"
 #include "Player.hpp"
@@ -66,11 +67,11 @@ namespace lab3 {
 
         inline void playerLook() {
             std::clog << "player look" << std::endl;
-            std::cout << player->position->name << std::endl;
+            std::cout << std::endl << player->position->name << std::endl;
             for (size_t i = 0; i < player->position->name.size(); i++) {
                 std::cout << "=";
             }
-            std::cout << std::endl << player->position->short_description << std::endl;
+            std::cout << std::endl << player->position->short_description << std::endl << std::endl;
 
             for (auto &actor : findActorsByPosition(player->position)) {
                 if (actor->id != player_id)
@@ -113,38 +114,40 @@ namespace lab3 {
         inline void help(Tokens &tokens) {
             if (*tokens.begin() == "help") {
                 std::cout << "There are only a few commands:" << std::endl
-                << "    help - prints this help." << std::endl
-                << "    look - look around you." << std::endl
-                << "    go *dir* - walk in direction: " << std::endl
-                << "        *dir* can be any from " << std::endl
-                << std::endl
-                << "        \"north\", \"south\"" << std::endl
-                << "        \"west\", \"east\"" << std::endl
-                << "        \"up\", \"down\"" << std::endl
-                << std::endl
-                << std::endl
-                << "Objects in the game are shown with their id."
-                << std::endl
-                << "Example:"
-                << std::endl
-                << "    [32] - Bird, where '32' is the id of the bird."
-                << std::endl
-                << std::endl
-                << "In order to interact with the objects, simply use their id after the interaction."
-                << std::endl
-                << "Example:"
-                << std::endl
-                   << "    '>fight 32'  -- fights with the bird"
-                   << std::endl
-                   << std::endl
-                   << "Interaction commands:"
-                   << std::endl
-                   << "    talk *target* - talks to *target*." << std::endl
-                   << "    fight *target* - fights with *target*." << std::endl
-                   << "    take *item* - takes *item*." << std::endl
-                   << "    inv - lists item in inventory." << std::endl
-                   << std::endl
-                   << "Type 'quit' to quit the game." << std::endl;
+                                                                 << "    help - prints this help." << std::endl
+                                                                 << "    look - look around you." << std::endl
+                                                                 << "    go *dir* - walk in direction: " << std::endl
+                                                                 << "        *dir* can be any from " << std::endl
+                                                                 << std::endl
+                                                                 << "        \"north\", \"south\"" << std::endl
+                                                                 << "        \"west\", \"east\"" << std::endl
+                                                                 << "        \"up\", \"down\"" << std::endl
+                                                                 << std::endl
+                                                                 << "Interaction commands:"
+                                                                 << std::endl
+                                                                 << "    talk *target* - talks to *target*." <<
+                                                                 std::endl
+                                                                 << "    fight *target* - fights with *target*." <<
+                                                                 std::endl
+                                                                 << "    take *item* - takes *item*." << std::endl
+                                                                 << "    inv - lists item in inventory." << std::endl
+                                                                 << std::endl
+                                                                 << "Type 'quit' to quit the game." << std::endl
+                                                                 << std::endl
+                                                                 << "Objects in the game are shown with their id."
+                                                                 << std::endl
+                                                                 << "Example:"
+                                                                 << std::endl
+                                                                 << "    [32] - Bird, where '32' is the id of the bird."
+                                                                 << std::endl
+                                                                 << std::endl
+                                                                 << "In order to interact with the objects, simply use their id after the interaction."
+                                                                 << std::endl
+                                                                 << "Example:"
+                                                                 << std::endl
+                                                                 << "    '>fight 32'  -- fights with the bird"
+                                                                 << std::endl
+                                                                 << std::endl;
                 return;
             }
             this->go(tokens);
@@ -230,6 +233,13 @@ namespace lab3 {
         inline void wait(Tokens &tokens) {
             if (*tokens.begin() == "wait") {
                 std::clog << "player wait" << std::endl;
+                uint32_t player_hp_diff = this->player->max_health - this->player->current_health;
+                if (this->player->position->id == this->player->start->id &&
+                    player_hp_diff > 0) {
+                    std::uint32_t health_amount = std::min((uint32_t) 20, player_hp_diff);
+                    this->player->heal(health_amount);
+                    std::cout << "The rock heals you with " << health_amount << " points." << std::endl;
+                }
                 ++tickCount;
                 return;
             }

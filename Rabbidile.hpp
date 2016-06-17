@@ -11,7 +11,26 @@ namespace lab3 {
     class Rabbidile : public Rabbit, public Crocodile {
     public:
         Rabbidile(const Environment *start, DungeonMap *dm) : Rabbit(start, dm), Crocodile(start, dm) {
+            Actor::current_health = 150;
+            Actor::max_health = 150;
+            Actor::base_damage = 30;
+            Actor::speed = PRETTY_DAMN_FAST;
+            Actor::current_state = NEUTRAL;
+        }
 
+        virtual bool go(Direction dir) override {
+            if (this->current_state == AGGRESSIVE) {
+                return Crocodile::go(dir);
+            }
+        }
+
+        virtual void action() override {
+            if (Actor::current_health < Actor::max_health) {
+
+                // Go into rage
+                if (this->current_state == NEUTRAL) this->howl();
+                this->current_state = AGGRESSIVE;
+            }
         }
     };
 

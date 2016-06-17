@@ -35,7 +35,7 @@ namespace lab3 {
 
             if (tickCount % this->speed == 0) {
                 Player *player = getPlayer();
-                if (currentState == aggr) {
+                if (current_state == AGGRESSIVE) {
 
                     if (player->position->id == Actor::position->id) {
                         this->fight(player);
@@ -46,23 +46,24 @@ namespace lab3 {
 
                     if (player->position->id == Actor::position->id) {
                         auto noise = this->race->noise();
-                        std::cout << "[" << this->id << "] - has arrived: " << noise << std::endl;
+                        std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
+                        std::endl;
                     }
                     return;
 
-                } else if (currentState == wimpy) {
+                } else if (current_state == WIMPY) {
                     ++wimpyTurns;
                     if (wimpyTurns >= 3) {
-                        this->currentState = neutral;
+                        this->current_state = NEUTRAL;
                         wimpyTurns = 0;
                     }
                     this->flee();
 
                     return;
-                } else { // neutral
+                } else { // NEUTRAL
 
                     if (this->game_map->bfs(this->position, player->position, this->game_map).size() <= 2) {
-                        this->currentState = aggr;
+                        this->current_state = AGGRESSIVE;
                     }
                     this->wait();
                 }
@@ -71,7 +72,7 @@ namespace lab3 {
             }
 
             if (Actor::current_health < Actor::max_health >> 1) {
-                currentState = wimpy;
+                current_state = WIMPY;
             }
         }
     };

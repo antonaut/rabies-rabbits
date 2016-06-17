@@ -66,7 +66,7 @@ namespace lab3 {
             << "-"
             << cls
             << "." << std::endl
-            << "Your goal is to beat the badass crocit." << std::endl
+            << "Your goal is to beat the badass Rabbidile." << std::endl
             << "Type 'quit' to quit, type 'help' for help." << std::endl
             << std::endl;
 

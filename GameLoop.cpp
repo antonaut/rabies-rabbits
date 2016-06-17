@@ -10,6 +10,7 @@
 #include "REPL.hpp"
 #include "Intro.hpp"
 #include "Rabbit.hpp"
+#include "Crocodile.hpp"
 
 namespace lab3 {
 
@@ -80,6 +81,11 @@ int main(int argc, char *argv[]) {
                    sm->getDungeonMap());
         new Rabbit(sm->getRabbitSpawnTwo(),
                    sm->getDungeonMap());
+
+        new Crocodile(sm->getCrocSpawnOne(),
+                      sm->getDungeonMap());
+        new Crocodile(sm->getCrocSpawnTwo(),
+                      sm->getDungeonMap());
 
         start_game_loop();
 

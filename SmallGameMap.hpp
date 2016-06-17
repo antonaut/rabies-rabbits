@@ -38,8 +38,9 @@ namespace lab3 {
     public:
         SmallGameMap() : GameObject() {
 
-            big_rock = new Environment(FOREST_TYPE, "A big rock",
-                                                "You stand in front of a big rock. Somehow you feel like home."),
+            big_rock = new Environment(FOREST_TYPE, "A big glowing rock",
+                                       "You stand in front of a big rock.\n"
+                                               "Somehow you feel like resting next to the stone makes you healthier."),
             forest_one = new Environment(FOREST_TYPE, "In the forest",
                                          "You find yourself lost amongst the trees."),
             forest_two = new Environment(FOREST_TYPE, "In the forest",
@@ -61,20 +62,20 @@ namespace lab3 {
                                                   "There's a small opening over there."),
             swamp_one = new Environment(SWAMP_TYPE, "A muddy swamp",
                                         "The vegetation changes. It is a bit less dense, but now there is mud everywhere.\n"
-                                                "The air is filled with flies and mosquitoes.\n"),
+                                                "The air is filled with flies and mosquitoes."),
             swamp_two = new Environment(SWAMP_TYPE, "A muddy swamp",
                                         "There is mud and water everywhere.\n"
-                                                "The air is filled with flies and mosquitoes.\n"),
+                                                "The air is filled with flies and mosquitoes."),
             swamp_three = new Environment(SWAMP_TYPE, "A muddy swamp",
                                           "There is mud and water everywhere.\n"
-                                                  "The air is filled with flies and mosquitoes.\n"),
+                                                  "The air is filled with flies and mosquitoes."),
             swamp_four = new Environment(SWAMP_TYPE, "A muddy swamp",
                                          "There is mud and water everywhere.\n"
-                                                 "The air is filled with flies and mosquitoes.\n"),
+                                                 "The air is filled with flies and mosquitoes."),
             mountain_one = new Environment(MOUNTAIN_TYPE, "The bottom of the mountain",
                                            "The mountain is pretty steep. The vegetation is not as dense anymore."),
             mountain_two = new Environment(MOUNTAIN_TYPE, "Halfway up the mountain",
-                                           "A small river runs down the side. The top is visible from here.\n"),
+                                           "A small river runs down the side. The top is visible from here."),
             mountain_three = new Environment(MOUNTAIN_TYPE, "The top of the mountain",
                                              "The view up here is breathtaking.");
 

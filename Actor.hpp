@@ -28,9 +28,10 @@ namespace lab3 {
     const ActorSpeed PRETTY_DAMN_FAST(1);
 
     typedef std::string ActorState;
-    ActorState aggr("Aggressive");
-    ActorState neutral("Neutral");
-    ActorState wimpy("Wimpy");
+
+    ActorState AGGRESSIVE("Aggressive");
+    ActorState NEUTRAL("Neutral");
+    ActorState WIMPY("Wimpy");
 
 
     class Actor : public GameObject {
@@ -39,8 +40,10 @@ namespace lab3 {
         uint32_t current_health;
         uint32_t max_health;
         uint32_t base_damage;
+        uint32_t bonus_damage;
+        bool bonus_applied;
         ActorSpeed speed;
-        ActorState currentState = aggr;
+        ActorState current_state = AGGRESSIVE;
 
         const Environment *position;
         DungeonMap *game_map;
@@ -55,6 +58,8 @@ namespace lab3 {
                 current_health(100),
                 max_health(current_health),
                 base_damage(10),
+                bonus_damage(0),
+                bonus_applied(true),
                 speed(NORMAL),
                 position(position),
                 game_map(game_map),
@@ -72,8 +77,10 @@ namespace lab3 {
 
         virtual void heal(uint32_t amount) {
             uint64_t sum = this->current_health + amount;
-            if (sum > this->max_health) {
+            if (sum >= this->max_health) {
                 this->current_health = this->max_health;
+            } else {
+                this->current_health = sum;
             }
         }
 
@@ -113,17 +120,27 @@ namespace lab3 {
             std::cout << this->race->noise();
         }
 
-        virtual void howl() const {
+        virtual void howl() {
             std::string n = this->race->noise();
             std::locale loc;
             for (std::size_t i = 0; i < n.length(); ++i) {
                 std::cout << std::toupper(n[i], loc);
             }
             std::cout << std::endl;
+            this->bonus_damage = 10;
+            this->bonus_applied = false;
         }
 
         virtual uint32_t damage() {
-            return this->base_damage;
+            uint32_t total_damage = this->base_damage;
+
+            if (!this->bonus_applied) {
+                total_damage += this->bonus_damage;
+                this->bonus_applied = true;
+                this->bonus_damage = 0;
+            }
+
+            return total_damage;
         }
 
         virtual void fight(Actor *target) { }
@@ -167,7 +184,7 @@ namespace lab3 {
 
     std::ostream &operator<<(std::ostream &str, const Actor &actor) {
         str << *actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
-        << actor.max_health << ")" << " - " << actor.currentState;
+        << actor.max_health << ")" << " - " << actor.current_state;
         return str;
     }
 

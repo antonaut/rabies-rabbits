@@ -18,6 +18,7 @@ namespace lab3 {
     private:
         std::string name;
         CharacterClass cls;
+        const Environment *start;
     public:
         Player(const Environment *start,
                DungeonMap *dmap,
@@ -27,7 +28,8 @@ namespace lab3 {
                                            dmap,
                                            race),
                                      name(name),
-                                     cls(cls) {
+                                     cls(cls),
+                                     start(start) {
             player_id = Actor::id;
         }
 
@@ -54,15 +56,18 @@ namespace lab3 {
             if (!enemy->is_dead) {
                 std::cout << "The enemy hits you for " << enemy->base_damage << " points of damage." << std::endl;
                 this->hurt(enemy->base_damage);
+            } else {
+                ++this->kills;
             }
         }
 
         virtual uint32_t damage() {
-            return this->base_damage;
+            return this->base_damage + 7 * kills;
         }
 
         virtual void action() override { }
 
+        uint32_t kills;
     };
 
 
