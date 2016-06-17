@@ -11,6 +11,7 @@
 #include "Intro.hpp"
 #include "Rabbit.hpp"
 #include "Crocodile.hpp"
+#include "Rabbidile.hpp"
 
 namespace lab3 {
 
@@ -74,7 +75,7 @@ int main(int argc, char *argv[]) {
     try {
         player = intro->create_player(sm->getStart(), sm->getDungeonMap());
 
-        new Repl(player);
+        new Repl(player, sm);
 
         // Spawn actors, deleted upon death / exit
         new Rabbit(sm->getRabbitSpawnOne(),
@@ -86,6 +87,8 @@ int main(int argc, char *argv[]) {
                       sm->getDungeonMap());
         new Crocodile(sm->getCrocSpawnTwo(),
                       sm->getDungeonMap());
+
+        new Rabbidile(sm->getBossSpawn(), sm->getDungeonMap(), sm);
 
         start_game_loop();
 

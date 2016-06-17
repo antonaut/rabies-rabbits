@@ -16,11 +16,12 @@
 
 namespace lab3 {
 
-    class Rabbit : public SimpleAI {
+    class Rabbit : virtual public SimpleAI {
     public:
 
         Rabbit(const Environment *start_pos,
-               DungeonMap *dm) : SimpleAI(start_pos,
+               DungeonMap *dm) : Actor(start_pos, dm, &RACE_RABBIT),
+                                 SimpleAI(start_pos,
                                           dm,
                                           &RACE_RABBIT) {
             Actor::current_health = 20;
@@ -34,6 +35,13 @@ namespace lab3 {
                 this->speed = SLOW;
             }
             return SimpleAI::go(dir);
+        }
+
+        virtual std::string noise() {
+            std::stringstream ss;
+            ss << this->race->noise();
+            ss << " " << this->race->noise();
+            return ss.str();
         }
 
     };

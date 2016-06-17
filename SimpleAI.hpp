@@ -9,7 +9,7 @@
 
 namespace lab3 {
 
-    struct SimpleAI : public Actor {
+    struct SimpleAI : virtual public Actor {
         int wimpyTurns = 0;
 
         SimpleAI(const Environment *position, DungeonMap *dm, const Race *race) : Actor(position, dm, race) { }
@@ -36,7 +36,10 @@ namespace lab3 {
             if (tickCount % this->speed == 0) {
                 Player *player = getPlayer();
                 if (current_state == AGGRESSIVE) {
-
+                    if (current_health < max_health >> 2) {
+                        current_state = WIMPY;
+                        wimpyTurns = 0;
+                    }
                     if (player->position->id == Actor::position->id) {
                         this->fight(player);
                         return;
@@ -62,7 +65,7 @@ namespace lab3 {
                     return;
                 } else { // NEUTRAL
 
-                    if (this->game_map->bfs(this->position, player->position, this->game_map).size() <= 2) {
+                    if (closeToPlayer(player)) {
                         this->current_state = AGGRESSIVE;
                     }
                     this->wait();
@@ -70,10 +73,10 @@ namespace lab3 {
             } else {
                 wait();
             }
+        }
 
-            if (Actor::current_health < Actor::max_health >> 1) {
-                current_state = WIMPY;
-            }
+        bool closeToPlayer(const Player *player) const {
+            return game_map->bfs(position, player->position, game_map).size() <= 2;
         }
     };
 

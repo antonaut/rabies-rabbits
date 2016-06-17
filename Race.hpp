@@ -32,6 +32,7 @@ namespace lab3 {
 
     const Race RACE_RABBIT{"Rabbit", "Omnomnom."};
     const Race RACE_CROCODILE{"Crocodile", "Snap-snap!"};
+    const Race RACE_RABBIDILE{"Rabbidile", "Omnom-snap-nom!"};
 
 }  // namespace lab3
 

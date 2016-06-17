@@ -28,12 +28,6 @@ namespace lab3 {
                 *mountain_one,
                 *mountain_two,
                 *mountain_three;
-    public:
-        const DungeonMap &getDm() const {
-            return dm;
-        }
-
-    private:
         DungeonMap dm;
     public:
         SmallGameMap() : GameObject() {
@@ -98,7 +92,6 @@ namespace lab3 {
 
             this->dm.ns(swamp_four, mountain_one);
             this->dm.ud(mountain_two, mountain_one);
-            this->dm.ud(mountain_three, mountain_two);
         }
 
         ~SmallGameMap() { }
@@ -107,23 +100,23 @@ namespace lab3 {
 
         SmallGameMap &operator=(const SmallGameMap &sfm) = delete;
 
-        Environment *getStart() const {
+        const Environment *getStart() const {
             return big_rock;
         }
 
-        Environment *getRabbitSpawnOne() const {
+        const Environment *getRabbitSpawnOne() const {
             return forest_three;
         }
 
-        Environment *getRabbitSpawnTwo() const {
+        const Environment *getRabbitSpawnTwo() const {
             return forest_seven;
         }
 
-        Environment *getCrocSpawnOne() const {
+        const Environment *getCrocSpawnOne() const {
             return swamp_two;
         }
 
-        Environment *getCrocSpawnTwo() const {
+        const Environment *getCrocSpawnTwo() const {
             return swamp_four;
         }
 
@@ -131,7 +124,15 @@ namespace lab3 {
             return &this->dm;
         }
 
+        const Environment *getBossSpawn() const {
+            return mountain_two;
+        }
+
+        void addFinalExit() {
+            this->dm.ud(mountain_three, mountain_two);
+        }
     };
+
 
 } // namespace lab3
 

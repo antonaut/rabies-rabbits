@@ -31,8 +31,10 @@ namespace lab3 {
         }
 
         Player *player;
+        SmallGameMap *smallGameMap;
     public:
-        Repl(Player *player) : GameObject(), player(player) { }
+        Repl(Player *player, SmallGameMap *smallGameMap = nullptr)
+                : GameObject(), player(player), smallGameMap(smallGameMap) { }
 
         virtual void action() {
 
@@ -112,42 +114,48 @@ namespace lab3 {
 
 
         inline void help(Tokens &tokens) {
-            if (*tokens.begin() == "help") {
+            if (*tokens.begin() == "help" ||
+                *tokens.begin() == "man") {
                 std::cout << "There are only a few commands:" << std::endl
-                                                                 << "    help - prints this help." << std::endl
-                                                                 << "    look - look around you." << std::endl
-                                                                 << "    go *dir* - walk in direction: " << std::endl
-                                                                 << "        *dir* can be any from " << std::endl
-                                                                 << std::endl
-                                                                 << "        \"north\", \"south\"" << std::endl
-                                                                 << "        \"west\", \"east\"" << std::endl
-                                                                 << "        \"up\", \"down\"" << std::endl
-                                                                 << std::endl
-                                                                 << "Interaction commands:"
-                                                                 << std::endl
-                                                                 << "    talk *target* - talks to *target*." <<
-                                                                 std::endl
-                                                                 << "    fight *target* - fights with *target*." <<
-                                                                 std::endl
-                                                                 << "    take *item* - takes *item*." << std::endl
-                                                                 << "    inv - lists item in inventory." << std::endl
-                                                                 << std::endl
-                                                                 << "Type 'quit' to quit the game." << std::endl
-                                                                 << std::endl
-                                                                 << "Objects in the game are shown with their id."
-                                                                 << std::endl
-                                                                 << "Example:"
-                                                                 << std::endl
-                                                                 << "    [32] - Bird, where '32' is the id of the bird."
-                                                                 << std::endl
-                                                                 << std::endl
-                                                                 << "In order to interact with the objects, simply use their id after the interaction."
-                                                                 << std::endl
-                                                                 << "Example:"
-                                                                 << std::endl
-                                                                 << "    '>fight 32'  -- fights with the bird"
-                                                                 << std::endl
-                                                                 << std::endl;
+                << "    help - prints this help." << std::endl
+                << "    look - look around you." << std::endl
+                << "    go *dir* - walk in direction: " << std::endl
+                << "        *dir* can be any from " << std::endl
+                << std::endl
+                << "        \"north\", \"south\"" << std::endl
+                << "        \"west\", \"east\"" << std::endl
+                << "        \"up\", \"down\"" << std::endl
+                << std::endl
+                << "Interaction commands:"
+                << std::endl
+                << "    talk *target* - talks to *target*." <<
+                std::endl
+                << "    fight *target* - fights with *target*." <<
+                std::endl
+                << "    take *item* - takes *item*." << std::endl
+                << "    inv - lists item in inventory." << std::endl
+                << std::endl
+                << "Type 'quit' to quit the game." << std::endl
+                << std::endl
+                << "Objects in the game are shown with their id."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    [32] - Bird, where '32' is the id of the bird."
+                << std::endl
+                << std::endl
+                << "In order to interact with the objects, simply use their id after the interaction."
+                << std::endl
+                << "Example:"
+                << std::endl
+                << "    '>fight 32'  -- fights with the bird"
+                << std::endl
+                << "Some commands are only available after you have gained some experience."
+                << std::endl
+                << std::endl;
+                if (player->kills > 3) {
+                    std::cout << "   howl - gives you bonus damage for the next attack." << std::endl << std::endl;
+                }
                 return;
             }
             this->go(tokens);
@@ -189,6 +197,11 @@ namespace lab3 {
                 *tokens.begin() == "kill" ||
                 *tokens.begin() == "k") {
 
+                if (tokens.size() < 2) {
+                    std::cout << "Fight who?" << std::endl;
+                    return;
+                }
+
                 auto it = ++tokens.begin();
                 std::clog << "player fight " << *it << std::endl;
                 uint64_t target_id = std::stoull(*it);
@@ -199,7 +212,7 @@ namespace lab3 {
                     std::cout << "No such target found." << std::endl;
                     return;
                 }
-                Actor *targetActor = (Actor *) target;
+                Actor *targetActor = dynamic_cast<Actor *>(target);
                 if (targetActor->position == this->player->position) {
                     this->player->fight(targetActor);
                     ++tickCount;
@@ -232,8 +245,11 @@ namespace lab3 {
 
         inline void wait(Tokens &tokens) {
             if (*tokens.begin() == "wait") {
+
                 std::clog << "player wait" << std::endl;
+
                 uint32_t player_hp_diff = this->player->max_health - this->player->current_health;
+
                 if (this->player->position->id == this->player->start->id &&
                     player_hp_diff > 0) {
                     std::uint32_t health_amount = std::min((uint32_t) 20, player_hp_diff);
@@ -249,7 +265,46 @@ namespace lab3 {
         inline void quit(Tokens &tokens) {
             if (*tokens.begin() == "quit") {
                 throw std::out_of_range("Player quit.");
+            }
+            this->howl(tokens);
+        }
+
+        inline void howl(Tokens &tokens) {
+            if (*tokens.begin() == "howl") {
+                if (this->player->kills > 3) {
+                    player->howl();
+                    return;
+                }
+            }
+            this->joke(tokens);
+        }
+
+        inline void joke(Tokens &tokens) {
+            if (*tokens.begin() == "ls") {
+                std::cout << "Did you mean 'rm -rf /'?" << std::endl;
                 return;
+            } else if (*tokens.begin() == "cd") {
+                std::cout << "No such directory. Try 'go' instead." << std::endl;
+                return;
+            }
+            this->teleport(tokens);
+        }
+
+        inline void teleport(Tokens &tokens) { // Cheat
+            if (this->player->cls.name == character_classes[1].name) { // Only C++ programmer can teleport
+                if (*tokens.begin() == "std::move") {
+                    if (*(tokens.begin() + 1) == "home") {
+                        player->teleport(player->start);
+                        playerLook();
+                        return;
+                    } else if (*(tokens.begin() + 1) == "mountain") {
+                        if (this->smallGameMap != nullptr) {
+                            player->teleport(this->smallGameMap->getBossSpawn());
+                            playerLook();
+                            return;
+                        }
+                    }
+                }
             }
             throw std::invalid_argument("Argle.");
         }

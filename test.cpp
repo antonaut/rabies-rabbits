@@ -66,7 +66,7 @@ int main(int argc, char const *argv[]) {
 
     tezt::add("Player movement", [&] {
         Player *player = new Player(&big_rock, &dm, "Anton", &character_races[1], character_classes[1]);
-        Repl repl(player);
+        Repl repl(player, nullptr);
         std::vector<std::string> tokens({"go", "south"});
         repl.parse(tokens);
         tezt::ae(&forest_one, player->position);
@@ -159,6 +159,7 @@ int main(int argc, char const *argv[]) {
 
         tezt::ae(true, dummy1.getCurrent_health() < dummy2.getCurrent_health());
     });
+
 
     return tezt::run();
 }

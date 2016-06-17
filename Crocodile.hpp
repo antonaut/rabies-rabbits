@@ -12,8 +12,9 @@
 
 namespace lab3 {
 
-    struct Crocodile : public SimpleAI {
-        Crocodile(const Environment *start, DungeonMap *dm) : SimpleAI(start, dm, &RACE_CROCODILE) {
+    struct Crocodile : virtual public SimpleAI {
+        Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, &RACE_CROCODILE),
+                                                              SimpleAI(start, dm, &RACE_CROCODILE) {
             this->base_damage = 20;
             this->max_health = 70;
             this->current_health = this->max_health;

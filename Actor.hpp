@@ -34,7 +34,7 @@ namespace lab3 {
     ActorState WIMPY("Wimpy");
 
 
-    class Actor : public GameObject {
+    class Actor : virtual public GameObject {
     public:
 
         uint32_t current_health;
@@ -116,12 +116,12 @@ namespace lab3 {
             return true;
         }
 
-        virtual void reply() const {
-            std::cout << this->race->noise();
+        virtual std::string noise() {
+            return this->race->noise();
         }
 
         virtual void howl() {
-            std::string n = this->race->noise();
+            std::string n = this->noise();
             std::locale loc;
             for (std::size_t i = 0; i < n.length(); ++i) {
                 std::cout << std::toupper(n[i], loc);

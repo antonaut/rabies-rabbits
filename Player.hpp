@@ -31,6 +31,7 @@ namespace lab3 {
                                      cls(cls),
                                      start(start) {
             player_id = Actor::id;
+            kills = 0;
         }
 
         friend class Repl;
@@ -58,6 +59,11 @@ namespace lab3 {
                 this->hurt(enemy->base_damage);
             } else {
                 ++this->kills;
+                if (this->kills == 4) {
+                    std::cout <<
+                    "You learned to 'howl'. If you do this, it will give you bonus damage next fighting round." <<
+                    std::endl;
+                }
             }
         }
 
@@ -67,12 +73,19 @@ namespace lab3 {
 
         virtual void action() override { }
 
+        void teleport(const Environment *env) {
+
+            std::cout << "YOU CHEATER!" << std::endl;
+
+            this->position = env;
+        }
+
         uint32_t kills;
     };
 
 
     Player *getPlayer() {
-        return (Player *) findGameObjectById(player_id);
+        return dynamic_cast<Player *>(findGameObjectById(player_id));
     }
 
 }  // namespace lab3

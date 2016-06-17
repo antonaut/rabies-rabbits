@@ -49,7 +49,7 @@ namespace lab3 {
             }
         }
 
-        Player *create_player(Environment *start, DungeonMap *dmap) {
+        Player *create_player(const Environment *start, DungeonMap *dmap) {
             std::string name;
             std::cout << "What is your name?" << std::endl;
             std::cout << ">";
