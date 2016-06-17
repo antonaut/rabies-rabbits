@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.5.1)
 project(rabiesrabbies)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-set(PROJECT_SOURCE_DIR)
 set(HEADER_FILES
         Actor.hpp
         CharacterClass.hpp
@@ -19,7 +18,9 @@ set(HEADER_FILES
         Rabbit.hpp
         REPL.hpp
         SmallGameMap.hpp
-        Rabbidile.hpp TickCount.hpp SimpleAI.hpp)
+        Rabbidile.hpp
+        TickCount.hpp
+        SimpleAI.hpp)
 
 set(SOURCE_FILES GameLoop.cpp TickCount.hpp)
 set(TEST_SOURCE_FILES test.cpp tezt.hpp TickCount.hpp)
