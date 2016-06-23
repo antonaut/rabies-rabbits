@@ -44,14 +44,14 @@ namespace lab3 {
                         current_state = WIMPY;
                         wimpyTurns = 0;
                     }
-                    if (player->position->id == Actor::position->id) {
+                    if (player->getPosition()->id == this->position->id) {
                         this->fight(player);
                         return;
                     }
 
-                    Actor::moveTowards(player->position);
+                    Actor::moveTowards(player->getPosition());
 
-                    if (player->position->id == Actor::position->id) {
+                    if (player->getPosition()->id == this->position->id) {
                         auto noise = this->race->noise();
                         std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
                         std::endl;
@@ -80,7 +80,7 @@ namespace lab3 {
         }
 
         bool closeToPlayer(const Player *player) const {
-            return game_map->bfs(position, player->position, game_map).size() <= 2;
+            return game_map->bfs(position, player->getPosition(), game_map).size() <= 2;
         }
     };
 

@@ -11,6 +11,7 @@
 #include "Environment.hpp"
 #include "Race.hpp"
 #include "TickCount.hpp"
+#include "Item.hpp"
 
 namespace lab3 {
 
@@ -37,43 +38,86 @@ namespace lab3 {
     class Actor : virtual public GameObject {
     public:
 
+        uint32_t getCurrent_health() const {
+            return this->current_health;
+        }
+
+        uint32_t getMax_health() const {
+            return max_health;
+        }
+
+        const Environment *getPosition() const {
+            return position;
+        }
+
+        const Race *getRace() const {
+            return race;
+        }
+
+        const bool isDead() const {
+            return this->is_dead;
+        }
+
+        DungeonMap *getGame_map() const {
+            return game_map;
+        }
+
+    protected:
         uint32_t current_health;
         uint32_t max_health;
-        uint32_t base_damage;
         uint32_t bonus_damage;
         bool bonus_applied;
+
         ActorSpeed speed;
         ActorState current_state = AGGRESSIVE;
-
-        const Environment *position;
         DungeonMap *game_map;
         const Race *race;
 
         bool is_dead;
 
+        std::vector<Item *> inventory;
+
+        uint32_t base_damage;
+        const Environment *position;
+
+        bool give_item_to(const uint64_t id, std::vector<Item *> &target) {
+            for (auto it = this->inventory.begin(); it != this->inventory.end(); ++it) {
+                auto ip = *it;
+                if (ip->id == id) {
+                    this->inventory.erase(it);
+                    target.push_back(ip);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    public:
         Actor(const Environment *position,
               DungeonMap *game_map,
               const Race *race) :
                 GameObject(),
                 current_health(100),
                 max_health(current_health),
-                base_damage(10),
                 bonus_damage(0),
                 bonus_applied(true),
                 speed(NORMAL),
-                position(position),
                 game_map(game_map),
                 race(race),
-                is_dead(false) {
+                is_dead(false),
+                inventory(0),
+                base_damage(10),
+                position(position) {
             ACTORS.push_back(this);
         }
 
         virtual ~Actor() { }
 
-        uint32_t getCurrent_health() const {
-            return this->current_health;
-        }
+        void drop(uint64_t item_id) {
+            Environment *env = const_cast<Environment *>(this->position);
+            this->give_item_to(item_id, env->getInventory());
 
+        }
 
         virtual void heal(uint32_t amount) {
             uint64_t sum = this->current_health + amount;
@@ -191,7 +235,7 @@ namespace lab3 {
     std::vector<Actor *> findActorsByPosition(const Environment *position) {
         std::vector<Actor *> atPosition;
         for (auto &actor : ACTORS) {
-            if (actor->position == position) {
+            if (actor->getPosition() == position) {
                 atPosition.push_back(actor);
             }
         }

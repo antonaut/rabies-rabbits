@@ -65,20 +65,20 @@ namespace lab3 {
                         std::clog << Actor::id << " moved towards starting location." << std::endl;
                     }
                     if (closeToPlayer(player)) {
-                        if (player->current_health < player->max_health) {
+                        if (player->getCurrent_health() < player->getMax_health()) {
                             this->current_state = AGGRESSIVE;
                         }
                     }
                 }
             } else if (this->current_state == AGGRESSIVE) {
                 if (closeToPlayer(player)) {
-                    if (this->position->id == player->position->id) {
+                    if (this->position->id == player->getPosition()->id) {
                         this->howl();
                         player->fight(this);
                         std::clog << Actor::id << " howls and fights." << std::endl;
                         return;
                     } else {
-                        this->moveTowards(player->position);
+                        this->moveTowards(player->getPosition());
                         std::clog << Actor::id << " chases the player." << std::endl;
                         return;
                     }

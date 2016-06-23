@@ -1,11 +1,12 @@
-#ifndef LAB3_PLAYER_HPP_
-#define LAB3_PLAYER_HPP_
+#ifndef LAB3_ITEM_HPP_
+#define LAB3_ITEM_HPP_
 
 #include <string>
+#include "GameObject.hpp"
 
 namespace lab3 {
 
-    class Item {
+    class Item : public GameObject {
         int weight;
         int damage;
         int defence;
@@ -13,6 +14,7 @@ namespace lab3 {
 
     public:
         explicit Item(int weight, std::string name, int damage = 0, int defence = 0) :
+                GameObject(),
                 weight(weight),
                 damage(damage),
                 defence(defence),
@@ -23,4 +25,4 @@ namespace lab3 {
 }  // namespace lab3
 
 
-#endif  // LAB3_PLAYER_HPP_
+#endif  // LAB3_ITEM_HPP_

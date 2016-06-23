@@ -42,7 +42,7 @@ namespace lab3 {
 
     bool hasWon(SmallGameMap *sm) {
         Player *player = getPlayer();
-        bool has_won = player->position->id == sm->getWinLocation()->id;
+        bool has_won = player->getPosition()->id == sm->getWinLocation()->id;
 
         if (has_won) {
             std::cout << "Congratulations! You have won the game! Please play again." << std::endl;
@@ -57,7 +57,7 @@ namespace lab3 {
         // Death
         std::vector<Actor *> dead_actors;
         for (std::vector<Actor *>::iterator it = ACTORS.begin(); it != ACTORS.end(); ++it) {
-            if ((*it)->is_dead) {
+            if ((*it)->isDead()) {
                 Actor *dead_actor = *it;
                 Player *player = getPlayer();
                 if (dead_actor->id == player->id) {
@@ -66,7 +66,7 @@ namespace lab3 {
                     break;
                 }
                 std::stringstream ss;
-                ss << *dead_actor->race;
+                ss << *dead_actor->getRace();
                 player->getCls().killed_fn(ss.str());
 
                 dead_actors.push_back(*it);

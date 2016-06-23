@@ -50,13 +50,13 @@ namespace lab3 {
             enemy->hurt(dmg);
 
             std::stringstream ss;
-            ss << *enemy->race;
+            ss << *enemy->getRace();
 
-            this->cls.attack_fn(ss.str(), enemy->max_health, enemy->current_health, dmg);
+            this->cls.attack_fn(ss.str(), enemy->getMax_health(), enemy->getCurrent_health(), dmg);
 
-            if (!enemy->is_dead) {
-                std::cout << "The enemy hits you for " << enemy->base_damage << " points of damage." << std::endl;
-                this->hurt(enemy->base_damage);
+            if (!enemy->isDead()) {
+                std::cout << "The enemy hits you for " << enemy->damage() << " points of damage." << std::endl;
+                this->hurt(enemy->damage());
             } else {
                 ++this->kills;
                 if (this->kills == 4) {
@@ -68,7 +68,7 @@ namespace lab3 {
         }
 
         virtual uint32_t damage() {
-            return this->base_damage + 7 * kills;
+            return Actor::base_damage + 7 * kills;
         }
 
         virtual void action() override { }
