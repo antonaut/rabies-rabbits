@@ -69,7 +69,7 @@ int main(int argc, char const *argv[]) {
         Repl repl(player, nullptr);
         std::vector<std::string> tokens({"go", "south"});
         repl.parse(tokens);
-        tezt::ae(&forest_one, player->position);
+        tezt::ae(&forest_one, player->getPosition());
 
         delete player;
     });
@@ -87,23 +87,23 @@ int main(int argc, char const *argv[]) {
         Actor *rabbit = new Rabbit(&forest_four, &dm);
         auto s1 = ACTORS.size();
 
-        rabbit->current_health = 1;
+        rabbit->setCurrent_health(1);
 
         // Simulate GameLoop
         player->fight(rabbit);
 
-        tezt::ae(true, rabbit->is_dead, "Rabbit should be dead.");
+        tezt::ae(true, rabbit->isDead(), "Rabbit should be dead.");
 
         // Make sure rabbit is gone
         for (auto it = ACTORS.begin(); it != ACTORS.end(); ++it) {
-            if ((*it)->is_dead) {
+            if ((*it)->isDead()) {
                 ACTORS.erase(it);
                 break;
             }
         }
 
         tezt::ae(s1 - 1, ACTORS.size(), "One less actor than before.");
-        tezt::ae((uint32_t) 0, rabbit->current_health, "Dead enemies have zero hp left. Nothing else.");
+        tezt::ae((uint32_t) 0, rabbit->getCurrent_health(), "Dead enemies have zero hp left. Nothing else.");
     });
 
     tezt::add("A crocodile is slower than a rabbit on land, but faster in water!", [&] {
@@ -113,14 +113,14 @@ int main(int argc, char const *argv[]) {
 
         const Environment *target = &forest_nine;
 
-        while (r1.position->id != target->id) {
+        while (r1.getPosition()->id != target->id) {
             r1.action();
             c1.action();
             tickCount++;
         }
 
-        tezt::ae(target->id, r1.position->id, "Rabbit arrived at target.");
-        tezt::ane(target->id, c1.position->id, "Crocodile not at target.");
+        tezt::ae(target->id, r1.getPosition()->id, "Rabbit arrived at target.");
+        tezt::ane(target->id, c1.getPosition()->id, "Crocodile not at target.");
     });
 
     tezt::add("A crocodile is faster in the swamp.", [&] {
@@ -129,20 +129,20 @@ int main(int argc, char const *argv[]) {
         Crocodile c1(sm2->getCrocSpawnOne(), sm2->getDungeonMap());
         Player player(sm2->getCrocSpawnTwo(), sm2->getDungeonMap(), "Testy", &character_races[2], character_classes[0]);
 
-        r1.position = sm2->getCrocSpawnOne();
-        c1.position = sm2->getCrocSpawnOne();
-        player.position = sm2->getCrocSpawnTwo();
+        r1.setPosition(sm2->getCrocSpawnOne());
+        c1.setPosition(sm2->getCrocSpawnOne());
+        player.setPosition(sm2->getCrocSpawnTwo());
 
-        const Environment *target = player.position;
+        const Environment *target = player.getPosition();
 
-        while (c1.position->id != target->id) {
+        while (c1.getPositionId() != target->id) {
             r1.action();
             c1.action();
             tickCount++;
         }
 
-        tezt::ae(target->id, c1.position->id, "The croc is at target.");
-        tezt::ane(target->id, r1.position->id, "...But the rabbit isn't.");
+        tezt::ae(target->id, c1.getPositionId(), "The croc is at target.");
+        tezt::ane(target->id, r1.getPositionId(), "...But the rabbit isn't.");
     });
 
     tezt::add("A crocodile always hurts more than a rabbit.", [&] {
@@ -157,7 +157,7 @@ int main(int argc, char const *argv[]) {
         rabbit.fight(&dummy1);
         crocodile.fight(&dummy2);
 
-        tezt::ae(true, dummy1.getCurrent_health() < dummy2.getCurrent_health());
+        tezt::ae(true, dummy1.getCurrent_health() > dummy2.getCurrent_health(), "dummy health");
     });
 
 

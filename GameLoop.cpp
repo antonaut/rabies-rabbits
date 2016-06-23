@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
 
         new Rabbidile(sm->getBossSpawn(), sm->getDungeonMap(), sm);
 
+
         start_game_loop(sm);
 
     } catch (const std::out_of_range &oor) {

@@ -90,6 +90,13 @@ namespace lab3 {
                     std::cout << "[" << actor->id << "] - A " << *actor->getRace() << " is here." << std::endl;
             }
 
+            if (!inventories[player->getPositionId()].empty()) {
+                std::cout << std::endl << std::endl << "Items:" << std::endl;
+            }
+            for (auto &item : inventories[player->getPositionId()]) {
+                std::cout << "[" << item->id << "] - " << item->getName();
+            }
+
             this->printExits();
         }
 

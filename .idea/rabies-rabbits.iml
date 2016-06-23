@@ -7,9 +7,10 @@
       <sourceFolder url="file://$MODULE_DIR$/GameLoop.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/GameObject.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tezt.hpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/REPL.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Inventory.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/TickCount.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/DungeonMap.hpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/REPL.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Direction.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Crocodile.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SimpleAI.hpp" isTestSource="false" />

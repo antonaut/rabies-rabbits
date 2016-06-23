@@ -12,6 +12,7 @@
 #include "Race.hpp"
 #include "TickCount.hpp"
 #include "Item.hpp"
+#include "Inventory.hpp"
 
 namespace lab3 {
 
@@ -50,6 +51,10 @@ namespace lab3 {
             return position;
         }
 
+        uint64_t getPositionId() const {
+            return position->id;
+        }
+
         const Race *getRace() const {
             return race;
         }
@@ -60,6 +65,26 @@ namespace lab3 {
 
         DungeonMap *getGame_map() const {
             return game_map;
+        }
+
+        void setCurrent_health(uint32_t current_health) {
+            Actor::current_health = current_health;
+        }
+
+        void setMax_health(uint32_t max_health) {
+            Actor::max_health = max_health;
+        }
+
+        void setBase_damage(uint32_t base_damage) {
+            Actor::base_damage = base_damage;
+        }
+
+        void setSpeed(ActorSpeed speed) {
+            Actor::speed = speed;
+        }
+
+        void setPosition(const Environment *env) {
+            Actor::position = env;
         }
 
     protected:
@@ -75,22 +100,9 @@ namespace lab3 {
 
         bool is_dead;
 
-        std::vector<Item *> inventory;
-
         uint32_t base_damage;
         const Environment *position;
-
-        bool give_item_to(const uint64_t id, std::vector<Item *> &target) {
-            for (auto it = this->inventory.begin(); it != this->inventory.end(); ++it) {
-                auto ip = *it;
-                if (ip->id == id) {
-                    this->inventory.erase(it);
-                    target.push_back(ip);
-                    return true;
-                }
-            }
-            return false;
-        }
+        int max_carry_capacity;
 
     public:
         Actor(const Environment *position,
@@ -105,19 +117,16 @@ namespace lab3 {
                 game_map(game_map),
                 race(race),
                 is_dead(false),
-                inventory(0),
                 base_damage(10),
-                position(position) {
+                position(position),
+                max_carry_capacity(2000) {
             ACTORS.push_back(this);
         }
 
-        virtual ~Actor() { }
-
-        void drop(uint64_t item_id) {
-            Environment *env = const_cast<Environment *>(this->position);
-            this->give_item_to(item_id, env->getInventory());
+        virtual ~Actor() {
 
         }
+
 
         virtual void heal(uint32_t amount) {
             uint64_t sum = this->current_health + amount;
@@ -224,6 +233,42 @@ namespace lab3 {
             std::clog << Actor::id << " waits." << std::endl;
         }
 
+        bool strongEnoughToCarry(Item *pItem);
+
+        int carryCapacity();
+
+        int getMaxCarryCapacity();
+
+
+        int totalCarryWeight();
+
+        bool drop(const uint64_t item_id) {
+            bool transferred = item_transfer(item_id, this->id, this->getPositionId());
+            if (transferred) {
+                Item *item = findItemById(item_id);
+                std::clog << item->getName() << " dropped by " << *this;
+            }
+
+            return transferred;
+        }
+
+        bool take(const uint64_t item_id) {
+            Item *item = findItemById(item_id);
+
+            if (!this->strongEnoughToCarry(item)) {
+                return false;
+            }
+
+            bool transferred = item_transfer(item_id, this->getPositionId(), this->id);
+            if (transferred) {
+                std::clog << item->getName() << " taken up by " << *this;
+            }
+
+            return transferred;
+        }
+
+
+
     };
 
     std::ostream &operator<<(std::ostream &str, const Actor &actor) {
@@ -231,6 +276,27 @@ namespace lab3 {
         << actor.max_health << ")" << " - " << actor.current_state;
         return str;
     }
+
+    bool Actor::strongEnoughToCarry(Item *pItem) {
+        return pItem->getWeight() < this->carryCapacity();
+    }
+
+    int Actor::carryCapacity() {
+        return this->getMaxCarryCapacity() - this->totalCarryWeight();
+    }
+
+    int Actor::getMaxCarryCapacity() {
+        return this->max_carry_capacity;
+    }
+
+    int Actor::totalCarryWeight() {
+        int total_carry_weight(0);
+        for (Item *ip: inventory(this->id)) {
+            total_carry_weight += ip->getWeight();
+        }
+        return total_carry_weight;
+    }
+
 
     std::vector<Actor *> findActorsByPosition(const Environment *position) {
         std::vector<Actor *> atPosition;
@@ -242,6 +308,7 @@ namespace lab3 {
 
         return atPosition;
     }
+
 
 }  // namespace lab3
 

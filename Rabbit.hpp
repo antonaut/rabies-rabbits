@@ -26,6 +26,17 @@ namespace lab3 {
                                           &RACE_RABBIT) {
             Actor::current_health = 20;
             Actor::max_health = 20;
+
+            std::uniform_int_distribution<int> distribution(0, 100);
+            int d100 = distribution(mt_engine);
+
+            if (d100 < 75) {
+                new Item(this->id, 20, "rabbit paw", 0, 10);
+            }
+            d100 = distribution(mt_engine);
+            if (d100 < 10) {
+                new Item(this->id, 2000, "stick", 30, 10);
+            }
         }
 
         virtual bool go(Direction dir) override {

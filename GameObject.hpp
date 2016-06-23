@@ -8,12 +8,14 @@
 #include <initializer_list>
 #include <memory>
 #include <stdexcept>
+#include <map>
 
 #include "GameObject.hpp"
 
 namespace lab3 {
 
     class GameObject;
+
 
     std::vector<GameObject *> GAME_OBJECTS;
 

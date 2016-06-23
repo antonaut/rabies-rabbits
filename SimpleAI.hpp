@@ -15,7 +15,7 @@ namespace lab3 {
         SimpleAI(const Environment *position, DungeonMap *dm, const Race *race) : Actor(position, dm, race) { }
 
         virtual void fight(Actor *target) {
-            if (this->is_dead) {
+            if (this->isDead()) {
                 std::clog << this->id << " is dead, so it can't fight." << std::endl;
                 return;
             }
