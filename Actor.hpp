@@ -16,299 +16,296 @@
 
 namespace lab3 {
 
-    std::mt19937 mt_engine;
-
-    class Actor;
-
-    std::vector<Actor *> ACTORS;
-
-    typedef int ActorSpeed;
-
-    const ActorSpeed SLOW(5);
-    const ActorSpeed NORMAL(3);
-    const ActorSpeed FAST(2);
-    const ActorSpeed PRETTY_DAMN_FAST(1);
+std::mt19937 mt_engine;
+
+class Actor;
+
+std::vector<Actor *> ACTORS;
+
+typedef int ActorSpeed;
+
+const ActorSpeed SLOW(5);
+const ActorSpeed NORMAL(3);
+const ActorSpeed FAST(2);
+const ActorSpeed PRETTY_DAMN_FAST(1);
 
-    typedef std::string ActorState;
+typedef std::string ActorState;
 
-    ActorState AGGRESSIVE("Aggressive");
-    ActorState NEUTRAL("Neutral");
-    ActorState WIMPY("Wimpy");
-
-
-    class Actor : virtual public GameObject {
-    public:
-
-        uint32_t getCurrent_health() const {
-            return this->current_health;
-        }
-
-        uint32_t getMax_health() const {
-            return max_health;
-        }
-
-        const Environment *getPosition() const {
-            return position;
-        }
-
-        uint64_t getPositionId() const {
-            return position->id;
-        }
-
-        const Race *getRace() const {
-            return race;
-        }
-
-        const bool isDead() const {
-            return this->is_dead;
-        }
-
-        DungeonMap *getGame_map() const {
-            return game_map;
-        }
-
-        void setCurrent_health(uint32_t current_health) {
-            Actor::current_health = current_health;
-        }
-
-        void setMax_health(uint32_t max_health) {
-            Actor::max_health = max_health;
-        }
-
-        void setBase_damage(uint32_t base_damage) {
-            Actor::base_damage = base_damage;
-        }
-
-        void setSpeed(ActorSpeed speed) {
-            Actor::speed = speed;
-        }
-
-        void setPosition(const Environment *env) {
-            Actor::position = env;
-        }
-
-    protected:
-        uint32_t current_health;
-        uint32_t max_health;
-        uint32_t bonus_damage;
-        bool bonus_applied;
-
-        ActorSpeed speed;
-        ActorState current_state = AGGRESSIVE;
-        DungeonMap *game_map;
-        const Race *race;
-
-        bool is_dead;
-
-        uint32_t base_damage;
-        const Environment *position;
-        int max_carry_capacity;
-
-    public:
-        Actor(const Environment *position,
-              DungeonMap *game_map,
-              const Race *race) :
-                GameObject(),
-                current_health(100),
-                max_health(current_health),
-                bonus_damage(0),
-                bonus_applied(true),
-                speed(NORMAL),
-                game_map(game_map),
-                race(race),
-                is_dead(false),
-                base_damage(10),
-                position(position),
-                max_carry_capacity(2000) {
-            ACTORS.push_back(this);
-        }
-
-        virtual ~Actor() {
-
-        }
-
-
-        virtual void heal(uint32_t amount) {
-            uint64_t sum = this->current_health + amount;
-            if (sum >= this->max_health) {
-                this->current_health = this->max_health;
-            } else {
-                this->current_health = sum;
-            }
-        }
-
-        virtual void hurt(uint32_t damage) {
-            if (this->is_dead)
-                return;
-            int32_t diff = this->current_health - damage;
-
-            if (diff <= 0) {
-                this->die();
-                this->current_health = 0;
-                return;
-            }
-
-            this->current_health = (uint32_t) diff;
-        }
-
-        virtual void die() {
-            this->howl();
-            this->is_dead = true;
-            std::clog << this->id << " just died." << std::endl;
-        }
-
-        virtual bool go(Direction dir) {
-            const Environment *new_loc;
-            try {
-                new_loc = this->game_map->env_from_exit(this->position, dir);
-            } catch (const std::invalid_argument &ex) {
-                std::clog << ex.what();
-                return false;
-            }
-            this->position = new_loc;
-            return true;
-        }
-
-        virtual std::string noise() {
-            return this->race->noise();
-        }
-
-        virtual void howl() {
-            std::string n = this->noise();
-            std::locale loc;
-            for (std::size_t i = 0; i < n.length(); ++i) {
-                std::cout << std::toupper(n[i], loc);
-            }
-            std::cout << std::endl;
-            this->bonus_damage = 10;
-            this->bonus_applied = false;
-        }
-
-        virtual uint32_t damage() {
-            uint32_t total_damage = this->base_damage;
-
-            if (!this->bonus_applied) {
-                total_damage += this->bonus_damage;
-                this->bonus_applied = true;
-                this->bonus_damage = 0;
-            }
-
-            return total_damage;
-        }
-
-        virtual void fight(Actor *target) { }
-
-        virtual void action() { }
-
-        friend
-        std::ostream &operator<<(std::ostream &str, const Actor &actor);
-
-        void moveTowards(const Environment *target_location) {
-            std::vector<Direction> path = this->game_map->bfs(Actor::position, target_location, Actor::game_map);
-            if (path.empty()) { // already there
-                return this->wait();
-            }
-
-            std::clog << Actor::id << " - move according to path ";
-            for (auto it = path.rbegin(); it != path.rend(); ++it) {
-                std::clog << *it << " ";
-            }
-            std::clog << std::endl;
-
-            this->go(*(--path.end()));
-        }
-
-        // Flee in a random direction
-        void flee() {
-            std::vector<Direction> exits = this->game_map->exits(this->position);
-
-            std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
-
-            int exit_index = distribution(mt_engine);
-
-            this->go(exits[exit_index]);
-        }
-
-        virtual void wait() const {
-            std::clog << Actor::id << " waits." << std::endl;
-        }
-
-        bool strongEnoughToCarry(Item *pItem);
-
-        int carryCapacity();
-
-        int getMaxCarryCapacity();
-
-
-        int totalCarryWeight();
-
-        bool drop(const uint64_t item_id) {
-            bool transferred = item_transfer(item_id, this->id, this->getPositionId());
-            if (transferred) {
-                Item *item = findItemById(item_id);
-                std::clog << item->getName() << " dropped by " << *this;
-            }
-
-            return transferred;
-        }
-
-        bool take(const uint64_t item_id) {
-            Item *item = findItemById(item_id);
-
-            if (!this->strongEnoughToCarry(item)) {
-                return false;
-            }
-
-            bool transferred = item_transfer(item_id, this->getPositionId(), this->id);
-            if (transferred) {
-                std::clog << item->getName() << " taken up by " << *this;
-            }
-
-            return transferred;
-        }
-
-
-
-    };
-
-    std::ostream &operator<<(std::ostream &str, const Actor &actor) {
-        str << *actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
-        << actor.max_health << ")" << " - " << actor.current_state;
-        return str;
+ActorState AGGRESSIVE("Aggressive");
+ActorState NEUTRAL("Neutral");
+ActorState WIMPY("Wimpy");
+
+
+class Actor: virtual public GameObject {
+ public:
+
+  uint32_t getCurrent_health() const {
+    return this->current_health;
+  }
+
+  uint32_t getMax_health() const {
+    return max_health;
+  }
+
+  const Environment *getPosition() const {
+    return position;
+  }
+
+  uint64_t getPositionId() const {
+    return position->id;
+  }
+
+  const Race *getRace() const {
+    return race;
+  }
+
+  const bool isDead() const {
+    return this->is_dead;
+  }
+
+  DungeonMap *getGame_map() const {
+    return game_map;
+  }
+
+  void setCurrent_health(uint32_t current_health) {
+    Actor::current_health = current_health;
+  }
+
+  void setMax_health(uint32_t max_health) {
+    Actor::max_health = max_health;
+  }
+
+  void setBase_damage(uint32_t base_damage) {
+    Actor::base_damage = base_damage;
+  }
+
+  void setSpeed(ActorSpeed speed) {
+    Actor::speed = speed;
+  }
+
+  void setPosition(const Environment *env) {
+    Actor::position = env;
+  }
+
+ protected:
+  uint32_t current_health;
+  uint32_t max_health;
+  uint32_t bonus_damage;
+  bool bonus_applied;
+
+  ActorSpeed speed;
+  ActorState current_state = AGGRESSIVE;
+  DungeonMap *game_map;
+  const Race *race;
+
+  bool is_dead;
+
+  uint32_t base_damage;
+  const Environment *position;
+  int max_carry_capacity;
+
+ public:
+  Actor(const Environment *position,
+        DungeonMap *game_map,
+        const Race *race) :
+      GameObject(),
+      current_health(100),
+      max_health(current_health),
+      bonus_damage(0),
+      bonus_applied(true),
+      speed(NORMAL),
+      game_map(game_map),
+      race(race),
+      is_dead(false),
+      base_damage(10),
+      position(position),
+      max_carry_capacity(2000) {
+    ACTORS.push_back(this);
+  }
+
+  virtual ~Actor() {
+
+  }
+
+
+  virtual void heal(uint32_t amount) {
+    uint64_t sum = this->current_health + amount;
+    if (sum >= this->max_health) {
+      this->current_health = this->max_health;
+    } else {
+      this->current_health = sum;
+    }
+  }
+
+  virtual void hurt(uint32_t damage) {
+    if (this->is_dead)
+      return;
+    int32_t diff = this->current_health - damage;
+
+    if (diff <= 0) {
+      this->die();
+      this->current_health = 0;
+      return;
     }
 
-    bool Actor::strongEnoughToCarry(Item *pItem) {
-        return pItem->getWeight() < this->carryCapacity();
+    this->current_health = (uint32_t) diff;
+  }
+
+  virtual void die() {
+    this->howl();
+    this->is_dead = true;
+    std::clog << this->id << " just died." << std::endl;
+  }
+
+  virtual bool go(Direction dir) {
+    const Environment *new_loc;
+    try {
+      new_loc = this->game_map->env_from_exit(this->position, dir);
+    } catch (const std::invalid_argument &ex) {
+      std::clog << ex.what();
+      return false;
+    }
+    this->position = new_loc;
+    return true;
+  }
+
+  virtual std::string noise() {
+    return this->race->noise();
+  }
+
+  virtual void howl() {
+    std::string n = this->noise();
+    std::locale loc;
+    for (std::size_t i = 0; i < n.length(); ++i) {
+      std::cout << std::toupper(n[i], loc);
+    }
+    std::cout << std::endl;
+    this->bonus_damage = 10;
+    this->bonus_applied = false;
+  }
+
+  virtual uint32_t damage() {
+    uint32_t total_damage = this->base_damage;
+
+    if (!this->bonus_applied) {
+      total_damage += this->bonus_damage;
+      this->bonus_applied = true;
+      this->bonus_damage = 0;
     }
 
-    int Actor::carryCapacity() {
-        return this->getMaxCarryCapacity() - this->totalCarryWeight();
+    return total_damage;
+  }
+
+  virtual void fight(Actor *target) { }
+
+  virtual void action() { }
+
+  friend
+  std::ostream &operator<<(std::ostream &str, const Actor &actor);
+
+  void moveTowards(const Environment *target_location) {
+    std::vector<Direction> path = this->game_map->bfs(Actor::position, target_location, Actor::game_map);
+    if (path.empty()) { // already there
+      return this->wait();
     }
 
-    int Actor::getMaxCarryCapacity() {
-        return this->max_carry_capacity;
+    std::clog << Actor::id << " - move according to path ";
+    for (auto it = path.rbegin(); it != path.rend(); ++it) {
+      std::clog << *it << " ";
+    }
+    std::clog << std::endl;
+
+    this->go(*(--path.end()));
+  }
+
+  // Flee in a random direction
+  void flee() {
+    std::vector<Direction> exits = this->game_map->exits(this->position);
+
+    std::uniform_int_distribution<int> distribution(0, (int) exits.size() - 1);
+
+    int exit_index = distribution(mt_engine);
+
+    this->go(exits[exit_index]);
+  }
+
+  virtual void wait() const {
+    std::clog << Actor::id << " waits." << std::endl;
+  }
+
+  bool strongEnoughToCarry(Item *pItem);
+
+  int carryCapacity();
+
+  int getMaxCarryCapacity();
+
+
+  int totalCarryWeight();
+
+  bool drop(const uint64_t item_id) {
+    bool transferred = item_transfer(item_id, this->id, this->getPositionId());
+    if (transferred) {
+      Item *item = findItemById(item_id);
+      std::clog << item->getName() << " dropped by " << *this;
     }
 
-    int Actor::totalCarryWeight() {
-        int total_carry_weight(0);
-        for (Item *ip: inventory(this->id)) {
-            total_carry_weight += ip->getWeight();
-        }
-        return total_carry_weight;
+    return transferred;
+  }
+
+  bool take(const uint64_t item_id) {
+    Item *item = findItemById(item_id);
+
+    if (!this->strongEnoughToCarry(item)) {
+      return false;
     }
 
-
-    std::vector<Actor *> findActorsByPosition(const Environment *position) {
-        std::vector<Actor *> atPosition;
-        for (auto &actor : ACTORS) {
-            if (actor->getPosition() == position) {
-                atPosition.push_back(actor);
-            }
-        }
-
-        return atPosition;
+    bool transferred = item_transfer(item_id, this->getPositionId(), this->id);
+    if (transferred) {
+      std::clog << item->getName() << " taken up by " << *this;
     }
 
+    return transferred;
+  }
+
+};
+
+std::ostream &operator<<(std::ostream &str, const Actor &actor) {
+  str << *actor.race << " [" << actor.id << "] (" << actor.current_health << "/"
+      << actor.max_health << ")" << " - " << actor.current_state;
+  return str;
+}
+
+bool Actor::strongEnoughToCarry(Item *pItem) {
+  return pItem->getWeight() < this->carryCapacity();
+}
+
+int Actor::carryCapacity() {
+  return this->getMaxCarryCapacity() - this->totalCarryWeight();
+}
+
+int Actor::getMaxCarryCapacity() {
+  return this->max_carry_capacity;
+}
+
+int Actor::totalCarryWeight() {
+  int total_carry_weight(0);
+  for (Item *ip: inventory(this->id)) {
+    total_carry_weight += ip->getWeight();
+  }
+  return total_carry_weight;
+}
+
+
+std::vector<Actor *> findActorsByPosition(const Environment *position) {
+  std::vector<Actor *> atPosition;
+  for (auto &actor : ACTORS) {
+    if (actor->getPosition() == position) {
+      atPosition.push_back(actor);
+    }
+  }
+
+  return atPosition;
+}
 
 }  // namespace lab3
 

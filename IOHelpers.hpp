@@ -7,26 +7,26 @@
 
 namespace lab3 {
 
-    std::string get_string() {
-        std::string line;
-        if (!std::getline(std::cin, line)) {
-            throw std::out_of_range("Ctrl-D");
-        }
-        return line;
-    }
+std::string get_string() {
+  std::string line;
+  if (!std::getline(std::cin, line)) {
+    throw std::out_of_range("Ctrl-D");
+  }
+  return line;
+}
 
-    int get_integer() {
-        try {
-            std::string line;
-            if (!std::getline(std::cin, line)) {
-                throw std::out_of_range("Ctrl-D");
-            }
-            int res = std::stoi(line, nullptr);
-            return res;
-        } catch (const std::invalid_argument &exception) {
-            return 0;
-        }
+int get_integer() {
+  try {
+    std::string line;
+    if (!std::getline(std::cin, line)) {
+      throw std::out_of_range("Ctrl-D");
     }
+    int res = std::stoi(line, nullptr);
+    return res;
+  } catch (const std::invalid_argument &exception) {
+    return 0;
+  }
+}
 
 }  // namespace lab3
 

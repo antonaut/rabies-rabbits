@@ -9,80 +9,80 @@
 
 namespace lab3 {
 
-    struct SimpleAI : virtual public Actor {
-        int wimpyTurns = 0;
+struct SimpleAI: virtual public Actor {
+  int wimpyTurns = 0;
 
-        SimpleAI(const Environment *position, DungeonMap *dm, const Race *race) : Actor(position, dm, race) { }
+  SimpleAI(const Environment *position, DungeonMap *dm, const Race *race) : Actor(position, dm, race) { }
 
-        virtual void fight(Actor *target) {
-            if (this->isDead()) {
-                std::clog << this->id << " is dead, so it can't fight." << std::endl;
-                return;
-            }
-            try {
-                Player *player = getPlayer();
-                if (target == player) {
-                    std::cout << *this->race << " attacks!" << std::endl;
-                    player->fight(this);
-                    return;
-                }
-            } catch (const std::invalid_argument &ex) {
-                // No player found
-            }
+  virtual void fight(Actor *target) {
+    if (this->isDead()) {
+      std::clog << this->id << " is dead, so it can't fight." << std::endl;
+      return;
+    }
+    try {
+      Player *player = getPlayer();
+      if (target == player) {
+        std::cout << *this->race << " attacks!" << std::endl;
+        player->fight(this);
+        return;
+      }
+    } catch (const std::invalid_argument &ex) {
+      // No player found
+    }
 
-            this->hurt(target->damage());
-            target->hurt(this->damage());
+    this->hurt(target->damage());
+    target->hurt(this->damage());
+  }
+
+  virtual void action() {
+    std::clog << *this << std::endl;
+
+    if (tickCount % this->speed == 0) {
+      Player *player = getPlayer();
+      if (current_state == AGGRESSIVE) {
+        if (current_health < max_health >> 2) {
+          current_state = WIMPY;
+          wimpyTurns = 0;
+        }
+        if (player->getPosition()->id == this->position->id) {
+          this->fight(player);
+          return;
         }
 
-        virtual void action() {
-            std::clog << *this << std::endl;
+        Actor::moveTowards(player->getPosition());
 
-            if (tickCount % this->speed == 0) {
-                Player *player = getPlayer();
-                if (current_state == AGGRESSIVE) {
-                    if (current_health < max_health >> 2) {
-                        current_state = WIMPY;
-                        wimpyTurns = 0;
-                    }
-                    if (player->getPosition()->id == this->position->id) {
-                        this->fight(player);
-                        return;
-                    }
-
-                    Actor::moveTowards(player->getPosition());
-
-                    if (player->getPosition()->id == this->position->id) {
-                        auto noise = this->race->noise();
-                        std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
-                        std::endl;
-                    }
-                    return;
-
-                } else if (current_state == WIMPY) {
-                    ++wimpyTurns;
-                    if (wimpyTurns >= 3) {
-                        this->current_state = NEUTRAL;
-                        wimpyTurns = 0;
-                    }
-                    this->flee();
-
-                    return;
-                } else { // NEUTRAL
-
-                    if (closeToPlayer(player)) {
-                        this->current_state = AGGRESSIVE;
-                    }
-                    this->wait();
-                }
-            } else {
-                wait();
-            }
+        if (player->getPosition()->id == this->position->id) {
+          auto noise = this->race->noise();
+          std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
+              std::endl;
         }
+        return;
 
-        bool closeToPlayer(const Player *player) const {
-            return game_map->bfs(position, player->getPosition(), game_map).size() <= 2;
+      } else if (current_state == WIMPY) {
+        ++wimpyTurns;
+        if (wimpyTurns >= 3) {
+          this->current_state = NEUTRAL;
+          wimpyTurns = 0;
         }
-    };
+        this->flee();
+
+        return;
+      } else { // NEUTRAL
+
+        if (closeToPlayer(player)) {
+          this->current_state = AGGRESSIVE;
+        }
+        this->wait();
+      }
+    } else {
+      wait();
+    }
+  }
+
+  bool closeToPlayer(const Player *player) const {
+    return game_map->bfs(position, player->getPosition(), game_map).size() <= 2;
+  }
+};
 
 } // namespace lab3
 

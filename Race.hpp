@@ -8,31 +8,31 @@
 
 namespace lab3 {
 
-    struct Race {
-        std::string name;
-        std::string sound;
+struct Race {
+  std::string name;
+  std::string sound;
 
-        friend std::ostream &operator<<(std::ostream &str, const Race c);
+  friend std::ostream &operator<<(std::ostream &str, const Race c);
 
-        std::string noise() const {
-            return this->sound;
-        }
-    };
+  std::string noise() const {
+    return this->sound;
+  }
+};
 
-    std::ostream &operator<<(std::ostream &str, const Race c) {
-        str << c.name;
-        return str;
-    }
+std::ostream &operator<<(std::ostream &str, const Race c) {
+  str << c.name;
+  return str;
+}
 
-    std::vector<Race> character_races = {
-            Race{"Bear", "RAAWR!"},
-            Race{"Fox", "Grrrr..."},
-            Race{"Wolf", "GRROWL!"},
-    };
+std::vector<Race> character_races = {
+    Race{"Bear", "RAAWR!"},
+    Race{"Fox", "Grrrr..."},
+    Race{"Wolf", "GRROWL!"},
+};
 
-    const Race RACE_RABBIT{"Rabbit", "Omnomnom."};
-    const Race RACE_CROCODILE{"Crocodile", "Snap-snap!"};
-    const Race RACE_RABBIDILE{"Rabbidile", "Omnom-snap-nom!"};
+const Race RACE_RABBIT{"Rabbit", "Omnomnom."};
+const Race RACE_CROCODILE{"Crocodile", "Snap-snap!"};
+const Race RACE_RABBIDILE{"Rabbidile", "Omnom-snap-nom!"};
 
 }  // namespace lab3
 

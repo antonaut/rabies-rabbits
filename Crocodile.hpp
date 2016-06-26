@@ -12,24 +12,24 @@
 
 namespace lab3 {
 
-    struct Crocodile : virtual public SimpleAI {
-        Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, &RACE_CROCODILE),
-                                                              SimpleAI(start, dm, &RACE_CROCODILE) {
-            this->base_damage = 20;
-            this->max_health = 70;
-            this->current_health = this->max_health;
-        }
+struct Crocodile: virtual public SimpleAI {
+  Crocodile(const Environment *start, DungeonMap *dm) : Actor(start, dm, &RACE_CROCODILE),
+                                                        SimpleAI(start, dm, &RACE_CROCODILE) {
+    this->base_damage = 20;
+    this->max_health = 70;
+    this->current_health = this->max_health;
+  }
 
-        virtual bool go(Direction dir) override {
-            if (this->position->type == SWAMP_TYPE) {
-                this->speed = PRETTY_DAMN_FAST;
-            } else {
-                this->speed = NORMAL;
-            }
-            return Actor::go(dir);
-        }
+  virtual bool go(Direction dir) override {
+    if (this->position->type == SWAMP_TYPE) {
+      this->speed = PRETTY_DAMN_FAST;
+    } else {
+      this->speed = NORMAL;
+    }
+    return Actor::go(dir);
+  }
 
-    };
+};
 
 }  // namespace lab3
 

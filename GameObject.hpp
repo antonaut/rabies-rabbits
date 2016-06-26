@@ -14,54 +14,54 @@
 
 namespace lab3 {
 
-    class GameObject;
+class GameObject;
 
 
-    std::vector<GameObject *> GAME_OBJECTS;
+std::vector<GameObject *> GAME_OBJECTS;
 
-    struct GameObject {
-        static uint64_t id_counter;
-        uint64_t id;
+struct GameObject {
+  static uint64_t id_counter;
+  uint64_t id;
 
-        // Default constructor constructs an empty GameObject
-        explicit GameObject() : id(++id_counter) {
-            GAME_OBJECTS.push_back(this);
-        }
-
-
-        virtual ~GameObject() { }
-
-        // No copy, no move
-        GameObject(const GameObject &go) = delete;
-
-        GameObject(GameObject &&go) = delete;
-
-        GameObject &operator=(const GameObject &go) = delete;
-
-        GameObject &operator=(GameObject &&go) = delete;
-
-        virtual void action() {
-
-        }
-
-        friend bool operator==(const GameObject &a, const GameObject &b);
-    };
-
-    uint64_t GameObject::id_counter = 0;
+  // Default constructor constructs an empty GameObject
+  explicit GameObject() : id(++id_counter) {
+    GAME_OBJECTS.push_back(this);
+  }
 
 
-    GameObject *findGameObjectById(uint64_t needle) {
-        for (size_t i = 0; i < GAME_OBJECTS.size(); ++i) {
-            if (GAME_OBJECTS[i]->id == needle) {
-                return GAME_OBJECTS[i];
-            }
-        }
-        throw std::invalid_argument("No GameObject with that id found.");
+  virtual ~GameObject() { }
+
+  // No copy, no move
+  GameObject(const GameObject &go) = delete;
+
+  GameObject(GameObject &&go) = delete;
+
+  GameObject &operator=(const GameObject &go) = delete;
+
+  GameObject &operator=(GameObject &&go) = delete;
+
+  virtual void action() {
+
+  }
+
+  friend bool operator==(const GameObject &a, const GameObject &b);
+};
+
+uint64_t GameObject::id_counter = 0;
+
+
+GameObject *findGameObjectById(uint64_t needle) {
+  for (size_t i = 0; i < GAME_OBJECTS.size(); ++i) {
+    if (GAME_OBJECTS[i]->id == needle) {
+      return GAME_OBJECTS[i];
     }
+  }
+  throw std::invalid_argument("No GameObject with that id found.");
+}
 
-    bool operator==(const GameObject &a, const GameObject &b) {
-        return a.id == b.id;
-    }
+bool operator==(const GameObject &a, const GameObject &b) {
+  return a.id == b.id;
+}
 
 }  // namespace lab3
 

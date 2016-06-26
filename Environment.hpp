@@ -11,34 +11,33 @@
 
 namespace lab3 {
 
-    typedef const int EnvironmentType;
+typedef const int EnvironmentType;
 
-    EnvironmentType FOREST_TYPE = 1;
-    EnvironmentType SWAMP_TYPE = 2;
-    EnvironmentType MOUNTAIN_TYPE = 3;
+EnvironmentType FOREST_TYPE = 1;
+EnvironmentType SWAMP_TYPE = 2;
+EnvironmentType MOUNTAIN_TYPE = 3;
 
-    class Environment : public GameObject {
-    public:
-        std::vector<Item *> &getInventory() {
-            return inventory;
-        }
+class Environment: public GameObject {
+ public:
+  std::vector<Item *> &getInventory() {
+    return inventory;
+  }
 
-    private:
-        std::vector<Item *> inventory;
-    protected:
-        Environment() = delete;
-    public:
-        std::string name;
-        std::string short_description;
-        EnvironmentType type;
+ private:
+  std::vector<Item *> inventory;
+ protected:
+  Environment() = delete;
+ public:
+  std::string name;
+  std::string short_description;
+  EnvironmentType type;
 
-        Environment(EnvironmentType type, std::string env_name, std::string env_description) :
-                name(env_name),
-                short_description(env_description),
-                type(type) { }
+  Environment(EnvironmentType type, std::string env_name, std::string env_description) :
+      name(env_name),
+      short_description(env_description),
+      type(type) { }
 
-    };
-
+};
 
 }  // namespace lab3
 

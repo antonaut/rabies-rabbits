@@ -4,7 +4,7 @@
 #define RABIESRABBIES_TICKCOUNT_HPP_
 
 namespace lab3 {
-    int tickCount(0);
+int tickCount(0);
 } //  namespace lab3
 
 
