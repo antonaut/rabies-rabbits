@@ -23,10 +23,11 @@ std::vector<GameObject *> GAME_OBJECTS;
 struct GameObject {
   static uint64_t id_counter;
   uint64_t id;
-  int last_tick_count;
+  int last_action_performed;
 
   // Default constructor constructs an empty GameObject
-  explicit GameObject() : id(++id_counter) {
+  explicit GameObject() : id(++id_counter),
+                          last_action_performed(tickCount) {
     GAME_OBJECTS.push_back(this);
   }
 
@@ -43,16 +44,15 @@ struct GameObject {
   GameObject &operator=(GameObject &&go) = delete;
 
   virtual void action() {
-    if (this->tickHasChanged())
-      this->last_tick_count = tickCount;
+    this->last_action_performed = tickCount;
   }
 
   friend bool operator==(const GameObject &a, const GameObject &b);
 
  protected:
 
-  bool tickHasChanged() {
-    return this->last_tick_count == tickCount;
+  bool tickHasChangedSinceLastAction() {
+    return this->last_action_performed < tickCount;
   }
 
 };

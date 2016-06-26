@@ -50,7 +50,7 @@ class Item: public GameObject {
 
   virtual void action() override {
     if (this->decayable) {
-      if (this->tickHasChanged()) {
+      if (this->tickHasChangedSinceLastAction()) {
         --ticksUntilDecay;
       }
 

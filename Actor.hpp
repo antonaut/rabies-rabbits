@@ -10,7 +10,6 @@
 #include "GameObject.hpp"
 #include "Environment.hpp"
 #include "Race.hpp"
-#include "TickCount.hpp"
 #include "Item.hpp"
 
 namespace lab3 {
@@ -196,7 +195,9 @@ class Actor: virtual public GameObject {
 
   virtual void fight(Actor *target) { }
 
-  virtual void action() { }
+  virtual void action() {
+    GameObject::action();
+  }
 
   friend
   std::ostream &operator<<(std::ostream &str, const Actor &actor);

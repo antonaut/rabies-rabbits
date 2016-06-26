@@ -37,7 +37,7 @@ struct SimpleAI: virtual public Actor {
   virtual void action() {
     std::clog << *this << std::endl;
 
-    if (tickCount % this->speed == 0) {
+    if (this->tickHasChangedSinceLastAction() && tickCount % this->speed == 0) {
       Player *player = getPlayer();
       if (current_state == AGGRESSIVE) {
         if (current_health < max_health >> 2) {
@@ -46,6 +46,7 @@ struct SimpleAI: virtual public Actor {
         }
         if (player->getPosition()->id == this->position->id) {
           this->fight(player);
+          Actor::action();
           return;
         }
 
@@ -56,6 +57,7 @@ struct SimpleAI: virtual public Actor {
           std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
               std::endl;
         }
+        Actor::action();
         return;
 
       } else if (current_state == WIMPY) {
@@ -65,7 +67,7 @@ struct SimpleAI: virtual public Actor {
           wimpyTurns = 0;
         }
         this->flee();
-
+        Actor::action();
         return;
       } else { // NEUTRAL
 
@@ -77,6 +79,7 @@ struct SimpleAI: virtual public Actor {
     } else {
       wait();
     }
+    Actor::action();
   }
 
   bool closeToPlayer(const Player *player) const {
