@@ -139,6 +139,10 @@ class Actor: virtual public GameObject {
       return;
     int32_t diff = this->current_health - damage;
 
+    for (auto ip : *inventory(this->id)) {
+      diff -= ip->getDefence();
+    }
+
     if (diff <= 0) {
       this->die();
       this->current_health = 0;
@@ -152,6 +156,9 @@ class Actor: virtual public GameObject {
     this->howl();
     this->is_dead = true;
     std::clog << this->id << " just died." << std::endl;
+    for (auto ip : *inventory(this->id)) {
+      this->drop(ip->id);
+    }
   }
 
   virtual bool go(Direction dir) {
@@ -188,6 +195,10 @@ class Actor: virtual public GameObject {
       total_damage += this->bonus_damage;
       this->bonus_applied = true;
       this->bonus_damage = 0;
+    }
+
+    for (auto ip : *inventory(this->id)) {
+      total_damage += ip->getDamage();
     }
 
     return total_damage;
@@ -251,7 +262,7 @@ class Actor: virtual public GameObject {
     return transferred;
   }
 
-  bool take(const uint64_t item_id) {
+  virtual bool take(const uint64_t item_id) {
     Item *item = findItemById(item_id);
 
     if (!this->strongEnoughToCarry(item)) {
@@ -288,7 +299,7 @@ int Actor::getMaxCarryCapacity() {
 
 int Actor::totalCarryWeight() {
   int total_carry_weight(0);
-  for (Item *ip: inventory(this->id)) {
+  for (Item *ip: *inventory(this->id)) {
     total_carry_weight += ip->getWeight();
   }
   return total_carry_weight;

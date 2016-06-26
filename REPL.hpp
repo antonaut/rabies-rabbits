@@ -90,11 +90,11 @@ struct Repl: public GameObject {
         std::cout << "[" << actor->id << "] - A " << *actor->getRace() << " is here." << std::endl;
     }
 
-    if (!inventories[player->getPositionId()].empty()) {
+    if (!INVENTORIES[player->getPositionId()].empty()) {
       std::cout << std::endl << std::endl << "Items:" << std::endl;
-    }
-    for (auto &item : inventories[player->getPositionId()]) {
-      std::cout << "[" << item->id << "] - " << item->getName();
+      for (auto &item : INVENTORIES[player->getPositionId()]) {
+        std::cout << "  [" << item->id << "] - " << item->getName() << std::endl;
+      }
     }
 
     this->printExits();
@@ -153,7 +153,7 @@ struct Repl: public GameObject {
           << "    fight *target* - fights with *target*." <<
           std::endl
           << "    take *item* - takes *item*." << std::endl
-          << "    inv - lists items in inventory." << std::endl
+          << "    inv - lists ITEMS in inventory." << std::endl
           << std::endl
           << "Type 'quit' to quit the game." << std::endl
           << std::endl

@@ -62,7 +62,7 @@ class Item: public GameObject {
     GameObject::action();
   }
 
-  bool isDecayed() {
+  bool isDecayed() const {
     return this->hasDecayed;
   }
 
@@ -81,12 +81,13 @@ class Item: public GameObject {
   int getDefence() const {
     return defence;
   }
+  void setTicksUntilDecay(int ticksUntilDecay);
 };
 
 /**
  * @return std::vector<Item *> inv - the inventory of the GameObject with id 'id'.
  **/
-std::vector<Item *> &inventory(const uint64_t id);
+std::vector<Item *> *inventory(const uint64_t id);
 
 /**
  * Performs 'action' on the item with id 'item_id'.
@@ -95,7 +96,7 @@ void itemAction(uint64_t item_id, std::function<void(uint64_t, Item *)> action);
 
 void inventory_insert(const uint64_t to, Item *item);
 
-std::vector<Item *> items;
+std::vector<Item *> ITEMS;
 
 Item::Item(std::string name, uint64_t owner_id, int weight, int damage, int defence, bool decayable) :
     GameObject(),
@@ -106,40 +107,44 @@ Item::Item(std::string name, uint64_t owner_id, int weight, int damage, int defe
     decayable(decayable),
     hasDecayed(false),
     ticksUntilDecay(20) {
-  items.push_back(this);
+  ITEMS.push_back(this);
   inventory_insert(owner_id, this);
 }
 
 Item::~Item() {
-  for (auto it = items.begin(); it != items.end(); ++it) {
+  for (auto it = ITEMS.begin(); it != ITEMS.end(); ++it) {
     if (*it == this) {
-      items.erase(it);
+      ITEMS.erase(it);
       return;
     }
   }
+}
+
+void Item::setTicksUntilDecay(int ticksUntilDecay) {
+  this->ticksUntilDecay = ticksUntilDecay;
 }
 
 
 // theVoid holds Items which are to be removed from the game.
 GameObject theVoid;
 
-// inventories holds the items for all the game objects
-std::map<uint64_t, std::vector<Item *>> inventories;
+// INVENTORIES holds the ITEMS for all the game objects
+std::map<uint64_t, std::vector<Item *>> INVENTORIES;
 
 void inventory_insert(const uint64_t to, Item *item) {
-  auto it = inventories.find(to);
-  if (it == inventories.end()) {
-    inventories.insert(std::make_pair(to, std::vector<Item *>(0)));
-    it = inventories.find(to);
+  auto it = INVENTORIES.find(to);
+  if (it == INVENTORIES.end()) {
+    INVENTORIES.insert(std::make_pair(to, std::vector<Item *>(0)));
+    it = INVENTORIES.find(to);
   }
   it->second.push_back(item);
 }
 
 bool item_transfer(const uint64_t item_id, const uint64_t from, const uint64_t to) {
-  for (auto it = inventories[from].begin(); it != inventories[from].end(); ++it) {
+  for (auto it = INVENTORIES[from].begin(); it != INVENTORIES[from].end(); ++it) {
     auto ip = *it;
     if (ip->id == item_id) {
-      inventories[from].erase(it);
+      INVENTORIES[from].erase(it);
       inventory_insert(to, ip);
       return true;
     }
@@ -147,13 +152,18 @@ bool item_transfer(const uint64_t item_id, const uint64_t from, const uint64_t t
   return false;
 }
 
+std::vector<Item *> empty;
 
-std::vector<Item *> &inventory(const uint64_t id) {
-  return inventories[id];
+std::vector<Item *> *inventory(const uint64_t id) {
+  try {
+    return &INVENTORIES.at(id);
+  } catch (const std::out_of_range &ex) {
+    return &empty;
+  }
 }
 
 void itemAction(uint64_t item_id, std::function<void(uint64_t, Item *)> action) {
-  for (auto it = inventories.begin(); it != inventories.end(); ++it) {
+  for (auto it = INVENTORIES.begin(); it != INVENTORIES.end(); ++it) {
     auto ownerItemPair = *it;
     for (auto jt = ownerItemPair.second.begin(); jt != ownerItemPair.second.end(); ++jt) {
       auto itemPointer = *jt;
@@ -181,7 +191,7 @@ uint64_t getOwnerId(uint64_t item_id) {
 
 
 Item *findItemById(uint64_t id) {
-  for (auto it = items.begin(); it != items.end(); ++it) {
+  for (auto it = ITEMS.begin(); it != ITEMS.end(); ++it) {
     if ((*it)->id == id) {
       return *it;
     }

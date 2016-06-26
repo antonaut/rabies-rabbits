@@ -45,18 +45,44 @@ void start_game_loop(SmallGameMap *sm) {
   }
 }
 
+void deleteVoidInventory();
+
 void handleItemDecay() {
-  for (Item *itemPointer: items) {
+  for (Item *itemPointer: ITEMS) {
     if (itemPointer->isDecayed()) {
       moveToVoid(itemPointer->id);
     }
   }
 
-  auto voidInventory = inventory(theVoid.id);
-  for (auto i : voidInventory) {
-    delete i;
+  deleteVoidInventory();
+}
+
+void deleteVoidInventory() {
+  std::vector<Item *> *voidInventoryPointer = inventory(theVoid.id);
+
+  std::vector<Item *> to_be_deleted;
+
+  for (auto it = voidInventoryPointer->begin(); it != voidInventoryPointer->end(); ++it) {
+    auto i = *it;
+
+    auto gob_it = find(GAME_OBJECTS.begin(), GAME_OBJECTS.end(), i);
+    if (gob_it != GAME_OBJECTS.end()) {
+      GAME_OBJECTS.erase(gob_it);
+    }
+
+    auto item_it = find(ITEMS.begin(), ITEMS.end(), i);
+
+    if (item_it != ITEMS.end()) {
+      ITEMS.erase(item_it);
+    }
+
+    to_be_deleted.push_back(*it);
   }
-  voidInventory.clear();
+
+  for (auto itemPointer : to_be_deleted) {
+    delete itemPointer;
+  }
+  voidInventoryPointer->clear();
 }
 
 bool hasWon(SmallGameMap *sm) {
@@ -87,6 +113,7 @@ bool handleDeath() {
       std::stringstream ss;
       ss << *dead_actor->getRace();
       player->getCls().killed_fn(ss.str());
+
 
       dead_actors.push_back(*it);
     }
@@ -144,6 +171,13 @@ int main(int argc, char *argv[]) {
   }
 
   // Memory management - cleanup
+
+  for (auto ip : ITEMS) {
+    moveToVoid(ip->id);
+  }
+
+  deleteVoidInventory();
+
   for (size_t i = 0; i < GAME_OBJECTS.size(); ++i) {
     delete GAME_OBJECTS[i];
   }

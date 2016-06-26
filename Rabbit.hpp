@@ -31,11 +31,12 @@ class Rabbit: virtual public SimpleAI {
     int d100 = distribution(mt_engine);
 
     if (d100 < 75) {
-      new Item("rabbit paw", this->id, 20, 0, 10, false);
+      new Item("rabbit paw", this->id, 20, 0, 10, true);
     }
     d100 = distribution(mt_engine);
     if (d100 < 10) {
-      new Item("stick", this->id, 2000, 30, 10, false);
+      Item *stick = new Item("stick", this->id, 2000, 30, 10, true);
+      stick->setTicksUntilDecay(100);
     }
   }
 

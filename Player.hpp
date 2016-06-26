@@ -68,7 +68,7 @@ struct Player: public Actor {
   }
 
   virtual uint32_t damage() {
-    return Actor::base_damage + 7 * kills;
+    return Actor::damage() + 7 * kills;
   }
 
   virtual void action() override { }
