@@ -160,6 +160,13 @@ int main(int argc, char const *argv[]) {
     tezt::ae(true, dummy1.getCurrent_health() > dummy2.getCurrent_health(), "dummy health");
   });
 
+  tezt::add("Item owner", [&] {
+
+    GameObject *anton = new GameObject();
+    Item *rock = new Item("rock", anton->id, 200, 0, 0, 0);
+    tezt::ae(anton->id, getOwnerId(rock->id), "Owner ID's are not equal.");
+
+  });
 
   return tezt::run();
 }

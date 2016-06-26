@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "GameObject.hpp"
-#include "Item.hpp"
 
 namespace lab3 {
 
@@ -18,13 +17,7 @@ EnvironmentType SWAMP_TYPE = 2;
 EnvironmentType MOUNTAIN_TYPE = 3;
 
 class Environment: public GameObject {
- public:
-  std::vector<Item *> &getInventory() {
-    return inventory;
-  }
 
- private:
-  std::vector<Item *> inventory;
  protected:
   Environment() = delete;
  public:

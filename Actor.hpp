@@ -12,7 +12,6 @@
 #include "Race.hpp"
 #include "TickCount.hpp"
 #include "Item.hpp"
-#include "Inventory.hpp"
 
 namespace lab3 {
 
@@ -126,7 +125,6 @@ class Actor: virtual public GameObject {
   virtual ~Actor() {
 
   }
-
 
   virtual void heal(uint32_t amount) {
     uint64_t sum = this->current_health + amount;

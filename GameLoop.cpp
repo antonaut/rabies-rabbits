@@ -19,6 +19,8 @@ bool handleDeath();
 
 bool hasWon(SmallGameMap *sm);
 
+void handleItemDecay();
+
 void start_game_loop(SmallGameMap *sm) {
   bool quit(false);
   while (!quit) {
@@ -31,6 +33,9 @@ void start_game_loop(SmallGameMap *sm) {
         break;
       }
     }
+
+    handleItemDecay();
+
     quit |= handleDeath();
     quit |= hasWon(sm);
 
@@ -38,6 +43,20 @@ void start_game_loop(SmallGameMap *sm) {
     if (tickCount % 15 == 0) new Rabbit(sm->getRabbitSpawnTwo(), sm->getDungeonMap());
     if (tickCount % 25 == 0) new Crocodile(sm->getCrocSpawnTwo(), sm->getDungeonMap());
   }
+}
+
+void handleItemDecay() {
+  for (Item *itemPointer: items) {
+    if (itemPointer->isDecayed()) {
+      moveToVoid(itemPointer->id);
+    }
+  }
+
+  auto voidInventory = inventory(theVoid.id);
+  for (auto i : voidInventory) {
+    delete i;
+  }
+  voidInventory.clear();
 }
 
 bool hasWon(SmallGameMap *sm) {
@@ -81,6 +100,7 @@ bool handleDeath() {
     GAME_OBJECTS.erase(it2);
     delete ap;
   }
+
   return quit;
 }
 

@@ -11,6 +11,7 @@
 #include <map>
 
 #include "GameObject.hpp"
+#include "TickCount.hpp"
 
 namespace lab3 {
 
@@ -22,6 +23,7 @@ std::vector<GameObject *> GAME_OBJECTS;
 struct GameObject {
   static uint64_t id_counter;
   uint64_t id;
+  int last_tick_count;
 
   // Default constructor constructs an empty GameObject
   explicit GameObject() : id(++id_counter) {
@@ -41,10 +43,18 @@ struct GameObject {
   GameObject &operator=(GameObject &&go) = delete;
 
   virtual void action() {
-
+    if (this->tickHasChanged())
+      this->last_tick_count = tickCount;
   }
 
   friend bool operator==(const GameObject &a, const GameObject &b);
+
+ protected:
+
+  bool tickHasChanged() {
+    return this->last_tick_count == tickCount;
+  }
+
 };
 
 uint64_t GameObject::id_counter = 0;
