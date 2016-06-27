@@ -17,7 +17,6 @@ namespace lab3 {
 
 class GameObject;
 
-
 std::vector<GameObject *> GAME_OBJECTS;
 
 struct GameObject {

@@ -182,6 +182,7 @@ int main(int argc, char *argv[]) {
     delete GAME_OBJECTS[i];
   }
 
+  ITEMS.clear();
   ACTORS.clear();
   GAME_OBJECTS.clear();
 

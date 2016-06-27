@@ -82,6 +82,16 @@ class Item: public GameObject {
     return defence;
   }
   void setTicksUntilDecay(int ticksUntilDecay);
+
+  friend
+  std::ostream& operator<<(std::ostream& str, const Item &item) {
+    str << "[" << item.id << "] - " << item.name << "("
+        << "W:" << item.weight << ", "
+        << "Dmg:" << item.damage << ", "
+        << "Def:" << item.defence << ")";
+
+    return str;
+  }
 };
 
 /**
@@ -109,6 +119,7 @@ Item::Item(std::string name, uint64_t owner_id, int weight, int damage, int defe
     ticksUntilDecay(20) {
   ITEMS.push_back(this);
   inventory_insert(owner_id, this);
+  std::clog << "Item spawned: " << std::endl;
 }
 
 Item::~Item() {
