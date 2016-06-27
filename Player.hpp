@@ -45,6 +45,12 @@ struct Player: public Actor {
   }
 
 
+  virtual
+  int getMaxCarryCapacity() override {
+    return Actor::getMaxCarryCapacity() + this->kills * 10;
+  }
+
+
   void fight(Actor *enemy) {
     uint32_t dmg = this->damage();
     enemy->hurt(dmg);

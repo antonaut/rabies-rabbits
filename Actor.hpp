@@ -139,7 +139,7 @@ class Actor: virtual public GameObject {
       return;
     int32_t diff = this->current_health - damage;
 
-    for (auto ip : *inventory(this->id)) {
+    for (auto ip : *getInventory(this->id)) {
       diff -= ip->getDefence();
     }
 
@@ -156,7 +156,7 @@ class Actor: virtual public GameObject {
     this->howl();
     this->is_dead = true;
     std::clog << this->id << " just died." << std::endl;
-    for (auto ip : *inventory(this->id)) {
+    for (auto ip : *getInventory(this->id)) {
       this->drop(ip->id);
     }
   }
@@ -197,7 +197,7 @@ class Actor: virtual public GameObject {
       this->bonus_damage = 0;
     }
 
-    for (auto ip : *inventory(this->id)) {
+    for (auto ip : *getInventory(this->id)) {
       total_damage += ip->getDamage();
     }
 
@@ -247,7 +247,7 @@ class Actor: virtual public GameObject {
 
   int carryCapacity();
 
-  int getMaxCarryCapacity();
+  virtual int getMaxCarryCapacity();
 
 
   int totalCarryWeight();
@@ -293,13 +293,13 @@ int Actor::carryCapacity() {
   return this->getMaxCarryCapacity() - this->totalCarryWeight();
 }
 
-int Actor::getMaxCarryCapacity() {
+virtual int Actor::getMaxCarryCapacity() {
   return this->max_carry_capacity;
 }
 
 int Actor::totalCarryWeight() {
   int total_carry_weight(0);
-  for (Item *ip: *inventory(this->id)) {
+  for (Item *ip: *getInventory(this->id)) {
     total_carry_weight += ip->getWeight();
   }
   return total_carry_weight;

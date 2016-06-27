@@ -61,7 +61,7 @@ void handleItemDecay() {
 }
 
 void deleteVoidInventory() {
-  std::vector<Item *> *voidInventoryPointer = inventory(theVoid->id);
+  std::vector<Item *> *voidInventoryPointer = getInventory(theVoid->id);
 
   std::vector<Item *> to_be_deleted;
 

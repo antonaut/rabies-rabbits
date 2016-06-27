@@ -95,9 +95,9 @@ class Item: public GameObject {
 };
 
 /**
- * @return std::vector<Item *> inv - the inventory of the GameObject with id 'id'.
+ * @return std::vector<Item *> inv - the getInventory of the GameObject with id 'id'.
  **/
-std::vector<Item *> *inventory(const uint64_t id);
+std::vector<Item *> *getInventory(const uint64_t id);
 
 /**
  * Performs 'action' on the item with id 'item_id'.
@@ -165,7 +165,7 @@ bool item_transfer(const uint64_t item_id, const uint64_t from, const uint64_t t
 
 std::vector<Item *> empty;
 
-std::vector<Item *> *inventory(const uint64_t id) {
+std::vector<Item *> *getInventory(const uint64_t id) {
   try {
     return &INVENTORIES.at(id);
   } catch (const std::out_of_range &ex) {

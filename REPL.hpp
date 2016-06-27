@@ -114,7 +114,8 @@ struct Repl: public GameObject {
   }
 
   inline void look(Tokens &tokens) {
-    if (*tokens.begin() == "look") {
+    if (*tokens.begin() == "look" ||
+        *tokens.begin() == "l") {
       this->playerLook();
       return;
     }
@@ -123,7 +124,17 @@ struct Repl: public GameObject {
 
   inline void inventory(Tokens &tokens) {
     if (*tokens.begin() == "inv" ||
-        *tokens.begin() == "inventory") {
+        *tokens.begin() == "getInventory") {
+
+      std::cout << "Inventory:" << std::endl << std::endl;
+      auto inv = getInventory(player_id);
+      int tot_weight = 0;
+      for (auto ip : *inv) {
+        std::cout << ip->getName() << std::endl;
+        tot_weight += ip->getWeight();
+      }
+      std::cout << tot_weight << " / " << player->getMaxCarryCapacity()
+          << std::endl << std::endl;
       return;
     }
     this->help(tokens);
@@ -136,24 +147,25 @@ struct Repl: public GameObject {
 
       std::cout << "There are a few commands:" << std::endl
           << "    help - prints this help." << std::endl
-          << "    look - look around you." << std::endl
+          << "    look - ('l' works too) look around you." << std::endl
           << "    wait - wait a turn or two. Useful near glowing rocks." << std::endl
           << "    p - repeats the previous command entered." << std::endl
-          << "    go *dir* - walk in direction: " << std::endl
+          << "    go *dir* - ('g' works too) walk in direction: " << std::endl
           << "        *dir* can be any from " << std::endl
           << std::endl
           << "        \"north\", \"south\"" << std::endl
           << "        \"west\", \"east\"" << std::endl
           << "        \"up\", \"down\"" << std::endl
           << std::endl
+          << std::endl
           << "Interaction commands:"
           << std::endl
           << "    talk *target* - talks to *target*." <<
           std::endl
-          << "    fight *target* - fights with *target*." <<
+          << "    fight *target* - fights with *target*. Also works with 'k', 'kill'." <<
           std::endl
           << "    take *item* - takes *item*." << std::endl
-          << "    inv - lists ITEMS in inventory." << std::endl
+          << "    inv - lists ITEMS in getInventory." << std::endl
           << std::endl
           << "Type 'quit' to quit the game." << std::endl
           << std::endl
@@ -169,6 +181,9 @@ struct Repl: public GameObject {
           << "Example:"
           << std::endl
           << "    '>fight 32'  -- fights with the bird"
+          << std::endl
+          << std::endl
+          << "Note: Items may decay after a while. Don't get worried if you no longer carry the items you picked up."
           << std::endl
           << std::endl
           << "New commands may become available after you have gained some experience."
