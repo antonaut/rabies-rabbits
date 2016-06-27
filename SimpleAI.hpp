@@ -66,6 +66,9 @@ struct SimpleAI: virtual public Actor {
           this->current_state = NEUTRAL;
           wimpyTurns = 0;
         }
+        if (closeToPlayer(player)) {
+          std::cout << "[" << this->id << "] - A " << *this->race << " is fleeing." << std::endl;
+        }
         this->flee();
         Actor::action();
         return;

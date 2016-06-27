@@ -119,7 +119,7 @@ Item::Item(std::string name, uint64_t owner_id, int weight, int damage, int defe
     ticksUntilDecay(20) {
   ITEMS.push_back(this);
   inventory_insert(owner_id, this);
-  std::clog << "Item spawned: " << std::endl;
+  std::clog << "Item spawned: " << this << std::endl;
 }
 
 Item::~Item() {
@@ -137,7 +137,7 @@ void Item::setTicksUntilDecay(int ticksUntilDecay) {
 
 
 // theVoid holds Items which are to be removed from the game.
-GameObject theVoid;
+GameObject *theVoid = new GameObject();
 
 // INVENTORIES holds the ITEMS for all the game objects
 std::map<uint64_t, std::vector<Item *>> INVENTORIES;
@@ -188,7 +188,7 @@ void itemAction(uint64_t item_id, std::function<void(uint64_t, Item *)> action) 
 
 void moveToVoid(uint64_t item_id) {
   itemAction(item_id, [&](uint64_t owner_id, Item *item) {
-    item_transfer(item_id, owner_id, theVoid.id);
+    item_transfer(item_id, owner_id, theVoid->id);
   });
 }
 

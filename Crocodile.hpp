@@ -18,6 +18,16 @@ struct Crocodile: virtual public SimpleAI {
     this->base_damage = 20;
     this->max_health = 70;
     this->current_health = this->max_health;
+
+
+    std::uniform_int_distribution<int> distribution(0, 100);
+    int d100 = distribution(mt_engine);
+
+    if (d100 < 50) {
+      Item *ip = new Item("croc's tooth", this->id, 40, 10, 0, true);
+      ip->setTicksUntilDecay(50);
+    }
+
   }
 
   virtual bool go(Direction dir) override {

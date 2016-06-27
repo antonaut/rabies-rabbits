@@ -226,6 +226,10 @@ struct Repl: public GameObject {
       auto it = ++tokens.begin();
       std::clog << "player fight " << *it << std::endl;
       uint64_t target_id = std::stoull(*it);
+      if (target_id == player_id) {
+        std::cout << "Are you trying to kill yourself?" << std::endl;
+        return;
+      }
       GameObject *target;
       try {
         target = findGameObjectById(target_id);
@@ -234,6 +238,10 @@ struct Repl: public GameObject {
         return;
       }
       Actor *targetActor = dynamic_cast<Actor *>(target);
+      if (targetActor == nullptr) {
+        std::cout << "No such target found." << std::endl;
+        return;
+      }
       if (targetActor->getPosition() == this->player->getPosition()) {
         this->player->fight(targetActor);
         ++tickCount;
@@ -262,6 +270,8 @@ struct Repl: public GameObject {
       auto it = ++tokens.begin();
       if (tokens.size() >= 2) {
         std::clog << "player take " << *it << std::endl;
+        uint64_t item_id = std::stoull(*it);
+        player->take(item_id);
       }
       return;
     }

@@ -24,6 +24,7 @@ void handleItemDecay();
 void start_game_loop(SmallGameMap *sm) {
   bool quit(false);
   while (!quit) {
+    int lastTick = tickCount;
     std::clog << "*** Tick: " << tickCount << " ***" << std::endl;
     for (auto &game_obj : GAME_OBJECTS) {
       try {
@@ -40,8 +41,10 @@ void start_game_loop(SmallGameMap *sm) {
     quit |= hasWon(sm);
 
     // Spawn more enemies
-    if (tickCount % 15 == 0) new Rabbit(sm->getRabbitSpawnTwo(), sm->getDungeonMap());
-    if (tickCount % 25 == 0) new Crocodile(sm->getCrocSpawnTwo(), sm->getDungeonMap());
+    if (tickCount > lastTick) {
+      if (tickCount % 15 == 0) new Rabbit(sm->getRabbitSpawnTwo(), sm->getDungeonMap());
+      if (tickCount % 25 == 0) new Crocodile(sm->getCrocSpawnTwo(), sm->getDungeonMap());
+    }
   }
 }
 
@@ -58,7 +61,7 @@ void handleItemDecay() {
 }
 
 void deleteVoidInventory() {
-  std::vector<Item *> *voidInventoryPointer = inventory(theVoid.id);
+  std::vector<Item *> *voidInventoryPointer = inventory(theVoid->id);
 
   std::vector<Item *> to_be_deleted;
 

@@ -73,6 +73,25 @@ struct Player: public Actor {
 
   virtual void action() override { }
 
+  virtual bool take(uint64_t item_id) override {
+    bool taken = Actor::take(item_id);
+    Item *item = findItemById(item_id);
+
+    if (taken) {
+      std::cout << "You picked up: " << item->getName() << std::endl;
+    } else {
+      if (!this->strongEnoughToCarry(item)) {
+        std::cout << "You are not strong enough to carry: "
+            << item->getName()
+            << std::endl;
+      } else {
+        std::cout << "No such item here." << std::endl;
+      }
+    }
+
+    return taken;
+  }
+
   void teleport(const Environment *env) {
 
     std::cout << "YOU CHEATER!" << std::endl;
