@@ -1,0 +1,42 @@
+
+* Build and run
+
+To build on Ubuntu:
+
+Requires cmake with version >= 3.5.1.
+
+#+begin_src sh
+cmake CMakeLists.txt
+make
+#+end_src
+
+To run (and redirect std:cerr to a file):
+
+#+begin_src sh
+./rabiesrabbies 2>log.txt
+#+end_src
+
+Not sure how to do it on other platforms. Please consult cmake manual.
+
+
+* About
+
+This is a text game where you type commands to perform actions. Your
+goal is to beat a boss called a rabbidile. It's a mix of both a rabbit
+and a crocodile. Good luck.
+
+It is made to illustrate and try out some C++ (C++11)
+concepts. It uses (among other things):
+
+ - diamond inheritance
+ - lambda functions
+ - auto keyword
+ - const_cast
+ - one dynamic_cast
+
+...somewhere in the code.
+
+
+* Structures & classes
+
+  TODO write/expand this

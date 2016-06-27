@@ -71,7 +71,13 @@ Tried to make sure dead actors are removed and won't attack back.
     - Rage when attacked.
 
 
-* Items - A.K.A. the big fat TODO
+* Items
 
-    Rabbits should drop paws or sticks
-    Crocodiles should drop teeth
+1. Rabbits should drop paws or sticks
+
+2. Crocodiles should drop teeth
+
+3. Items are stored in global vector ITEMS and a global std::map of
+   GameObject.id => vector<Item*> called INVENTORIES.
+
+4. Items can decay after a fixed amount of ticks. Carry weight is improved with number of kills made.
