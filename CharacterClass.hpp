@@ -24,7 +24,7 @@ std::ostream &operator<<(std::ostream &str, const CharacterClass c) {
 }
 
 std::vector<CharacterClass> character_classes = {
-    CharacterClass{"Vet",
+    CharacterClass{"Veterinarian",
                    [&](std::string target,
                        uint32_t max_hp,
                        uint32_t current_hp,
