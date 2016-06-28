@@ -45,8 +45,7 @@ struct Player: public Actor {
   }
 
 
-  virtual
-  int getMaxCarryCapacity() override {
+  virtual int getMaxCarryCapacity() const override {
     return Actor::getMaxCarryCapacity() + this->kills * 10;
   }
 

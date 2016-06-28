@@ -250,7 +250,7 @@ class Actor: virtual public GameObject {
   virtual int getMaxCarryCapacity() const;
 
 
-  int totalCarryWeight();
+  int totalCarryWeight() const;
 
   bool drop(const uint64_t item_id) {
     bool transferred = item_transfer(item_id, this->id, this->getPositionId());
@@ -293,7 +293,7 @@ int Actor::carryCapacity() const {
   return this->getMaxCarryCapacity() - this->totalCarryWeight();
 }
 
-virtual int Actor::getMaxCarryCapacity() const {
+int Actor::getMaxCarryCapacity() const {
   return this->max_carry_capacity;
 }
 
