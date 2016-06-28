@@ -13,6 +13,7 @@
 #include "Direction.hpp"
 #include "DungeonMap.hpp"
 #include "SimpleAI.hpp"
+#include "RabbitPaw.hpp"
 
 namespace lab3 {
 
@@ -31,7 +32,7 @@ class Rabbit: virtual public SimpleAI {
     int d100 = distribution(mt_engine);
 
     if (d100 < 75) {
-      new Item("rabbit paw", this->id, 20, 0, 10, true);
+      new RabbitPaw(this->id);
     }
     d100 = distribution(mt_engine);
     if (d100 < 10) {

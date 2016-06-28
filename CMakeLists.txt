@@ -20,7 +20,7 @@ set(HEADER_FILES
         SmallGameMap.hpp
         Rabbidile.hpp
         TickCount.hpp
-        SimpleAI.hpp)
+        SimpleAI.hpp RabbitPaw.hpp CrocsTooth.hpp)
 
 set(SOURCE_FILES GameLoop.cpp TickCount.hpp)
 set(TEST_SOURCE_FILES test.cpp tezt.hpp TickCount.hpp)

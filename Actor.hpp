@@ -69,18 +69,6 @@ class Actor: virtual public GameObject {
     Actor::current_health = current_health;
   }
 
-  void setMax_health(uint32_t max_health) {
-    Actor::max_health = max_health;
-  }
-
-  void setBase_damage(uint32_t base_damage) {
-    Actor::base_damage = base_damage;
-  }
-
-  void setSpeed(ActorSpeed speed) {
-    Actor::speed = speed;
-  }
-
   void setPosition(const Environment *env) {
     Actor::position = env;
   }
@@ -130,7 +118,7 @@ class Actor: virtual public GameObject {
     if (sum >= this->max_health) {
       this->current_health = this->max_health;
     } else {
-      this->current_health = sum;
+      this->current_health = (uint32_t) sum;
     }
   }
 

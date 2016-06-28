@@ -9,6 +9,7 @@
 #include "Race.hpp"
 #include "DungeonMap.hpp"
 #include "SimpleAI.hpp"
+#include "CrocsTooth.hpp"
 
 namespace lab3 {
 
@@ -24,7 +25,7 @@ struct Crocodile: virtual public SimpleAI {
     int d100 = distribution(mt_engine);
 
     if (d100 < 50) {
-      Item *ip = new Item("croc's tooth", this->id, 40, 10, 0, true);
+      Item *ip = new CrocsTooth(this->id);
       ip->setTicksUntilDecay(50);
     }
 
