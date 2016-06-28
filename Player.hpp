@@ -51,7 +51,7 @@ struct Player: public Actor {
   }
 
 
-  void fight(Actor *enemy) {
+  virtual void fight(Actor *enemy) override {
     uint32_t dmg = this->damage();
     enemy->hurt(dmg);
 

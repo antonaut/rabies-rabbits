@@ -243,11 +243,11 @@ class Actor: virtual public GameObject {
     std::clog << Actor::id << " waits." << std::endl;
   }
 
-  bool strongEnoughToCarry(Item *pItem);
+  bool strongEnoughToCarry(Item *pItem) const;
 
-  int carryCapacity();
+  int carryCapacity() const;
 
-  virtual int getMaxCarryCapacity();
+  virtual int getMaxCarryCapacity() const;
 
 
   int totalCarryWeight();
@@ -285,19 +285,19 @@ std::ostream &operator<<(std::ostream &str, const Actor &actor) {
   return str;
 }
 
-bool Actor::strongEnoughToCarry(Item *pItem) {
+bool Actor::strongEnoughToCarry(Item *pItem) const{
   return pItem->getWeight() < this->carryCapacity();
 }
 
-int Actor::carryCapacity() {
+int Actor::carryCapacity() const {
   return this->getMaxCarryCapacity() - this->totalCarryWeight();
 }
 
-virtual int Actor::getMaxCarryCapacity() {
+virtual int Actor::getMaxCarryCapacity() const {
   return this->max_carry_capacity;
 }
 
-int Actor::totalCarryWeight() {
+int Actor::totalCarryWeight() const {
   int total_carry_weight(0);
   for (Item *ip: *getInventory(this->id)) {
     total_carry_weight += ip->getWeight();
