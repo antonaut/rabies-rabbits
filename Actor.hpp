@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <iostream>
 #include <random>
+#include <algorithm>
+#include <string>
 
 #include "GameObject.hpp"
 #include "Environment.hpp"
@@ -303,6 +305,22 @@ std::vector<Actor *> findActorsByPosition(const Environment *position) {
   }
 
   return atPosition;
+}
+
+std::vector<Actor *> findActorsByNameAtPosition(std::string name, const Environment *position) {
+  std::vector<Actor *> found_actors;
+  std::transform(name.begin(), name.end(), name.begin(), std::tolower);
+
+  for (auto &actor : ACTORS) {
+    if (actor->getPositionId() == position->id) {
+      std::string race_name = actor->getRace()->name;
+      std::transform(race_name.begin(), race_name.end(), race_name.begin(), std::tolower);
+      if (!name.compare(race_name)) {
+        found_actors.push_back(actor);
+      }
+    }
+  }
+  return found_actors; // OK to return a copy since there won't be that many in the same room.
 }
 
 }  // namespace lab3
