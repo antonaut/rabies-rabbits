@@ -154,8 +154,10 @@ int main(int argc, char *argv[]) {
     new Repl(player, sm);
 
     // Spawn actors, deleted upon death / exit
-    new Rabbit(sm->getRabbitSpawnOne(),
+    GameObject * gp = new Rabbit(sm->getRabbitSpawnOne(),
                sm->getDungeonMap());
+    new RabbitPaw(gp->id); // Help RNG a bit
+
     new Rabbit(sm->getRabbitSpawnTwo(),
                sm->getDungeonMap());
 

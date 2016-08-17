@@ -242,7 +242,7 @@ class Actor: virtual public GameObject {
 
   int totalCarryWeight() const;
 
-  bool drop(const uint64_t item_id) {
+  virtual bool drop(const uint64_t item_id) {
     bool transferred = item_transfer(item_id, this->id, this->getPositionId());
     if (transferred) {
       Item *item = findItemById(item_id);
@@ -309,12 +309,12 @@ std::vector<Actor *> findActorsByPosition(const Environment *position) {
 
 std::vector<Actor *> findActorsByNameAtPosition(std::string name, const Environment *position) {
   std::vector<Actor *> found_actors;
-  std::transform(name.begin(), name.end(), name.begin(), std::tolower);
+  std::transform(name.begin(), name.end(), name.begin(), [](int c){ return std::tolower(c);});
 
   for (auto &actor : ACTORS) {
     if (actor->getPositionId() == position->id) {
       std::string race_name = actor->getRace()->name;
-      std::transform(race_name.begin(), race_name.end(), race_name.begin(), std::tolower);
+      std::transform(race_name.begin(), race_name.end(), race_name.begin(), [](int c){ return std::tolower(c);});
       if (!name.compare(race_name)) {
         found_actors.push_back(actor);
       }

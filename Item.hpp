@@ -106,6 +106,9 @@ void itemAction(uint64_t item_id, std::function<void(uint64_t, Item *)> action);
 
 void inventory_insert(const uint64_t to, Item *item);
 
+/**
+ * Holds all Items in the game.
+ */
 std::vector<Item *> ITEMS;
 
 Item::Item(std::string name, uint64_t owner_id, int weight, int damage, int defence, bool decayable) :
@@ -209,6 +212,20 @@ Item *findItemById(uint64_t id) {
   }
 
   throw std::invalid_argument("No such item found");
+}
+
+/**
+ * If more than one Item with a matching name is found, this only returns the first one.
+ * Returns null if no items are found.
+ */
+Item *findItemByNameInInventory(std::string name, const uint64_t inventory_id) {
+  for (auto &item: INVENTORIES[inventory_id]) {
+    std::string item_name_prefix = item->getName().substr(0, item->getName().find(' '));
+    if (item_name_prefix.compare(name)== 0) {
+      return item;
+    }
+  }
+  return nullptr;
 }
 
 }  // namespace lab3

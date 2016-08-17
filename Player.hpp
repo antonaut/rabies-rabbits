@@ -97,6 +97,18 @@ struct Player: public Actor {
     return taken;
   }
 
+  virtual bool drop(uint64_t item_id) override {
+    bool dropped = Actor::drop(item_id);
+    Item * item = findItemById(item_id);
+    if (dropped) {
+      std::cout << "You dropped: " << item->getName() << std::endl;
+    } else {
+      std::cout << "Unable to drop: "  << item->getName() << std::endl;
+    }
+
+    return dropped;
+  }
+
   void teleport(const Environment *env) {
 
     std::cout << "YOU CHEATER!" << std::endl;

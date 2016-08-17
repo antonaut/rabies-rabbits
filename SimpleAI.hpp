@@ -54,7 +54,7 @@ struct SimpleAI: virtual public Actor {
 
         if (player->getPosition()->id == this->position->id) {
           auto noise = this->race->noise();
-          std::cout << "[" << this->id << "] - A " << *this->race << " has arrived: " << noise <<
+          std::cout << "A " << *this->race << " has arrived: " << noise <<
               std::endl;
         }
         Actor::action();
@@ -67,7 +67,7 @@ struct SimpleAI: virtual public Actor {
           wimpyTurns = 0;
         }
         if (closeToPlayer(player)) {
-          std::cout << "[" << this->id << "] - A " << *this->race << " is fleeing." << std::endl;
+          std::cout << "A " << *this->race << " is fleeing." << std::endl;
         }
         this->flee();
         Actor::action();

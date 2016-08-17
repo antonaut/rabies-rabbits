@@ -87,13 +87,13 @@ struct Repl: public GameObject {
 
     for (auto &actor : findActorsByPosition(player->getPosition())) {
       if (actor->id != player_id)
-        std::cout << "[" << actor->id << "] - A " << *actor->getRace() << " is here." << std::endl;
+        std::cout << "A " << *actor->getRace() << " is here." << std::endl;
     }
 
     if (!INVENTORIES[player->getPositionId()].empty()) {
       std::cout << std::endl << std::endl << "Items:" << std::endl;
       for (auto &item : INVENTORIES[player->getPositionId()]) {
-        std::cout << "  [" << item->id << "] - " << item->getName() << std::endl;
+        std::cout << "  " << item->getName() << std::endl;
       }
     }
 
@@ -133,7 +133,7 @@ struct Repl: public GameObject {
         std::cout << ip->getName() << std::endl;
         tot_weight += ip->getWeight();
       }
-      std::cout << tot_weight << " / " << player->getMaxCarryCapacity()
+      std::cout << "Capacity: " <<  tot_weight << " / " << player->getMaxCarryCapacity()
           << std::endl << std::endl;
       return;
     }
@@ -170,18 +170,18 @@ struct Repl: public GameObject {
           << "    inv - lists ITEMS in inventory." << std::endl
           << std::endl
           << std::endl
-          << "Objects in the game are shown with their id."
+          << "Objects in the game are shown like this"
           << std::endl
           << "Example:"
           << std::endl
-          << "    [32] - Bird, where '32' is the id of the bird."
+          << "    Bird"
           << std::endl
           << std::endl
-          << "In order to interact with the objects, simply use their id after the interaction."
+          << "In order to interact with the objects, simply type their name (lowercase should work) after the interaction."
           << std::endl
           << "Example:"
           << std::endl
-          << "    '>fight 32'  -- fights with the bird"
+          << "    '>fight bird'  -- fights with the bird"
           << std::endl
           << std::endl
           << "Note: Items may decay after a while. Don't get worried if you no longer carry the items you picked up."
@@ -191,6 +191,7 @@ struct Repl: public GameObject {
           << std::endl
           << std::endl;
       if (player->kills > 3) {
+        std::cout << std::endl << "Bonus command:" << std::endl;
         std::cout << "   howl - gives you bonus damage for the next fight." << std::endl << std::endl;
       }
       return;
@@ -241,7 +242,14 @@ struct Repl: public GameObject {
 
       auto it = ++tokens.begin();
       std::clog << "player fight " << *it << std::endl;
-      uint64_t target_id = std::stoull(*it);
+      auto targets = findActorsByNameAtPosition(*it, player->getPosition());
+
+      if (targets.size() == 0) {
+        std::cout << "No such target found." << std::endl;
+        return;
+      }
+      uint64_t target_id = targets[0]->id;
+
       if (target_id == player_id) {
         std::cout << "Are you trying to kill yourself?" << std::endl;
         return;
@@ -286,10 +294,33 @@ struct Repl: public GameObject {
       auto it = ++tokens.begin();
       if (tokens.size() >= 2) {
         std::clog << "player take " << *it << std::endl;
-        uint64_t item_id = std::stoull(*it);
+        Item * item = findItemByNameInInventory(*it, player->getPositionId());
+        if (item == nullptr) {
+          std::cout << "No such item found." << std::endl;
+          return;
+        }
+        uint64_t item_id = item->id;
         player->take(item_id);
+        return;
       }
-      return;
+    }
+    this->drop(tokens);
+  }
+
+  inline void drop(Tokens &tokens) {
+    if (*tokens.begin() == "drop") {
+      auto it = ++tokens.begin();
+      if (tokens.size() >= 2) {
+        std::clog << "player drop " << *it << std::endl;
+        Item * item = findItemByNameInInventory(*it, player_id);
+        if (item == nullptr) {
+          std::cout << "No such item found." << std::endl;
+          return;
+        }
+        uint64_t item_id = item->id;
+        player->drop(item_id);
+        return;
+      }
     }
     this->wait(tokens);
   }
