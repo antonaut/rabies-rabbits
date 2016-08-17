@@ -124,7 +124,7 @@ struct Repl: public GameObject {
 
   inline void inventory(Tokens &tokens) {
     if (*tokens.begin() == "inv" ||
-        *tokens.begin() == "getInventory") {
+        *tokens.begin() == "inventory") {
 
       std::cout << "Inventory:" << std::endl << std::endl;
       auto inv = getInventory(player_id);
@@ -157,17 +157,18 @@ struct Repl: public GameObject {
           << "        \"west\", \"east\"" << std::endl
           << "        \"up\", \"down\"" << std::endl
           << std::endl
+          << "    quit - will quit the game." << std::endl
+          << std::endl
           << std::endl
           << "Interaction commands:"
           << std::endl
           << "    talk *target* - talks to *target*." <<
           std::endl
-          << "    fight *target* - fights with *target*. Also works with 'k', 'kill'." <<
+          << "    fight *target* - ('k' & 'kill' works too) fights with *target*." <<
           std::endl
           << "    take *item* - takes *item*." << std::endl
-          << "    inv - lists ITEMS in getInventory." << std::endl
+          << "    inv - lists ITEMS in inventory." << std::endl
           << std::endl
-          << "Type 'quit' to quit the game." << std::endl
           << std::endl
           << "Objects in the game are shown with their id."
           << std::endl
