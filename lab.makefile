@@ -17,5 +17,11 @@ play: game
 	clear
 	@./rabies-rabbits 2>log.txt
 
+valgrind: game
+	clear
+	@valgrind --tool=memcheck --leak-check=full ./rabies-rabbits 2>log.txt
+
 clean:
+	touch rabies-rabbits
+	rm rabies-rabbits
 	rm -f *.obj *.out
